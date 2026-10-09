@@ -1,0 +1,164 @@
+[
+  {
+    "question": "What is 2 + 2?",
+    "label": "KNOWN",
+    "features": {
+      "num_clusters": 1.0,
+      "majority_cluster_agreement": 1.0,
+      "second_cluster_agreement": 0.0,
+      "agreement_margin": 1.0,
+      "raw_semantic_entropy": 0.0,
+      "normalized_semantic_entropy": 0.0,
+      "mean_pairwise_similarity": 0.98,
+      "min_pairwise_similarity": 0.94,
+      "mean_length_chars": 24.0,
+      "mean_length_words": 5.0,
+      "length_variance_words": 1.2,
+      "lexical_diversity": 0.25,
+      "question_word_count": 5.0,
+      "question_has_disjunction": 0.0,
+      "question_has_which": 0.0,
+      "question_has_what": 1.0,
+      "question_is_short": 1.0
+    },
+    "metadata": {
+      "category": "arithmetic",
+      "rationale": "Elementary mathematical fact with unambiguous definition."
+    }
+  },
+  {
+    "question": "What is the chemical formula for water?",
+    "label": "KNOWN",
+    "features": {
+      "num_clusters": 1.0,
+      "majority_cluster_agreement": 1.0,
+      "second_cluster_agreement": 0.0,
+      "agreement_margin": 1.0,
+      "raw_semantic_entropy": 0.0,
+      "normalized_semantic_entropy": 0.0,
+      "mean_pairwise_similarity": 0.95,
+      "min_pairwise_similarity": 0.91,
+      "mean_length_chars": 38.0,
+      "mean_length_words": 7.0,
+      "length_variance_words": 2.1,
+      "lexical_diversity": 0.35,
+      "question_word_count": 7.0,
+      "question_has_disjunction": 0.0,
+      "question_has_which": 0.0,
+      "question_has_what": 1.0,
+      "question_is_short": 0.0
+    },
+    "metadata": {
+      "category": "science",
+      "rationale": "Established scientific fact."
+    }
+  },
+  {
+    "question": "What is the capital of Georgia?",
+    "label": "AMBIGUOUS",
+    "features": {
+      "num_clusters": 2.0,
+      "majority_cluster_agreement": 0.50,
+      "second_cluster_agreement": 0.50,
+      "agreement_margin": 0.0,
+      "raw_semantic_entropy": 0.693,
+      "normalized_semantic_entropy": 0.301,
+      "mean_pairwise_similarity": 0.52,
+      "min_pairwise_similarity": 0.15,
+      "mean_length_chars": 120.0,
+      "mean_length_words": 22.0,
+      "length_variance_words": 14.5,
+      "lexical_diversity": 0.68,
+      "question_word_count": 6.0,
+      "question_has_disjunction": 0.0,
+      "question_has_which": 0.0,
+      "question_has_what": 1.0,
+      "question_is_short": 0.0
+    },
+    "metadata": {
+      "category": "geography_polysemy",
+      "rationale": "Refers either to the US state of Georgia (Atlanta) or the sovereign Eurasian nation (Tbilisi)."
+    }
+  },
+  {
+    "question": "Where was Michael Jordan born?",
+    "label": "AMBIGUOUS",
+    "features": {
+      "num_clusters": 2.0,
+      "majority_cluster_agreement": 0.70,
+      "second_cluster_agreement": 0.30,
+      "agreement_margin": 0.40,
+      "raw_semantic_entropy": 0.611,
+      "normalized_semantic_entropy": 0.265,
+      "mean_pairwise_similarity": 0.61,
+      "min_pairwise_similarity": 0.22,
+      "mean_length_chars": 85.0,
+      "mean_length_words": 15.0,
+      "length_variance_words": 8.0,
+      "lexical_diversity": 0.58,
+      "question_word_count": 5.0,
+      "question_has_disjunction": 0.0,
+      "question_has_which": 0.0,
+      "question_has_what": 0.0,
+      "question_is_short": 1.0
+    },
+    "metadata": {
+      "category": "entity_polysemy",
+      "rationale": "Potential reference to basketball legend Michael Jordan (Brooklyn, NY) or actor Michael B. Jordan (Santa Ana, CA)."
+    }
+  },
+  {
+    "question": "Who was the prime minister of Atlantis in 1842?",
+    "label": "UNKNOWN",
+    "features": {
+      "num_clusters": 3.0,
+      "majority_cluster_agreement": 0.40,
+      "second_cluster_agreement": 0.30,
+      "agreement_margin": 0.10,
+      "raw_semantic_entropy": 1.055,
+      "normalized_semantic_entropy": 0.458,
+      "mean_pairwise_similarity": 0.38,
+      "min_pairwise_similarity": 0.08,
+      "mean_length_chars": 95.0,
+      "mean_length_words": 18.0,
+      "length_variance_words": 20.1,
+      "lexical_diversity": 0.72,
+      "question_word_count": 9.0,
+      "question_has_disjunction": 0.0,
+      "question_has_which": 0.0,
+      "question_has_what": 0.0,
+      "question_is_short": 0.0
+    },
+    "metadata": {
+      "category": "unanswerable_fictional",
+      "rationale": "Fictional entity; unanswerable fact."
+    }
+  },
+  {
+    "question": "What was the exact stock price of Apple on October 9, 2035?",
+    "label": "UNKNOWN",
+    "features": {
+      "num_clusters": 4.0,
+      "majority_cluster_agreement": 0.30,
+      "second_cluster_agreement": 0.30,
+      "agreement_margin": 0.0,
+      "raw_semantic_entropy": 1.366,
+      "normalized_semantic_entropy": 0.593,
+      "mean_pairwise_similarity": 0.31,
+      "min_pairwise_similarity": 0.05,
+      "mean_length_chars": 110.0,
+      "mean_length_words": 20.0,
+      "length_variance_words": 18.0,
+      "lexical_diversity": 0.75,
+      "question_word_count": 11.0,
+      "question_has_disjunction": 0.0,
+      "question_has_which": 0.0,
+      "question_has_what": 1.0,
+      "question_is_short": 0.0
+    },
+    "metadata": {
+      "category": "future_prediction",
+      "rationale": "Future event that cannot be known by any model."
+    }
+  }
+]

@@ -1,0 +1,15 @@
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Secrets
+.env
+.env.*
+
+# Local models and generated outputs
+*.gguf
+results/raw_generations/*.json
+results/models/*

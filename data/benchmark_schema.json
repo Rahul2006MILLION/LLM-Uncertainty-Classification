@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UncertaintyBenchmarkDatasetSchema",
+  "description": "Standardized schema for evaluating LLM uncertainty classification without data leakage.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["question", "label", "features"],
+    "properties": {
+      "question": {
+        "type": "string",
+        "description": "The exact input prompt/question presented to the model."
+      },
+      "label": {
+        "type": "string",
+        "enum": ["KNOWN", "AMBIGUOUS", "UNKNOWN"],
+        "description": "Ground-truth classification: KNOWN (factual & unambiguous), AMBIGUOUS (polysemous or under-specified), UNKNOWN (unanswerable, non-existent, or future)."
+      },
+      "features": {
+        "type": "object",
+        "description": "Extracted NLP semantic features from 10 model generations. MUST NOT contain target label.",
+        "properties": {
+          "num_clusters": { "type": "number" },
+          "majority_cluster_agreement": { "type": "number" },
+          "second_cluster_agreement": { "type": "number" },
+          "agreement_margin": { "type": "number" },
+          "raw_semantic_entropy": { "type": "number" },
+          "normalized_semantic_entropy": { "type": "number" },
+          "mean_pairwise_similarity": { "type": "number" },
+          "min_pairwise_similarity": { "type": "number" },
+          "mean_length_chars": { "type": "number" },
+          "mean_length_words": { "type": "number" },
+          "length_variance_words": { "type": "number" },
+          "lexical_diversity": { "type": "number" },
+          "question_word_count": { "type": "number" },
+          "question_has_disjunction": { "type": "number" },
+          "question_has_which": { "type": "number" },
+          "question_has_what": { "type": "number" },
+          "question_is_short": { "type": "number" }
+        }
+      },
+      "metadata": {
+        "type": "object",
+        "description": "Optional research notes, rationale, source dataset, or category annotation."
+      }
+    }
+  }
+}
