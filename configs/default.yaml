@@ -1,0 +1,39 @@
+# Configuration for LLM Uncertainty Classification & Adaptive QA Pipeline
+
+ollama:
+  host: "http://localhost:11434"
+  generation_model: "qwen2.5:3b"
+  embedding_model: "all-minilm"
+  temperature: 0.7
+  top_p: 0.9
+  request_timeout: 45.0
+  max_retries: 3
+  backoff_factor: 1.5
+
+pipeline:
+  fast_path_enabled: true
+  multi_response_count: 10 # 1 initial + 9 sequential stochastic generations
+  fast_path_max_chars: 120
+  # Routing confidence heuristics
+  allow_arithmetic_fast_path: true
+  allow_clear_factual_fast_path: true
+
+clustering:
+  method: "hierarchical" # "hierarchical" (agglomerative) or "greedy"
+  similarity_threshold: 0.80 # Cosine similarity threshold for grouping
+  linkage: "average"
+
+output_selection:
+  explanation_threshold: 0.25 # If second cluster agreement >= this, explain multiple interpretations
+  dominant_min_agreement: 0.40
+
+classifier:
+  model_type: "xgboost" # "xgboost" or "sklearn_hist_gb"
+  random_state: 42
+  n_estimators: 100
+  max_depth: 4
+  learning_rate: 0.05
+  model_save_path: "models/uncertainty_classifier.json"
+
+storage:
+  results_dir: "experiments/results"
