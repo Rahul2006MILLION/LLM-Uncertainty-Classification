@@ -103,7 +103,7 @@ def main():
     parser.add_argument("--features", "-f", type=str, default="data/features.jsonl",
                         help="Input features JSONL file")
     parser.add_argument("--model-type", type=str, default="xgboost", choices=["xgboost", "hist_gb", "random_forest"])
-    parser.add_argument("--output-model", "-o", type=str, default="models/uncertainty_classifier.json")
+    parser.add_argument("--output-model", "-o", type=str, default="models/uncertainty_classifier.joblib")
     parser.add_argument("--report", type=str, default="experiments/results/training_report.json")
     parser.add_argument("--save-artifact", action="store_true", help="Save model artifact if validation passes")
     args = parser.parse_args()
@@ -128,7 +128,7 @@ def main():
 
     # 1. Group-based train/test split to prevent leakage
     train_records, val_records, test_records = DatasetValidator.group_train_val_test_split(
-        records, train_ratio=0.60, val_ratio=0.20, test_ratio=0.20, random_seed=42
+        records, train_ratio=0.70, val_ratio=0.10, test_ratio=0.20, random_seed=42
     )
     # If test is empty due to small grouping, fallback to train/test split
     if not test_records:
@@ -198,11 +198,34 @@ def main():
     ]
     print("\n" + tabulate(table_data, headers=["Model / Configuration", "Test Accuracy", "Test Macro-F1"], floatfmt=".3f", tablefmt="github") + "\n")
 
+    # Per-Class Precision, Recall, F1 for Full Model
+    per_class_data = []
+    for cls_name, m in primary_eval.get("per_class", {}).items():
+        per_class_data.append([
+            cls_name,
+            m.get("precision", 0.0),
+            m.get("recall", 0.0),
+            m.get("f1_score", m.get("f1", 0.0)),
+            m.get("support", 0),
+        ])
+    print("Per-Class Performance (Full Model on Test Set):")
+    print(tabulate(per_class_data, headers=["Class", "Precision", "Recall", "F1-Score", "Support"], floatfmt=".3f", tablefmt="github") + "\n")
+
     # Confusion matrix
     print("Confusion Matrix (Full Model):")
     conf_mat = primary_eval["confusion_matrix"]
     print(tabulate(conf_mat, headers=["Pred: KNOWN", "Pred: AMBIGUOUS", "Pred: UNKNOWN"], showindex=["True: KNOWN", "True: AMBIGUOUS", "True: UNKNOWN"], tablefmt="github"))
     print("")
+
+    # Feature Importance (if model has it)
+    feat_importances = {}
+    if hasattr(classifier.model, "feature_importances_"):
+        for fn, imp in zip(all_features, classifier.model.feature_importances_):
+            feat_importances[fn] = float(imp)
+        sorted_feats = sorted(feat_importances.items(), key=lambda x: x[1], reverse=True)
+        print("Feature Importances:")
+        print(tabulate(sorted_feats, headers=["Feature", "Importance"], floatfmt=".4f", tablefmt="github"))
+        print("")
 
     # Export report
     report_dict = {
@@ -210,6 +233,7 @@ def main():
         "model_type": args.model_type,
         "n_train": int(len(y_train)),
         "n_test": int(len(y_test)),
+        "feature_importances": feat_importances,
         "primary_model_eval": primary_eval,
         "majority_baseline_eval": maj_eval,
         "heuristic_baseline_eval": heuristic_eval,

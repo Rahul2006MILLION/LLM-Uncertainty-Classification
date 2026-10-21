@@ -64,24 +64,23 @@ def main():
 
     # Load existing cached outputs if file exists
     os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
-    existing_ids = set()
+    existing_keys = set()
     if os.path.exists(args.output):
         with open(args.output, "r", encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
                 if line:
                     rec = json.loads(line)
-                    existing_ids.add(rec.get("id"))
-        logger.info("Found %d already generated records in %s. Resuming...", len(existing_ids), args.output)
+                    existing_keys.add((rec.get("id"), rec.get("question")))
+        logger.info("Found %d already generated records in %s. Resuming...", len(existing_keys), args.output)
 
     # Process items
     with open(args.output, "a", encoding="utf-8") as out_f:
         for q_item in tqdm(questions, desc="Generating responses"):
             qid = q_item["id"]
-            if qid in existing_ids:
-                continue
-
             q_text = q_item["question"]
+            if (qid, q_text) in existing_keys:
+                continue
             start_t = time.time()
             responses = generator.generate_multi(question=q_text, target_total_count=args.n_responses)
             elapsed = time.time() - start_t

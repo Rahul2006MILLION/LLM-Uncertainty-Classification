@@ -75,26 +75,69 @@ class DatasetValidator:
         test_ratio: float = 0.15,
         random_seed: int = 42,
     ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]], List[Dict[str, Any]]]:
-        """Perform group-based split by question group key to strictly prevent train/test leakage."""
+        """Perform stratified group-based split by question group key to strictly prevent train/test leakage.
+        
+        Guarantees:
+        1. No question group key appears in more than one partition.
+        2. Balanced representation across all present classes in each partition.
+        """
         if not records:
             return [], [], []
 
-        groups = [cls.get_question_group_key(r["question"]) for r in records]
+        # Partition records by class label
+        by_class: Dict[str, List[Dict[str, Any]]] = {}
+        for r in records:
+            lbl = r.get("label", "UNKNOWN")
+            by_class.setdefault(lbl, []).append(r)
 
-        # First split into train and remainder
-        gss_train = GroupShuffleSplit(n_splits=1, train_size=train_ratio, random_state=random_seed)
-        train_idx, rem_idx = next(gss_train.split(records, groups=groups))
+        train_set: List[Dict[str, Any]] = []
+        val_set: List[Dict[str, Any]] = []
+        test_set: List[Dict[str, Any]] = []
 
-        rem_records = [records[i] for i in rem_idx]
-        rem_groups = [groups[i] for i in rem_idx]
+        rng = np.random.RandomState(random_seed)
 
-        # Split remainder into val and test
-        relative_val_ratio = val_ratio / (val_ratio + test_ratio)
-        gss_val = GroupShuffleSplit(n_splits=1, train_size=relative_val_ratio, random_state=random_seed)
-        val_sub_idx, test_sub_idx = next(gss_val.split(rem_records, groups=rem_groups))
+        for c_idx, (lbl, class_records) in enumerate(by_class.items()):
+            # Find unique groups for this class
+            group_to_records: Dict[str, List[Dict[str, Any]]] = {}
+            for r in class_records:
+                gkey = cls.get_question_group_key(r["question"])
+                group_to_records.setdefault(gkey, []).append(r)
 
-        train_set = [records[i] for i in train_idx]
-        val_set = [rem_records[i] for i in val_sub_idx]
-        test_set = [rem_records[i] for i in test_sub_idx]
+            unique_groups = list(group_to_records.keys())
+            # Deterministic shuffle with seed offset
+            class_seed = random_seed + c_idx * 17
+            shuffled_groups = list(unique_groups)
+            np.random.RandomState(class_seed).shuffle(shuffled_groups)
+
+            n_g = len(shuffled_groups)
+            if n_g == 1:
+                train_groups = set(shuffled_groups)
+                val_groups = set()
+                test_groups = set()
+            elif n_g == 2:
+                train_groups = {shuffled_groups[0]}
+                val_groups = set()
+                test_groups = {shuffled_groups[1]}
+            else:
+                n_test = max(1, int(round(n_g * test_ratio)))
+                n_val = max(0, int(round(n_g * val_ratio))) if val_ratio > 0 else 0
+                n_train = n_g - n_test - n_val
+                if n_train < 1:
+                    n_train = 1
+                    if n_val > 0:
+                        n_val -= 1
+                    else:
+                        n_test -= 1
+
+                test_groups = set(shuffled_groups[:n_test])
+                val_groups = set(shuffled_groups[n_test:n_test + n_val])
+                train_groups = set(shuffled_groups[n_test + n_val:])
+
+            for g in train_groups:
+                train_set.extend(group_to_records[g])
+            for g in val_groups:
+                val_set.extend(group_to_records[g])
+            for g in test_groups:
+                test_set.extend(group_to_records[g])
 
         return train_set, val_set, test_set

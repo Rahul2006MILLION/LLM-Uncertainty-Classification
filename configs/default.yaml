@@ -3,7 +3,7 @@
 ollama:
   host: "http://localhost:11434"
   generation_model: "qwen2.5:3b"
-  embedding_model: "all-minilm"
+  embedding_model: "all-minilm:latest"
   temperature: 0.7
   top_p: 0.9
   request_timeout: 45.0
@@ -33,7 +33,7 @@ classifier:
   n_estimators: 100
   max_depth: 4
   learning_rate: 0.05
-  model_save_path: "models/uncertainty_classifier.json"
+  model_save_path: "models/uncertainty_classifier.joblib"
 
 storage:
   results_dir: "experiments/results"

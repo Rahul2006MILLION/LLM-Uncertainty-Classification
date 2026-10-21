@@ -121,7 +121,10 @@ class UncertaintyClassifier:
             }
 
     def save(self, filepath: str) -> None:
-        """Serialize model and metadata to disk."""
+        """Serialize model and metadata to disk.
+        
+        Saves the model artifact (via joblib) and exports a human-readable metadata JSON alongside it.
+        """
         if not self.is_trained:
             raise RuntimeError("Cannot save an untrained classifier.")
 
@@ -135,16 +138,40 @@ class UncertaintyClassifier:
             "metadata": self.metadata,
         }
         joblib.dump(save_dict, filepath)
-        logger.info("Classifier saved to %s", filepath)
+        logger.info("Classifier binary saved to %s", filepath)
+
+        # Export accompanying human-readable JSON metadata file
+        meta_path = os.path.splitext(filepath)[0] + "_metadata.json"
+        try:
+            with open(meta_path, "w", encoding="utf-8") as f:
+                json.dump({
+                    "model_type": self.model_type,
+                    "feature_names": self.feature_names,
+                    "is_trained": self.is_trained,
+                    "metadata": self.metadata,
+                }, f, indent=2)
+            logger.info("Human-readable metadata exported to %s", meta_path)
+        except Exception as e:
+            logger.warning("Could not write metadata JSON: %s", e)
 
     @classmethod
     def load(cls, filepath: str) -> "UncertaintyClassifier":
-        """Load a trained classifier from disk."""
+        """Load a trained classifier from disk, resolving .joblib and .json paths cleanly."""
         import joblib
-        if not os.path.exists(filepath):
-            raise FileNotFoundError(f"Model file not found at {filepath}")
 
-        data = joblib.load(filepath)
+        target_path = filepath
+        if not os.path.exists(target_path):
+            # Check alternative extensions
+            base = os.path.splitext(filepath)[0]
+            for alt in [f"{base}.joblib", f"{base}.json", f"{base}.pkl"]:
+                if os.path.exists(alt):
+                    target_path = alt
+                    break
+
+        if not os.path.exists(target_path):
+            raise FileNotFoundError(f"Model file not found at {filepath} (checked alternatives)")
+
+        data = joblib.load(target_path)
         clf = cls(model_type=data.get("model_type", "xgboost"))
         clf.model = data["model"]
         clf.feature_names = data.get("feature_names", [])

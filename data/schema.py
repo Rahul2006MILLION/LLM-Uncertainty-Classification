@@ -13,6 +13,9 @@ class QuestionRecord(BaseModel):
         ..., description="Ground truth uncertainty class"
     )
     domain: str = Field(default="general", description="Subject area (e.g., geography, math, science, history)")
+    subcategory: Optional[str] = Field(
+        default=None, description="Detailed category (e.g. concept_definition, factual, entity_polysemy, criterion_ambiguity, false_premise)"
+    )
     source: str = Field(..., description="Dataset or literature origin (e.g., ambignq, natural_questions, curated_unanswerable)")
     license: Optional[str] = Field(default="CC BY-SA 3.0", description="Data license")
     ground_truth_answers: Optional[List[str]] = Field(

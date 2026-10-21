@@ -51,6 +51,10 @@ def run_pipeline(
     question: str,
     config: Optional[Dict[str, Any]] = None,
     force_multi_response: bool = False,
+    generator: Optional[Any] = None,
+    classifier: Optional[Any] = None,
+    router: Optional[Any] = None,
+    embedder: Optional[Any] = None,
 ) -> ExperimentRecord:
     """Execute the end-to-end adaptive QA pipeline on a given question."""
     start_total_t = time.time()
@@ -75,28 +79,37 @@ def run_pipeline(
     expl_threshold = float(out_cfg.get("explanation_threshold", 0.25))
 
     clf_cfg = cfg.get("classifier", {})
-    model_save_path = clf_cfg.get("model_save_path", "models/uncertainty_classifier.json")
+    model_save_path = clf_cfg.get("model_save_path", "models/uncertainty_classifier.joblib")
 
     # 1. Initialize Clients and Modules
-    client = OllamaClient(host=host, request_timeout=float(ollama_cfg.get("request_timeout", 45.0)))
-    if not client.is_available():
-        raise OllamaClientError(
-            f"Cannot connect to Ollama at {host}. Please verify that the Ollama service is running."
-        )
+    client = None
+    if generator is None or embedder is None:
+        client = OllamaClient(host=host, request_timeout=float(ollama_cfg.get("request_timeout", 45.0)))
 
-    generator = ResponseGenerator(client=client, model=gen_model, temperature=temperature, top_p=top_p)
-    router = AdaptiveRouter(fast_path_enabled=fast_path_enabled)
+    if generator is None:
+        if not client.is_available():
+            raise OllamaClientError(
+                f"Cannot connect to Ollama at {host}. Please verify that the Ollama service is running."
+            )
+        generator = ResponseGenerator(client=client, model=gen_model, temperature=temperature, top_p=top_p)
+
+    if router is None:
+        router = AdaptiveRouter(fast_path_enabled=fast_path_enabled)
+
     clusterer = SemanticClusterer(similarity_threshold=sim_threshold, linkage=linkage)
     feature_extractor = FeatureExtractor(clusterer=clusterer)
-    embedder = EmbeddingEngine(client=client, embedding_model=emb_model)
+    if embedder is None:
+        embedder = EmbeddingEngine(client=client, embedding_model=emb_model)
 
-    # Load classifier if present
-    classifier: Optional[UncertaintyClassifier] = None
-    if os.path.exists(model_save_path):
-        try:
-            classifier = UncertaintyClassifier.load(model_save_path)
-        except Exception as e:
-            logger.warning("Could not load classifier from %s: %s", model_save_path, e)
+    # Load classifier if present and not provided
+    if classifier is None:
+        for candidate_path in [model_save_path, "models/uncertainty_classifier.joblib", "models/uncertainty_classifier.json"]:
+            if os.path.exists(candidate_path):
+                try:
+                    classifier = UncertaintyClassifier.load(candidate_path)
+                    break
+                except Exception as e:
+                    logger.warning("Could not load classifier from %s: %s", candidate_path, e)
 
     # 2. Step 1: Initial Response Generation
     t0 = time.time()
@@ -109,6 +122,23 @@ def run_pipeline(
     # 4. Path Branching
     if decision.path == "FAST_PATH":
         elapsed_total = time.time() - start_total_t
+        # Extract genuine single-response features
+        single_emb = embedder.embed_batch([initial_text])
+        features = feature_extractor.extract_features(
+            question=question,
+            responses=[initial_text],
+            embeddings=single_emb,
+        )
+
+        clf_status = "CLASSIFIER NOT TRAINED"
+        pred_label = None
+        pred_conf = None
+        if classifier is not None and classifier.is_trained:
+            pred_res = classifier.predict(features)
+            clf_status = pred_res.get("status", "PREDICTED")
+            pred_label = pred_res.get("predicted_label")
+            pred_conf = pred_res.get("confidence")
+
         rec = ExperimentRecord(
             timestamp=datetime.datetime.now().isoformat(),
             question=question,
@@ -123,12 +153,12 @@ def run_pipeline(
             normalized_entropy=0.0,
             mean_pairwise_similarity=1.0,
             elapsed_seconds=elapsed_total,
-            classifier_status="BYPASSED (FAST_PATH)",
-            predicted_label="KNOWN",
-            confidence=decision.confidence,
-            features={"fast_path_confidence": decision.confidence},
+            classifier_status=clf_status,
+            predicted_label=pred_label,
+            confidence=pred_conf,
+            features=features,
             responses=[initial_res],
-            clusters={"labels": [0], "cluster_counts": [1]},
+            clusters={"labels": [0], "cluster_counts": [1], "dominant_rep_idx": 0, "second_rep_idx": None},
             model=gen_model,
             embedding_model=emb_model,
         )
