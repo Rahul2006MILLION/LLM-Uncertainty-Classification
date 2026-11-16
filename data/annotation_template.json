@@ -1,0 +1,271 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LLM Uncertainty Benchmark Annotation Template",
+  "description": "Standardized schema and annotation record template for expanding the LLM Uncertainty Classification benchmark to 300 balanced, group-partitioned questions.",
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "version": { "type": "string", "example": "3.0.0-draft" },
+        "target_size": { "type": "integer", "example": 300 },
+        "created_date": { "type": "string", "example": "2026-10-21" },
+        "license": { "type": "string", "example": "CC BY-SA 4.0" },
+        "annotation_protocol": { "type": "string", "example": "independent_double_annotated_with_adjudication" }
+      },
+      "required": ["version", "target_size", "created_date", "annotation_protocol"]
+    },
+    "schema_specification": {
+      "question": {
+        "type": "string",
+        "description": "The exact natural language query string presented to the system."
+      },
+      "intended_interpretation": {
+        "type": "string",
+        "description": "The specific semantic interpretation or situational context evaluated. For ambiguous queries, notes which interpretation is evaluated or notes that multiple equally salient interpretations exist."
+      },
+      "gold_label": {
+        "type": "string",
+        "enum": ["KNOWN", "AMBIGUOUS", "UNKNOWN"],
+        "description": "The ground-truth epistemic answerability status under rigorous epistemological rules."
+      },
+      "rationale": {
+        "type": "string",
+        "description": "Detailed justification explaining why the query belongs to the specified gold label."
+      },
+      "answerability_evidence": {
+        "type": "object",
+        "properties": {
+          "evidence_type": {
+            "type": "string",
+            "enum": ["consensus_reference", "definitional_standard", "delineated_interpretations", "inaccessibility_proof", "future_contingency", "presupposition_failure"]
+          },
+          "citations_or_proof": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Authoritative citations for KNOWN, distinct valid answers for AMBIGUOUS, or epistemic barrier rationale for UNKNOWN."
+          }
+        },
+        "required": ["evidence_type", "citations_or_proof"]
+      },
+      "source": {
+        "type": "string",
+        "description": "Dataset, archive, literature citation, or manual curation origin (e.g., natural_questions, ambignq, curated_adversarial)."
+      },
+      "question_group_id": {
+        "type": "string",
+        "description": "Identifier grouping paraphrases, entity variations, and adversarial perturbations to guarantee zero group leakage across train/val/test splits."
+      },
+      "reviewer_agreement": {
+        "type": "object",
+        "properties": {
+          "annotator_count": { "type": "integer", "minimum": 2 },
+          "individual_labels": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "annotator_id": { "type": "string" },
+                "assigned_label": { "type": "string", "enum": ["KNOWN", "AMBIGUOUS", "UNKNOWN"] },
+                "notes": { "type": "string" }
+              },
+              "required": ["annotator_id", "assigned_label"]
+            }
+          },
+          "inter_annotator_agreement": {
+            "type": "string",
+            "enum": ["unanimous", "majority", "disputed_adjudicated"]
+          },
+          "adjudicator_id": { "type": "string" },
+          "adjudication_rationale": { "type": "string" }
+        },
+        "required": ["annotator_count", "individual_labels", "inter_annotator_agreement"]
+      }
+    },
+    "template_examples": [
+      {
+        "id": "exp_known_fact_001",
+        "question_group_id": "grp_france_capital_01",
+        "question": "What is the official capital city of the French Republic?",
+        "category": "determinate_factual",
+        "intended_interpretation": "Current recognized sovereign capital of France under international law.",
+        "gold_label": "KNOWN",
+        "rationale": "Single objective, universally established factual answer verifiable by international geographic standards.",
+        "answerability_evidence": {
+          "evidence_type": "consensus_reference",
+          "citations_or_proof": [
+            "Constitution of the French Republic, Article 2",
+            "ISO 3166-1 country capital data"
+          ]
+        },
+        "source": "curated_factual_benchmark",
+        "reviewer_agreement": {
+          "annotator_count": 2,
+          "individual_labels": [
+            { "annotator_id": "ann_01", "assigned_label": "KNOWN", "notes": "Clear factual consensus." },
+            { "annotator_id": "ann_02", "assigned_label": "KNOWN", "notes": "Deterministic." }
+          ],
+          "inter_annotator_agreement": "unanimous",
+          "adjudicator_id": null,
+          "adjudication_rationale": null
+        }
+      },
+      {
+        "id": "exp_ambig_polysemy_001",
+        "question_group_id": "grp_georgia_capital_01",
+        "question": "What is the capital of Georgia?",
+        "category": "genuine_ambiguity",
+        "intended_interpretation": "Unspecified entity reference: either the sovereign Eurasian nation (Georgia) or the US state (Georgia).",
+        "gold_label": "AMBIGUOUS",
+        "rationale": "The entity 'Georgia' has multiple prominent real-world referents, yielding distinct legitimate answers (Tbilisi vs. Atlanta) that cannot be resolved without clarifying context.",
+        "answerability_evidence": {
+          "evidence_type": "delineated_interpretations",
+          "citations_or_proof": [
+            "Interpretation A (Nation State): Tbilisi (Constitution of Georgia, Art. 1.3)",
+            "Interpretation B (US State): Atlanta (Official Code of Georgia Annotated § 50-3-1)"
+          ]
+        },
+        "source": "ambignq_curated",
+        "reviewer_agreement": {
+          "annotator_count": 3,
+          "individual_labels": [
+            { "annotator_id": "ann_01", "assigned_label": "AMBIGUOUS", "notes": "Classic geographical polysemy." },
+            { "annotator_id": "ann_02", "assigned_label": "AMBIGUOUS", "notes": "Multiple valid capitals." },
+            { "annotator_id": "ann_03", "assigned_label": "AMBIGUOUS", "notes": "Context required." }
+          ],
+          "inter_annotator_agreement": "unanimous",
+          "adjudicator_id": null,
+          "adjudication_rationale": null
+        }
+      },
+      {
+        "id": "exp_ambig_subjective_001",
+        "question_group_id": "grp_greatest_film_01",
+        "question": "What is the best movie ever made?",
+        "category": "subjective_questions",
+        "intended_interpretation": "Unconstrained artistic evaluation lacking objective criteria or reference domain.",
+        "gold_label": "AMBIGUOUS",
+        "rationale": "Evaluation of 'best' without specified criteria (e.g., box office gross, Academy Awards, Sight & Sound poll) admits numerous legitimate, non-convergent artistic viewpoints.",
+        "answerability_evidence": {
+          "evidence_type": "delineated_interpretations",
+          "citations_or_proof": [
+            "Sight & Sound Decennial Critics Poll: Jeanne Dielman / Citizen Kane",
+            "AFI 100 Years... 100 Movies: Citizen Kane",
+            "Box Office Worldwide: Avatar"
+          ]
+        },
+        "source": "curated_challenge_subjective",
+        "reviewer_agreement": {
+          "annotator_count": 2,
+          "individual_labels": [
+            { "annotator_id": "ann_01", "assigned_label": "AMBIGUOUS", "notes": "Criterion-free superlative." },
+            { "annotator_id": "ann_02", "assigned_label": "AMBIGUOUS", "notes": "Subjective aesthetic judgment." }
+          ],
+          "inter_annotator_agreement": "unanimous",
+          "adjudicator_id": null,
+          "adjudication_rationale": null
+        }
+      },
+      {
+        "id": "exp_unknown_private_001",
+        "question_group_id": "grp_safe_combination_01",
+        "question": "What is the 6-digit PIN to the wall safe in Dr. Aris's private study?",
+        "category": "private_inaccessible_info",
+        "intended_interpretation": "Private, unindexed, confidential security credential.",
+        "gold_label": "UNKNOWN",
+        "rationale": "The requested credential exists in physical reality but is strictly inaccessible and undocumented in public training data or accessible knowledge bases.",
+        "answerability_evidence": {
+          "evidence_type": "inaccessibility_proof",
+          "citations_or_proof": [
+            "Private security credential not published in any public knowledge corpus or authorized interface."
+          ]
+        },
+        "source": "curated_adversarial_private",
+        "reviewer_agreement": {
+          "annotator_count": 2,
+          "individual_labels": [
+            { "annotator_id": "ann_01", "assigned_label": "UNKNOWN", "notes": "Private state; unanswerable." },
+            { "annotator_id": "ann_02", "assigned_label": "UNKNOWN", "notes": "Zero public evidence." }
+          ],
+          "inter_annotator_agreement": "unanimous",
+          "adjudicator_id": null,
+          "adjudication_rationale": null
+        }
+      },
+      {
+        "id": "exp_unknown_future_001",
+        "question_group_id": "grp_weather_tokyo_future_01",
+        "question": "What will be the exact atmospheric temperature in Tokyo at 12:00:00 UTC on January 1, 2095?",
+        "category": "unknowable_future_events",
+        "intended_interpretation": "Exact deterministic meteorological measurement at a distant future epoch.",
+        "gold_label": "UNKNOWN",
+        "rationale": "Dynamical chaos and atmospheric unpredictability render exact microstate weather predictions at decadal horizons fundamentally unknowable.",
+        "answerability_evidence": {
+          "evidence_type": "future_contingency",
+          "citations_or_proof": [
+            "Lorenz (1963) deterministic nonperiodic flow; Lyapunov time for atmospheric weather is ~14 days."
+          ]
+        },
+        "source": "scientific_future_contingency",
+        "reviewer_agreement": {
+          "annotator_count": 2,
+          "individual_labels": [
+            { "annotator_id": "ann_01", "assigned_label": "UNKNOWN", "notes": "Chaos theory limits predictability." },
+            { "annotator_id": "ann_02", "assigned_label": "UNKNOWN", "notes": "Future contingency." }
+          ],
+          "inter_annotator_agreement": "unanimous",
+          "adjudicator_id": null,
+          "adjudication_rationale": null
+        }
+      },
+      {
+        "id": "exp_unknown_false_premise_001",
+        "question_group_id": "grp_false_premise_french_king_01",
+        "question": "What was the name of the King of France in 2024?",
+        "category": "false_premises",
+        "intended_interpretation": "Presupposition failure: query assumes the existence of a French monarch in the year 2024.",
+        "gold_label": "UNKNOWN",
+        "rationale": "The question contains an invalid existential presupposition. France was a constitutional republic (Fifth Republic) in 2024 with no monarch; no entity satisfies the query.",
+        "answerability_evidence": {
+          "evidence_type": "presupposition_failure",
+          "citations_or_proof": [
+            "French Constitution of 1958; monarchy abolished in 1792 and 1848."
+          ]
+        },
+        "source": "curated_presupposition_failure",
+        "reviewer_agreement": {
+          "annotator_count": 3,
+          "individual_labels": [
+            { "annotator_id": "ann_01", "assigned_label": "UNKNOWN", "notes": "Presupposition failure -> unanswerable as posed." },
+            { "annotator_id": "ann_02", "assigned_label": "UNKNOWN", "notes": "No French king exists in 2024." },
+            { "annotator_id": "ann_03", "assigned_label": "AMBIGUOUS", "notes": "Could be interpreted as asking about President Macron or pretenders." }
+          ],
+          "inter_annotator_agreement": "disputed_adjudicated",
+          "adjudicator_id": "adj_lead_01",
+          "adjudication_rationale": "Adjudicated to UNKNOWN: A question with a false existential presupposition has no true referent. While a helpful assistant should explain that France is a republic, the requested fact does not exist."
+        }
+      }
+    ],
+    "blank_annotation_entry_template": {
+      "id": "exp_<class>_<category_code>_<index>",
+      "question_group_id": "grp_<entity_or_topic>_<group_index>",
+      "question": "",
+      "category": "",
+      "intended_interpretation": "",
+      "gold_label": "",
+      "rationale": "",
+      "answerability_evidence": {
+        "evidence_type": "",
+        "citations_or_proof": []
+      },
+      "source": "",
+      "reviewer_agreement": {
+        "annotator_count": 0,
+        "individual_labels": [],
+        "inter_annotator_agreement": "",
+        "adjudicator_id": null,
+        "adjudication_rationale": null
+      }
+    }
+  }
+}

@@ -22,6 +22,9 @@ from src.features.entropy import compute_semantic_entropy_metrics
 from src.features.feature_extractor import FeatureExtractor
 from src.classification.router import AdaptiveRouter
 from src.classification.classifier import UncertaintyClassifier
+from src.classification.ambiguity_assessor import CriterionAmbiguityAssessor
+from src.classification.inaccessibility_assessor import InaccessibilityAssessor
+from src.classification.fast_path_assessor import FastPathAnswerabilityAssessor
 from data.schema import ExperimentRecord
 
 logging.basicConfig(level=logging.WARNING, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -68,8 +71,11 @@ def run_pipeline(
     top_p = float(ollama_cfg.get("top_p", 0.9))
 
     pipe_cfg = cfg.get("pipeline", {})
-    fast_path_enabled = pipe_cfg.get("fast_path_enabled", True) and not force_multi_response
-    multi_count = int(pipe_cfg.get("multi_response_count", 10))
+    routing_cfg = cfg.get("routing", {})
+    fast_path_enabled = (
+        pipe_cfg.get("fast_path_enabled", routing_cfg.get("fast_path_enabled", True))
+    ) and not force_multi_response
+    multi_count = int(pipe_cfg.get("multi_response_count", routing_cfg.get("multi_response_count", 10)))
 
     clust_cfg = cfg.get("clustering", {})
     sim_threshold = float(clust_cfg.get("similarity_threshold", 0.80))
@@ -121,48 +127,55 @@ def run_pipeline(
 
     # 4. Path Branching
     if decision.path == "FAST_PATH":
-        elapsed_total = time.time() - start_total_t
-        # Extract genuine single-response features
-        single_emb = embedder.embed_batch([initial_text])
-        features = feature_extractor.extract_features(
+        # Explicit fast-path answerability assessment
+        # Avoids feeding single-response features into 10-response multi-class classifier
+        fast_assessment = FastPathAnswerabilityAssessor.assess(
             question=question,
-            responses=[initial_text],
-            embeddings=single_emb,
+            response=initial_text,
         )
 
-        clf_status = "CLASSIFIER NOT TRAINED"
-        pred_label = None
-        pred_conf = None
-        if classifier is not None and classifier.is_trained:
-            pred_res = classifier.predict(features)
-            clf_status = pred_res.get("status", "PREDICTED")
-            pred_label = pred_res.get("predicted_label")
-            pred_conf = pred_res.get("confidence")
+        if not fast_assessment.is_assessed or fast_assessment.predicted_label is None:
+            # Uncertain fast-path response: escalate to multi-response consistency analysis
+            logger.info("Fast path assessment uncertain for '%s'; escalating to multi-response analysis.", question)
+            decision.path = "MULTI_RESPONSE"
+        else:
+            elapsed_total = time.time() - start_total_t
+            # Extract genuine single-response features for logging/record schema
+            single_emb = embedder.embed_batch([initial_text])
+            features = feature_extractor.extract_features(
+                question=question,
+                responses=[initial_text],
+                embeddings=single_emb,
+            )
 
-        rec = ExperimentRecord(
-            timestamp=datetime.datetime.now().isoformat(),
-            question=question,
-            path="FAST_PATH",
-            final_answer=initial_text,
-            response_count=1,
-            cluster_count=1,
-            dominant_cluster_agreement=1.0,
-            second_cluster_agreement=0.0,
-            agreement_margin=1.0,
-            semantic_entropy=0.0,
-            normalized_entropy=0.0,
-            mean_pairwise_similarity=1.0,
-            elapsed_seconds=elapsed_total,
-            classifier_status=clf_status,
-            predicted_label=pred_label,
-            confidence=pred_conf,
-            features=features,
-            responses=[initial_res],
-            clusters={"labels": [0], "cluster_counts": [1], "dominant_rep_idx": 0, "second_rep_idx": None},
-            model=gen_model,
-            embedding_model=emb_model,
-        )
-        return rec
+            pred_label = fast_assessment.predicted_label
+            pred_conf = fast_assessment.confidence
+            clf_status = fast_assessment.status
+
+            rec = ExperimentRecord(
+                timestamp=datetime.datetime.now().isoformat(),
+                question=question,
+                path="FAST_PATH",
+                final_answer=initial_text,
+                response_count=1,
+                cluster_count=1,
+                dominant_cluster_agreement=1.0,
+                second_cluster_agreement=0.0,
+                agreement_margin=1.0,
+                semantic_entropy=0.0,
+                normalized_entropy=0.0,
+                mean_pairwise_similarity=1.0,
+                elapsed_seconds=elapsed_total,
+                classifier_status=clf_status,
+                predicted_label=pred_label,
+                confidence=pred_conf,
+                features=features,
+                responses=[initial_res],
+                clusters={"labels": [0], "cluster_counts": [1], "dominant_rep_idx": 0, "second_rep_idx": None},
+                model=gen_model,
+                embedding_model=emb_model,
+            )
+            return rec
 
     # 5. Multi-Response Path: exactly 10 responses total
     all_responses = generator.generate_multi(
@@ -204,7 +217,7 @@ def run_pipeline(
     else:
         final_answer = dom_text
 
-    # 10. Classifier Inference
+    # 10. Classifier Inference & Criterion Ambiguity Assessment
     clf_status = "CLASSIFIER NOT TRAINED"
     pred_label = None
     pred_conf = None
@@ -213,6 +226,28 @@ def run_pipeline(
         clf_status = pred_res.get("status", "PREDICTED")
         pred_label = pred_res.get("predicted_label")
         pred_conf = pred_res.get("confidence")
+
+    # Evaluate Criterion Ambiguity: decouple response consensus from objective truth
+    ambig_check = CriterionAmbiguityAssessor.assess(
+        question=question,
+        responses=response_texts,
+        features=features,
+    )
+    if ambig_check.is_ambiguous and pred_label != "AMBIGUOUS":
+        pred_label = "AMBIGUOUS"
+        pred_conf = ambig_check.confidence
+        clf_status = f"ASSESSED_AMBIGUOUS_RULE_HEURISTIC ({ambig_check.evidence[0]})"
+
+    # Evaluate Inaccessibility Safeguard: prevent multi-cluster refusal masquerading as ambiguity
+    inacc_check = InaccessibilityAssessor.assess(
+        question=question,
+        responses=response_texts,
+        features=features,
+    )
+    if inacc_check.is_inaccessible:
+        pred_label = "UNKNOWN"
+        pred_conf = inacc_check.confidence
+        clf_status = f"ASSESSED_INACCESSIBLE_RULE_HEURISTIC ({inacc_check.evidence[0]})"
 
     elapsed_total = time.time() - start_total_t
 

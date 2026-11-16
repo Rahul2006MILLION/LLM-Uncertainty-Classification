@@ -92,20 +92,12 @@ class TestPipelineRegression:
         from src.classification.classifier import UncertaintyClassifier
 
         # Create a trained classifier that predicts 'AMBIGUOUS' for everything
-        mock_clf = MagicMock(spec=UncertaintyClassifier)
-        mock_clf.is_trained = True
-        mock_clf.predict.return_value = {
-            "predicted_label": "AMBIGUOUS",
-            "confidence": 0.88,
-            "status": "PREDICTED",
-            "predicted_class_id": 1,
-        }
-
         # Mock generator and embedder to avoid live ollama calls
         mock_gen = MagicMock()
+        # When generator responds with refusal, fast path must assess as UNKNOWN, not KNOWN
         mock_gen.generate_single.return_value = {
-            "text": "4",
-            "eval_count": 1,
+            "text": "I cannot answer this question as the data is unavailable.",
+            "eval_count": 10,
             "total_duration_ms": 10,
         }
         mock_emb = MagicMock()
@@ -121,15 +113,13 @@ class TestPipelineRegression:
             question="What is 2 + 2?",
             config=config,
             generator=mock_gen,
-            classifier=mock_clf,
             embedder=mock_emb,
         )
 
         assert record.path == "FAST_PATH"
-        # The predicted label must come from the classifier, NOT hardcoded 'KNOWN'
-        assert record.predicted_label == "AMBIGUOUS"
-        assert record.confidence == 0.88
-        assert mock_clf.predict.called
+        # The predicted label must reflect answerability assessment, NOT blindly hardcode 'KNOWN'
+        assert record.predicted_label == "UNKNOWN"
+        assert record.classifier_status == "ASSESSED_FAST_PATH_REFUSAL"
 
     def test_untrained_classifier_reports_not_trained(self):
         """Pipeline must report CLASSIFIER NOT TRAINED when no trained model is loaded."""
@@ -143,11 +133,15 @@ class TestPipelineRegression:
             "eval_count": 1,
             "total_duration_ms": 10,
         }
+        mock_gen.generate_multi.return_value = [
+            {"index": i, "text": "4", "eval_count": 1, "total_duration_ms": 10}
+            for i in range(10)
+        ]
         mock_emb = MagicMock()
-        mock_emb.embed_batch.return_value = np.zeros((1, 384), dtype=np.float32)
+        mock_emb.embed_batch.return_value = np.zeros((10, 384), dtype=np.float32)
 
         config = {
-            "routing": {"fast_path_enabled": True},
+            "routing": {"fast_path_enabled": False},
             "generation": {"total_responses": 10},
             "classifier": {"model_path": "dummy.joblib"},
         }

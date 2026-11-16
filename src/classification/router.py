@@ -10,8 +10,8 @@ AMBIGUITY_QUESTION_PATTERNS = [
     r"\b(georgia|jordan|washington|columbia|alexandria|victoria|mercury)\b",
     # Underspecified single-name queries, e.g. "Who is Jordan?", "Who is Smith?"
     r"^(who|what|where)\s+is\s+[A-Za-z]+(\s+[A-Za-z]+)?\??$",
-    # Criterion ambiguity (superlatives requiring criteria, e.g. population vs area)
-    r"\b(largest|biggest|tallest|fastest|best|oldest|richest|most)\b",
+    # Criterion ambiguity & subjective superlatives (requiring unstated criteria, e.g. success, greatness, impact, language utility)
+    r"\b(largest|biggest|tallest|fastest|best|oldest|richest|greatest|finest|worst|favorite|most\s+[a-z]+)\b",
     # Private mental state or indeterminate future contingencies
     r"\b(thinking|mind|guess|secret|future|tomorrow|lottery|predict)\b",
 ]
@@ -32,6 +32,13 @@ INITIAL_RESPONSE_AMBIGUITY_TRIGGERS = [
     r"\bunable to know\b",
     r"\bno way to know\b",
     r"\bas an ai,?\s*i cannot\b",
+    r"\bno single\b",
+    r"\bsubjective\b",
+    r"\bdepends on (the\s+)?(criteria|task|context|definition|perspective)\b",
+    r"\bno universally accepted\b",
+    r"\bvaries (greatly\s+)?based on\b",
+    r"\bmatter of (opinion|perspective)\b",
+    r"\bdifferent criteria\b",
 ]
 
 # High-confidence fast-path triggers: strictly deterministic arithmetic and established concept definitions
@@ -103,9 +110,10 @@ class AdaptiveRouter:
             )
 
         # 5. Length and complexity heuristic:
-        # If response is concise (< 200 chars) and free of hedging, can qualify as fast path
-        has_hedging = bool(re.search(r"\b(maybe|perhaps|possibly|might|unclear)\b", resp_clean))
-        if len(resp_clean) < 200 and not has_hedging and len(q_clean.split()) <= 8:
+        # If response is concise (< 200 chars) and free of hedging/subjectivity, can qualify as fast path
+        has_hedging = bool(re.search(r"\b(maybe|perhaps|possibly|might|unclear|subjective|depends)\b", resp_clean))
+        is_subjective_query = any(re.search(p, q_clean, flags=re.IGNORECASE) for p in AMBIGUITY_QUESTION_PATTERNS)
+        if len(resp_clean) < 200 and not has_hedging and not is_subjective_query and len(q_clean.split()) <= 8:
             return RoutingDecision(
                 path="FAST_PATH",
                 reason="Concise, direct single response with zero hedging on short query.",
