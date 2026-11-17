@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROJECT DESIGN DOCUMENT: Epistemic Uncertainty Classification in Language Model Responses</title>
+
+<!-- MathJax Configuration & Script -->
+<script>
+window.mathjaxReady = false;
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  startup: {
+    ready: () => {
+      MathJax.startup.defaultReady();
+      MathJax.startup.promise.then(() => {
+        window.mathjaxReady = true;
+      });
+    }
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- Mermaid.js Configuration & Script -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+window.mermaidReady = false;
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'neutral',
+  securityLevel: 'loose',
+  flowchart: {
+    useMaxWidth: true,
+    htmlLabels: true,
+    curve: 'basis'
+  }
+});
+window.addEventListener('DOMContentLoaded', async () => {
+  try {
+    await mermaid.run({ querySelector: '.mermaid' });
+    window.mermaidReady = true;
+  } catch (e) {
+    console.error('Mermaid rendering error:', e);
+    window.mermaidReady = true;
+  }
+});
+</script>
+
+<style>
+/* ==========================================================================
+   ACADEMIC DESIGN SYSTEM & TYPOGRAPHY
+   ========================================================================== */
+:root {
+  --font-serif: "Charter", "Bitstream Charter", "Sitka Text", "Cambria", Georgia, serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  
+  --color-primary: #1e3a8a;       /* Deep Navy */
+  --color-primary-light: #3b82f6; /* Blue Accent */
+  --color-text: #1e293b;          /* Slate 800 */
+  --color-text-muted: #64748b;    /* Slate 500 */
+  --color-bg-page: #f8fafc;       /* Slate 50 */
+  --color-bg-card: #ffffff;       /* Pure White */
+  --color-border: #e2e8f0;        /* Slate 200 */
+  --color-border-subtle: #f1f5f9; /* Slate 100 */
+  
+  --known-color: #166534;
+  --known-bg: #dcfce7;
+  --ambig-color: #92400e;
+  --ambig-bg: #fef3c7;
+  --unknown-color: #6b21a8;
+  --unknown-bg: #f3e8ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-serif);
+  color: var(--color-text);
+  background-color: var(--color-bg-page);
+  line-height: 1.68;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   APP CONTAINER & LAYOUT
+   ========================================================================== */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar TOC */
+.sidebar {
+  width: 320px;
+  background-color: #ffffff;
+  border-right: 1px solid var(--color-border);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  padding: 1.75rem 1.25rem;
+  z-index: 100;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.02);
+}
+
+.sidebar-header {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 1rem;
+}
+
+.sidebar-title {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.sidebar-subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+}
+
+.toc-list li {
+  margin: 0.35rem 0;
+}
+
+.toc-list a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  display: block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.15s ease-in-out;
+  line-height: 1.35;
+}
+
+.toc-list a:hover {
+  color: var(--color-primary);
+  background-color: #f1f5f9;
+}
+
+.toc-item-h2 {
+  font-weight: 600;
+  margin-top: 0.6rem !important;
+}
+
+.toc-item-h2 a {
+  color: var(--color-text);
+}
+
+.toc-item-h3 {
+  padding-left: 1rem;
+  font-size: 0.8rem;
+}
+
+/* Main Document Area */
+.main-wrapper {
+  flex: 1;
+  margin-left: 320px;
+  padding: 2.5rem 3.5rem 5rem 3.5rem;
+  max-width: 1050px;
+}
+
+.document-paper {
+  background-color: var(--color-bg-card);
+  padding: 3.5rem 4rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+/* ==========================================================================
+   ACADEMIC METADATA BANNER
+   ========================================================================== */
+.paper-header {
+  border-bottom: 2px solid var(--color-primary);
+  padding-bottom: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.paper-title {
+  font-family: var(--font-sans);
+  font-size: 2.15rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.02em;
+}
+
+.paper-subtitle {
+  font-family: var(--font-sans);
+  font-size: 1.15rem;
+  color: #475569;
+  margin: 0 0 1.5rem 0;
+  font-weight: 400;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  background-color: #f8fafc;
+  padding: 1rem 1.25rem;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.meta-value {
+  font-weight: 600;
+  color: #1e293b;
+  margin-top: 0.15rem;
+}
+
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  font-family: var(--font-sans);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.badge-green {
+  background-color: var(--known-bg);
+  color: var(--known-color);
+  border-color: #bbf7d0;
+}
+
+.badge-blue {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border-color: #bae6fd;
+}
+
+.badge-purple {
+  background-color: var(--unknown-bg);
+  color: var(--unknown-color);
+  border-color: #e9d5ff;
+}
+
+/* ==========================================================================
+   SECTION & HEADING STYLES
+   ========================================================================== */
+.doc-heading {
+  font-family: var(--font-sans);
+  color: #0f172a;
+  letter-spacing: -0.015em;
+  scroll-margin-top: 2rem;
+}
+
+.doc-h2 {
+  font-size: 1.55rem;
+  font-weight: 700;
+  margin-top: 3.25rem;
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.doc-h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 2.25rem;
+  margin-bottom: 0.85rem;
+  color: #1e293b;
+}
+
+.doc-h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #334155;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1.2rem;
+  text-align: justify;
+}
+
+ul, ol {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  padding-left: 1.75rem;
+}
+
+li {
+  margin-bottom: 0.4rem;
+}
+
+strong {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background-color: #f1f5f9;
+  color: #0f172a;
+  padding: 0.15em 0.35em;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  background-color: #0f172a;
+  color: #f8fafc;
+  padding: 1.25rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  border: none;
+}
+
+/* ==========================================================================
+   TABLES
+   ========================================================================== */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin: 1.75rem 0;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  text-align: left;
+}
+
+thead tr {
+  background-color: #f8fafc;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+th {
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: 0.02em;
+}
+
+td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: top;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #fcfdfe;
+}
+
+tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* ==========================================================================
+   MERMAID DIAGRAMS
+   ========================================================================== */
+.diagram-wrapper {
+  margin: 2.25rem 0;
+  text-align: center;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.diagram-container {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1.75rem;
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.diagram-container .mermaid {
+  display: flex;
+  justify-content: center;
+}
+
+.diagram-caption {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  margin-top: 0.75rem;
+}
+
+/* ==========================================================================
+   MATH DISPLAY & KAtex/MATHJAX
+   ========================================================================== */
+mjx-container[jax="CHTML"][display="true"] {
+  margin: 1.5rem 0 !important;
+  padding: 0.75rem 1rem;
+  background-color: #fafbfc;
+  border-radius: 6px;
+  border: 1px solid #f1f5f9;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* ==========================================================================
+   CALLOUTS & HORIZONTAL RULES
+   ========================================================================== */
+hr {
+  border: none;
+  height: 1px;
+  background-color: #e2e8f0;
+  margin: 2.5rem 0;
+}
+
+/* Responsive Nav Toggle */
+.mobile-header {
+  display: none;
+  background: #ffffff;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-title {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-primary);
+}
+
+.mobile-btn {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .mobile-header {
+    display: flex;
+  }
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.25s ease-in-out;
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .main-wrapper {
+    margin-left: 0;
+    padding: 1.5rem;
+  }
+  .document-paper {
+    padding: 2rem 1.5rem;
+  }
+}
+
+/* ==========================================================================
+   PRINT / PDF PRESENTATION STYLING
+   ========================================================================== */
+@page {
+  size: A4 portrait;
+  margin: 18mm 16mm 18mm 16mm;
+}
+
+@media print {
+  .sidebar, .mobile-header, .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-size: 10.2pt;
+    line-height: 1.55;
+  }
+  
+  .app-container {
+    display: block !important;
+  }
+  
+  .main-wrapper {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  
+  .document-paper {
+    border: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+  
+  .paper-header {
+    border-bottom: 2pt solid #1e3a8a !important;
+    padding-bottom: 12pt !important;
+    margin-bottom: 16pt !important;
+  }
+  
+  .paper-title {
+    font-size: 18pt !important;
+    color: #0f172a !important;
+  }
+  
+  .paper-subtitle {
+    font-size: 11pt !important;
+    color: #334155 !important;
+  }
+  
+  .meta-grid {
+    background-color: #f8fafc !important;
+    border: 1pt solid #cbd5e1 !important;
+    padding: 8pt !important;
+    font-size: 8pt !important;
+  }
+  
+  .doc-h2 {
+    font-size: 13.5pt !important;
+    margin-top: 20pt !important;
+    margin-bottom: 8pt !important;
+    padding-bottom: 4pt !important;
+    border-bottom: 1pt solid #cbd5e1 !important;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  
+  .doc-h3 {
+    font-size: 11.5pt !important;
+    margin-top: 14pt !important;
+    margin-bottom: 6pt !important;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  
+  .table-container {
+    border: 0.5pt solid #cbd5e1 !important;
+    box-shadow: none !important;
+    margin: 10pt 0 !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  
+  table {
+    font-size: 8pt !important;
+    line-height: 1.35 !important;
+  }
+  
+  th, td {
+    padding: 4pt 6pt !important;
+  }
+  
+  thead {
+    display: table-header-group;
+  }
+  
+  tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  
+  /* Major Exhibit Sections start on fresh page in print */
+  #section-4, #section-8, #section-13, #section-16 {
+    break-before: page !important;
+    page-break-before: always !important;
+  }
+
+  .diagram-wrapper {
+    margin: 12pt 0 !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  .diagram-container {
+    border: 0.5pt solid #cbd5e1 !important;
+    box-shadow: none !important;
+    padding: 8pt !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .diagram-container svg {
+    max-height: 205mm !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  
+  mjx-container[jax="CHTML"][display="true"] {
+    margin: 8pt 0 !important;
+    padding: 4pt !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  
+  pre {
+    font-size: 7.5pt !important;
+    padding: 8pt !important;
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+    border: 0.5pt solid #cbd5e1 !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="mobile-header no-print">
+  <div class="mobile-title">ML Uncertainty Classification</div>
+  <button class="mobile-btn" onclick="document.querySelector('.sidebar').classList.toggle('open')">Table of Contents</button>
+</div>
+
+<div class="app-container">
+  <!-- Interactive Navigation Sidebar -->
+  <aside class="sidebar no-print">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">Contents Outline</h2>
+      <div class="sidebar-subtitle">Project Design Document (v1.0.0)</div>
+    </div>
+    <ul class="toc-list">
+<li class="toc-item-h2"><a href="#section-1">1. Abstract &amp;amp; Project Motivation</a></li>
+<li class="toc-item-h2"><a href="#section-2">2. Problem Statement &amp;amp; Research Objectives</a></li>
+<li class="toc-item-h3"><a href="#section-2-1">2.1 Problem Statement</a></li>
+<li class="toc-item-h3"><a href="#section-2-2">2.2 Core Research Question</a></li>
+<li class="toc-item-h3"><a href="#section-2-3">2.3 Research Objectives</a></li>
+<li class="toc-item-h2"><a href="#section-3">3. Three-Class Epistemic Uncertainty Taxonomy</a></li>
+<li class="toc-item-h3"><a href="#sec-scientific-principles-amp-safeguards">Scientific Principles &amp;amp; Safeguards</a></li>
+<li class="toc-item-h2"><a href="#section-4">4. Overall System Architecture</a></li>
+<li class="toc-item-h2"><a href="#section-5">5. Adaptive Question-Answering Pipeline</a></li>
+<li class="toc-item-h3"><a href="#section-5-1">5.1 Step-by-Step Execution Lifecycle</a></li>
+<li class="toc-item-h2"><a href="#section-6">6. Multi-Response Consistency Methodology</a></li>
+<li class="toc-item-h2"><a href="#section-7">7. Semantic Entropy &amp;amp; Clustering</a></li>
+<li class="toc-item-h3"><a href="#section-7-1">7.1 Mathematical Formulations</a></li>
+<li class="toc-item-h3"><a href="#section-7-2">7.2 Medoid Representative Selection</a></li>
+<li class="toc-item-h2"><a href="#section-8">8. Complete 16-Feature Extraction Methodology</a></li>
+<li class="toc-item-h2"><a href="#section-9">9. XGBoost Classification Architecture</a></li>
+<li class="toc-item-h3"><a href="#section-9-1">9.1 Underlying Model &amp;amp; Fallback Hierarchy</a></li>
+<li class="toc-item-h3"><a href="#section-9-2">9.2 Label Encoding &amp;amp; Probability Output</a></li>
+<li class="toc-item-h2"><a href="#section-10">10. Fast-Path Assessment</a></li>
+<li class="toc-item-h3"><a href="#section-10-1">10.1 Motivation &amp;amp; Principles</a></li>
+<li class="toc-item-h3"><a href="#section-10-2">10.2 Assessment Rules</a></li>
+<li class="toc-item-h2"><a href="#section-11">11. Criterion Ambiguity Assessment</a></li>
+<li class="toc-item-h3"><a href="#section-11-1">11.1 The Decoupling Problem</a></li>
+<li class="toc-item-h3"><a href="#section-11-2">11.2 The Criterion Ambiguity Assessor</a></li>
+<li class="toc-item-h2"><a href="#section-12">12. Inaccessibility Safeguards</a></li>
+<li class="toc-item-h3"><a href="#section-12-1">12.1 The Refusal Dispersion Failure Mode</a></li>
+<li class="toc-item-h3"><a href="#section-12-2">12.2 Dual-Condition Inaccessibility Safeguard</a></li>
+<li class="toc-item-h2"><a href="#section-13">13. Dataset &amp;amp; Benchmark Design</a></li>
+<li class="toc-item-h3"><a href="#section-13-1">13.1 Benchmark Evolution: Pilot (60 Qs) to Candidate v1.1 (300 Qs)</a></li>
+<li class="toc-item-h3"><a href="#section-13-2">13.2 Category Quotas &amp;amp; Class Distribution (Exact 100/100/100 Balance)</a></li>
+<li class="toc-item-h3"><a href="#section-13-3">13.3 Audited Boundary Corrections &amp;amp; Audit Trail</a></li>
+<li class="toc-item-h2"><a href="#section-14">14. Union-Find Group Partitioning &amp;amp; Leakage Prevention</a></li>
+<li class="toc-item-h3"><a href="#section-14-1">14.1 The Data Leakage Vulnerability</a></li>
+<li class="toc-item-h3"><a href="#section-14-2">14.2 Union-Find Connected Component Algorithm</a></li>
+<li class="toc-item-h2"><a href="#section-15">15. Training &amp;amp; Evaluation Methodology</a></li>
+<li class="toc-item-h3"><a href="#section-15-1">15.1 Stratified Group Allocation</a></li>
+<li class="toc-item-h3"><a href="#section-15-2">15.2 Comprehensive Evaluation Metrics</a></li>
+<li class="toc-item-h3"><a href="#section-15-3">15.3 Evaluated Baselines &amp;amp; Ablations</a></li>
+<li class="toc-item-h2"><a href="#section-16">16. Existing Experimental Results &amp;amp; Documented Limitations</a></li>
+<li class="toc-item-h3"><a href="#section-16-1">16.1 Verified Empirical Results</a></li>
+<li class="toc-item-h3"><a href="#section-16-2">16.2 Documented Limitations</a></li>
+<li class="toc-item-h2"><a href="#section-17">17. Future Research Roadmap</a></li>
+<li class="toc-item-h3"><a href="#sec-next-implementation-milestones">Next Implementation Milestones</a></li>
+    </ul>
+  </aside>
+
+  <!-- Document Paper Container -->
+  <main class="main-wrapper">
+    <article class="document-paper">
+      
+      <!-- Academic Document Header -->
+      <header class="paper-header">
+        <h1 class="paper-title">Epistemic Uncertainty Classification in Language Model Responses</h1>
+        <div class="paper-subtitle">A Leak-Free, Adaptive Machine Learning Architecture for Tri-State Uncertainty Characterization</div>
+        
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Document ID</span>
+            <span class="meta-value">PDD-ML-UNCERTAINTY-v1.0.0</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Date & Reference</span>
+            <span class="meta-value">November 17, 2026</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Classification Stage</span>
+            <span class="meta-value">Tri-State Epistemic Router</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">License</span>
+            <span class="meta-value">CC BY-SA 3.0</span>
+          </div>
+        </div>
+
+        <div class="badge-row">
+          <span class="badge badge-green">&#10003; 81/81 Test Suite Passing</span>
+          <span class="badge badge-blue">&#9878; Union-Find Split Verified</span>
+          <span class="badge badge-purple">&#9733; Candidate v1.1 Adjudicated (300 Qs)</span>
+        </div>
+      </header>
+
+      <!-- Main Rendered Content -->
+      <section class="paper-content">
+<h1>Formal Project Design Document: LLM Uncertainty Classification Using Multi-Response Consistency and Feature-Based Machine Learning</h1>
+<p><strong>Document Version</strong>: 1.0.0-RELEASE<br />
+<strong>Date</strong>: November 17, 2026<br />
+<strong>Project</strong>: LLM Uncertainty Classification Prototype<br />
+<strong>Repository</strong>: <code>/Users/rahuljain/Documents/Rahul Jain/ML proj</code><br />
+<strong>License</strong>: CC BY-SA 3.0<br />
+<strong>Test Suite Status</strong>: 81 / 81 Tests Passing (100%)</p>
+<hr />
+<h2 id="section-1" class="doc-heading doc-h2">1. Abstract &amp; Project Motivation</h2>
+<p>Modern Large Language Models (LLMs) routinely exhibit high generation fluency while suffering from severe calibration failures. In open-domain question answering, LLMs frequently express unwarranted confidence when hallucinating factual answers, collapse distinct interpretations of polysemous queries into an arbitrary single response, and generate superficial answers or varied refusals to fundamentally inaccessible questions. Traditional token-level logit probabilities often fail to capture semantic uncertainty because high probability can be concentrated on semantically identical paraphrases, or conversely, dispersed across divergent phrasings of the same factual proposition.</p>
+<p>This project designs, implements, and validates a scientifically grounded, leak-free machine learning architecture for multi-class epistemic uncertainty classification. Operating on a local instruction-tuned LLM (<code>qwen2.5:3b</code>) coupled with a sentence-transformer embedding model (<code>all-minilm</code>), our system samples stochastic responses ($N=10$), maps them into dense semantic spaces, performs agglomerative clustering to identify semantic equivalence classes, and extracts a canonical 16-feature vector capturing semantic entropy, cluster dispersion, lexical diversity, question-response overlap, hedging, and negation dynamics. An XGBoost classifier maps these feature vectors to an operational three-class epistemic uncertainty taxonomy: <strong><code>KNOWN</code></strong>, <strong><code>AMBIGUOUS</code></strong>, and <strong><code>UNKNOWN</code></strong>.</p>
+<p>To guarantee computational efficiency and robust real-world behavior, the pipeline integrates an <strong>Adaptive Fast-Path Router</strong> with specialized heuristics:</p>
+<ol>
+<li>A <strong>Fast-Path Answerability Assessor</strong> that executes low-latency single-response inference on elementary arithmetic and definitions without hardcoding labels.</li>
+<li>A <strong>Criterion Ambiguity Assessor</strong> that decouples model response consensus from objective truth on subjective superlative queries.</li>
+<li>An <strong>Inaccessibility Safeguard</strong> that prevents refusal variance on private credentials and unrecorded mental states from masquerading as multi-cluster ambiguity.</li>
+</ol>
+<p>Furthermore, we design a 300-question evaluation benchmark with exact class balance (100/100/100) across seven distinct operational categories, governed by an indivisible <strong>Union-Find Connected Component Partitioning</strong> algorithm that prevents train/test data leakage even across multi-label adversarial pairs.</p>
+<hr />
+<h2 id="section-2" class="doc-heading doc-h2">2. Problem Statement &amp; Research Objectives</h2>
+<h3 id="section-2-1" class="doc-heading doc-h3">2.1 Problem Statement</h3>
+<p>Given a user query $q$, an LLM generator $\mathcal{G}$, and an embedding model $\mathcal{E}$, how can an automated system determine whether:</p>
+<ol>
+<li>The question has a single determinate, verifiable answer in public knowledge that the system knows (<strong><code>KNOWN</code></strong>);</li>
+<li>The question permits multiple materially different, equally legitimate interpretations, readings, or value judgments requiring clarification (<strong><code>AMBIGUOUS</code></strong>); or</li>
+<li>The question is fundamentally unanswerable due to inaccessible private information, chaotic future contingencies, or false existential premises (<strong><code>UNKNOWN</code></strong>)?</li>
+</ol>
+<h3 id="section-2-2" class="doc-heading doc-h3">2.2 Core Research Question</h3>
+<blockquote>
+<p><em>Can semantic consistency and information-theoretic representations extracted from stochastic multi-response local LLM generations reliably differentiate between answerable knowledge, question ambiguity, and fundamental unanswerability without relying on target label leakage or task-specific fine-tuning?</em></p>
+</blockquote>
+<h3 id="section-2-3" class="doc-heading doc-h3">2.3 Research Objectives</h3>
+<ol>
+<li><strong>Develop an Information-Theoretic Multi-Response Consistency Framework</strong>: Formalize semantic entropy, agreement margins, and pairwise semantic similarity across dense sentence embeddings.</li>
+<li><strong>Design a Strict 16-Feature Representation Free of Label Leakage</strong>: Guarantee that feature extraction operates solely on question text and generated output strings, strictly prohibiting gold labels or target answers from entering the feature space.</li>
+<li><strong>Construct an Adaptive, Cost-Effective Architecture</strong>: Minimize latency and token expenditure by routing deterministic arithmetic and definition queries through a Fast Path ($N=1$) while reserving Multi-Response sampling ($N=10$) for complex, ambiguous, or uncertain queries.</li>
+<li><strong>Establish Decoupled Epistemic Safeguards</strong>: Prevent high model agreement from falsely asserting truth on subjective superlatives (<em>Agreement $\neq$ Truth</em>), and prevent stylistic refusal variation from misclassifying inaccessible secrets as ambiguous (<em>Refusal Dispersion $\neq$ Ambiguity</em>).</li>
+<li><strong>Develop a Leak-Free Group-Partitioning Benchmark Protocol</strong>: Build and audit a 300-question ground-truth benchmark and prove mathematically and empirically that connected-component group partitioning prevents train/validation/test leakage across composite paraphrases and adversarial boundary pairs.</li>
+</ol>
+<hr />
+<h2 id="section-3" class="doc-heading doc-h2">3. Three-Class Epistemic Uncertainty Taxonomy</h2>
+<p>The system adopts a mutually exclusive, operationally testable three-class taxonomy grounded in epistemic logic and formal question-answering semantics:</p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>Uncertainty Class</th>
+<th>Epistemic Definition</th>
+<th>Operational Criteria</th>
+<th>Model Generation Profile ($N=10$)</th>
+<th>Representative Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>KNOWN</code></strong></td>
+<td>Sufficiently specified query with a single, verifiable, authoritative answer in public knowledge.</td>
+<td>Single factual answer exists across reputable references; prompt is unambiguous.</td>
+<td>Single dominant cluster ($K=1$), high agreement ($p_1 \ge 0.80$), near-zero semantic entropy ($H \to 0$), low hedging.</td>
+<td><em>&quot;What is 2 + 2?&quot;</em><br><em>&quot;What is the official capital city of France?&quot;</em><br><em>&quot;Define photosynthesis.&quot;</em></td>
+</tr>
+<tr>
+<td><strong><code>AMBIGUOUS</code></strong></td>
+<td>Query with multiple materially different, equally plausible interpretations, referents, or subjective metrics.</td>
+<td>Prompt lacks distinguishing scope (polysemy, unstated jurisdiction/timeframe, or unconstrained subjective superlatives).</td>
+<td>Bimodal or trimodal clustering ($K \ge 2$), second cluster agreement $p_2 \ge 0.25$, low agreement margin $\Delta p &lt; 0.50$, moderate-to-high entropy.</td>
+<td><em>&quot;What is the capital of Georgia?&quot;</em> (Tbilisi vs Atlanta)<br><em>&quot;Who is Jordan?&quot;</em> (Michael vs Michael B.)<br><em>&quot;What is the best programming language?&quot;</em></td>
+</tr>
+<tr>
+<td><strong><code>UNKNOWN</code></strong></td>
+<td>Clear query for which empirical facts are fundamentally inaccessible, undetermined, or nonexistent.</td>
+<td>Information is epistemically opaque: private credentials, chaotic future events, unrecorded history, or false existential presuppositions.</td>
+<td>Broad cluster dispersion ($K \ge 4$), high normalized entropy ($H_{norm} \to 1.0$), low dominant agreement ($p_1 &lt; 0.40$), or explicit refusal patterns.</td>
+<td><em>&quot;What is the secret password in my safe?&quot;</em><br><em>&quot;What will Apple stock close at on Dec 31, 2035?&quot;</em><br><em>&quot;How many corners does a circle have?&quot;</em></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="sec-scientific-principles-amp-safeguards" class="doc-heading doc-h3">Scientific Principles &amp; Safeguards</h3>
+<ol>
+<li><strong>Ambiguity Is Not Ignorance ($\text{Ambiguity} \neq \text{Lack of Knowledge}$)</strong>: An ambiguous query is not unanswerable; it possesses multiple legitimate answers depending on unstated context. Forcing a single answer is a calibration failure.</li>
+<li><strong>Consensus Is Not Truth ($\text{Agreement} \neq \text{Truth}$)</strong>: Strong agreement across stochastic samples reflects only the model's internal prior or training distribution default. It does not establish empirical truth on subjective superlatives.</li>
+<li><strong>Refusal Dispersion Is Not Ambiguity ($\text{Refusal Dispersion} \neq \text{Ambiguity}$)</strong>: Slight stylistic variations across multiple refusal responses (<em>&quot;I cannot...&quot;</em> vs <em>&quot;As an AI...&quot;</em>) must not be interpreted as competing interpretations.</li>
+</ol>
+<hr />
+<h2 id="section-4" class="doc-heading doc-h2">4. Overall System Architecture</h2>
+<p>The system operates as an end-to-end adaptive pipeline integrating local inference, linguistic pre-processing, dense embedding, agglomerative clustering, feature calculation, heuristic assessment, and supervised gradient-boosted classification.</p>
+<div class="diagram-wrapper">
+  <div class="diagram-container">
+    <div class="mermaid">
+flowchart TD
+    UserQuery(["User Query: q"]) --> OllamaGreedy["Ollama Initial Sample<br/>(qwen2.5:3b, T=0.0)"]
+    OllamaGreedy --> AdaptiveRouter{"Adaptive Router"}
+
+    %% Fast Path Branch
+    AdaptiveRouter -->|"Simple / Confident Query"| FastAssessor["FastPathAnswerabilityAssessor<br/>(Arithmetic / Concept Definition)"]
+    FastAssessor --> FastDecision{"Fast Assessment<br/>Confident?"}
+    FastDecision -->|"Yes (Confidence ≥ 0.90)"| FastReturn(["Fast-Path Output<br/>(KNOWN / Direct Return, Latency < 1s)"])
+    FastDecision -->|"Uncertain / Reroute"| MultiGen
+
+    %% Multi-Response Branch
+    AdaptiveRouter -->|"Ambiguous / Complex Query"| MultiGen["ResponseGenerator<br/>(Sample 9 Additional Responses, T=0.7, top_p=0.9)"]
+    MultiGen --> TotalTen["Total 10 Responses: R = {r1, ..., r10}"]
+    
+    TotalTen --> EmbedEngine["EmbeddingEngine<br/>(all-minilm:latest, L2 Normalized Vectors v_i)"]
+    EmbedEngine --> AgglomCluster["SemanticClusterer<br/>(Agglomerative Linkage, Distance Threshold τ = 0.20)"]
+    
+    AgglomCluster --> FeatureEngine["FeatureExtractor<br/>(Extracts 16-Dimensional Feature Vector x ∈ ℝ¹⁶)"]
+    
+    FeatureEngine --> OutputSynth["Output Synthesizer<br/>(p2 ≥ 0.25 ? Dual Explanation : Dominant Medoid)"]
+    FeatureEngine --> XGBoostModel["UncertaintyClassifier<br/>(XGBoost / HistGB Model)"]
+    
+    XGBoostModel --> RawPred["Raw Predicted Label & Probabilities<br/>P(KNOWN), P(AMBIGUOUS), P(UNKNOWN)"]
+    
+    RawPred --> CriterionAssessor{"CriterionAmbiguityAssessor<br/>(Subjective Superlatives?)"}
+    CriterionAssessor -->|"Subjective Superlative"| OverrideAmbig["Override Label → AMBIGUOUS"]
+    CriterionAssessor -->|"No Override"| InaccAssessor{"InaccessibilityAssessor<br/>(Private Info / Mental State?)"}
+    
+    OverrideAmbig --> InaccAssessor
+    InaccAssessor -->|"Private Credential / Refusal"| OverrideUnk["Override Label → UNKNOWN"]
+    InaccAssessor -->|"No Override"| FinalExperiment["ExperimentRecord Output<br/>(Final Answer, Label, Features, Clusters)"]
+    OverrideUnk --> FinalExperiment
+    </div>
+  </div>
+  <div class="diagram-caption">Figure 1: End-to-End Adaptive Inference Pipeline Architecture</div>
+</div>
+<hr />
+<h2 id="section-5" class="doc-heading doc-h2">5. Adaptive Question-Answering Pipeline</h2>
+<p>The adaptive execution flow is implemented in [<code>experiments/ask.py</code>](file:///Users/rahuljain/Documents/Rahul%20Jain/ML%20proj/experiments/ask.py) and coordinated by [<code>src/classification/router.py</code>](file:///Users/rahuljain/Documents/Rahul%20Jain/ML%20proj/src/classification/router.py).</p>
+<h3 id="section-5-1" class="doc-heading doc-h3">5.1 Step-by-Step Execution Lifecycle</h3>
+<ol>
+<li><strong>Initial Greedy Generation ($T=0.0$)</strong>: The query is dispatched to <code>OllamaClient</code> using greedy decoding ($T=0$) to obtain a canonical reference response $r_1$.</li>
+<li><strong>Adaptive Route Classification</strong>: <code>AdaptiveRouter.route(question, initial_response)</code> evaluates question morphology and response properties:
+<ul>
+<li>Queries matching closed-domain arithmetic or standard definitional syntax (<em>&quot;What is X?&quot;</em>, <em>&quot;Define Y&quot;</em>) without uncertainty markers are routed to <code>FAST_PATH</code>.</li>
+<li>Queries with detected polysemy, subjective superlatives, or hedging markers are routed to <code>MULTI_RESPONSE</code>.</li>
+</ul>
+</li>
+<li><strong>Fast-Path Verification</strong>:
+<ul>
+<li>If routed to <code>FAST_PATH</code>, <code>FastPathAnswerabilityAssessor.assess</code> verifies whether the response directly answers the question or indicates inability to answer.</li>
+<li>If verified, the pipeline extracts single-response baseline features ($H=0.0$, $p_1=1.0$, elapsed time $&lt; 1.0\text{s}$) and returns immediately.</li>
+<li>If uncertain or hedged, the query is dynamically escalated to <code>MULTI_RESPONSE</code>.</li>
+</ul>
+</li>
+<li><strong>Stochastic Multi-Response Sampling ($N=10$)</strong>:
+<ul>
+<li>The generator draws 9 additional samples at $T=0.7$, $top_p=0.9$, yielding exactly $N=10$ independent responses.</li>
+</ul>
+</li>
+<li><strong>Dense Semantic Embedding</strong>:
+<ul>
+<li><code>EmbeddingEngine</code> encodes all 10 responses into 384-dimensional dense vectors using <code>all-minilm</code> and applies $L_2$ normalization:
+$$\mathbf{v}_i = \frac{\mathcal{E}(r_i)}{|\mathcal{E}(r_i)|_2}$$</li>
+</ul>
+</li>
+<li><strong>Agglomerative Clustering</strong>:
+<ul>
+<li>Pairwise cosine distances $d(r_i, r_j) = 1 - \mathbf{v}_i^\top \mathbf{v}_j$ are computed and clustered using average linkage at threshold $\tau = 0.20$ (similarity threshold $\ge 0.80$).</li>
+</ul>
+</li>
+<li><strong>Canonical 16-Feature Extraction</strong>:
+<ul>
+<li><code>FeatureExtractor</code> computes information-theoretic entropy, agreement margin, pairwise similarities, lexical ratios, question overlap, hedging, and negation count.</li>
+</ul>
+</li>
+<li><strong>Adaptive Answer Synthesis</strong>:
+<ul>
+<li>If the second cluster agreement $p_2 \ge 0.25$, the pipeline formats a multi-interpretation answer showing both readings and their consensus proportions.</li>
+<li>Otherwise, the medoid representative of the dominant cluster is returned.</li>
+</ul>
+</li>
+<li><strong>Supervised Inference &amp; Safeguard Cascading</strong>:
+<ul>
+<li><code>UncertaintyClassifier</code> predicts probabilities across <code>KNOWN</code>, <code>AMBIGUOUS</code>, and <code>UNKNOWN</code>.</li>
+<li>The prediction cascades through <code>CriterionAmbiguityAssessor</code> and <code>InaccessibilityAssessor</code> to correct known failure modes before output serialisation.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2 id="section-6" class="doc-heading doc-h2">6. Multi-Response Consistency Methodology</h2>
+<p>Stochastic multi-response sampling exploits the property that an LLM's probability distribution over semantic spaces reflects its epistemic state:</p>
+<ol>
+<li><strong>Epistemic Certainty (<code>KNOWN</code>)</strong>: The model's probability mass is concentrated on a single semantic proposition. Sampling under non-zero temperature ($T=0.7$) introduces lexical and syntactic paraphrases, but their semantic representations remain tightly clustered around a single medoid.</li>
+<li><strong>Polysemic Ambiguity (<code>AMBIGUOUS</code>)</strong>: The prompt is compatible with multiple distinct, well-supported semantic propositions. The stochastic sampling process draws responses from multiple disjoint modes in probability space, forming distinct, balanced clusters.</li>
+<li><strong>Epistemic Ignorance / Chaos (<code>UNKNOWN</code>)</strong>: The model lacks grounding data. The stochastic responses either hallucinate disjoint conjectures, resulting in high cluster dispersion, or generate refusals that fail to provide factual answers.</li>
+</ol>
+<hr />
+<h2 id="section-7" class="doc-heading doc-h2">7. Semantic Entropy &amp; Clustering</h2>
+<h3 id="section-7-1" class="doc-heading doc-h3">7.1 Mathematical Formulations</h3>
+<h4 id="sec-1-cluster-probability-distribution" class="doc-heading doc-h4">1. Cluster Probability Distribution</h4>
+<p>Given $N$ stochastic responses partitioned into $K$ disjoint semantic equivalence clusters $C_1, C_2, \dots, C_K$ with cardinalities $N_1 \ge N_2 \ge \dots \ge N_K &gt; 0$ such that $\sum_{k=1}^K N_k = N$, the empirical probability of cluster $k$ is:
+$$p_k = \frac{N_k}{N}$$</p>
+<h4 id="sec-2-semantic-entropy-h-x" class="doc-heading doc-h4">2. Semantic Entropy ($H(X)$)</h4>
+<p>Semantic entropy measures the uncertainty over distinct semantic equivalence classes rather than surface tokens:
+$$H(X) = - \sum_{k=1}^K p_k \ln(p_k)$$</p>
+<ul>
+<li>If all responses belong to a single cluster ($K=1$), $p_1 = 1.0$ and $H(X) = 0.0$.</li>
+<li>If every response forms its own distinct cluster ($K=N$), $p_k = \frac{1}{N}$ and $H(X) = \ln(N)$.</li>
+</ul>
+<h4 id="sec-3-normalized-semantic-entropy-h-norm-x" class="doc-heading doc-h4">3. Normalized Semantic Entropy ($H_{norm}(X)$)</h4>
+<p>To compare uncertainty across varying sample counts, entropy is normalized by the maximum possible entropy:
+$$H_{norm}(X) = \begin{cases} \frac{H(X)}{\ln(N)} &amp; \text{if } N &gt; 1 \ 0.0 &amp; \text{if } N = 1 \end{cases}$$
+Where $H_{norm}(X) \in [0.0, 1.0]$.</p>
+<h4 id="sec-4-dominant-amp-second-agreement-margins" class="doc-heading doc-h4">4. Dominant &amp; Second Agreement Margins</h4>
+<ul>
+<li><strong>Dominant Cluster Agreement ($p_1$)</strong>:
+$$p_1 = \max_{k} p_k = \frac{N_1}{N}$$</li>
+<li><strong>Second Cluster Agreement ($p_2$)</strong>:
+$$p_2 = \begin{cases} \frac{N_2}{N} &amp; \text{if } K \ge 2 \ 0.0 &amp; \text{if } K = 1 \end{cases}$$</li>
+<li><strong>Agreement Margin (First-Second Difference, FSD)</strong>:
+$$\Delta p = p_1 - p_2$$
+A small margin $\Delta p \to 0$ with $p_2 \ge 0.25$ indicates competing plausible interpretations (hallmark of ambiguity).</li>
+</ul>
+<h4 id="sec-5-pairwise-semantic-similarity" class="doc-heading doc-h4">5. Pairwise Semantic Similarity</h4>
+<p>Given L2-normalized embedding vectors $\mathbf{v}_1, \dots, \mathbf{v}<em>N \in \mathbb{R}^D$ where $\mathbf{v}<em>i^\top \mathbf{v}<em>j = \cos(\theta</em>{ij})$:
+$$\bar{S}</em>{mean} = \frac{2}{N(N-1)} \sum</em>{1 \le i &lt; j \le N} \mathbf{v}<em>i^\top \mathbf{v}<em>j$$
+$$S</em>{min} = \min</em>{1 \le i &lt; j \le N} \mathbf{v}_i^\top \mathbf{v}_j$$</p>
+<h3 id="section-7-2" class="doc-heading doc-h3">7.2 Medoid Representative Selection</h3>
+<p>For each cluster $C_k$, the representative response $r^<em>_k$ is the cluster medoid, defined as the response that maximizes average cosine similarity to all other responses within that cluster:
+$$r^</em><em>k = \arg\max</em>{r_i \in C_k} \sum_{r_j \in C_k} \mathbf{v}_i^\top \mathbf{v}_j$$</p>
+<hr />
+<h2 id="section-8" class="doc-heading doc-h2">8. Complete 16-Feature Extraction Methodology</h2>
+<p>All 16 features are strictly extracted in [<code>src/features/feature_extractor.py</code>](file:///Users/rahuljain/Documents/Rahul%20Jain/ML%20proj/src/features/feature_extractor.py). No gold target labels or expected answers enter the extraction process, ensuring zero label leakage:</p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th style="text-align:center">Feature Index</th>
+<th>Feature Name</th>
+<th>Mathematical / Algorithmic Definition</th>
+<th style="text-align:center">Range</th>
+<th>Epistemic Significance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td><code>semantic_entropy</code></td>
+<td>$H(X) = - \sum_{k=1}^K p_k \ln(p_k)$</td>
+<td style="text-align:center">$[0, \ln N]$</td>
+<td>Information-theoretic uncertainty across semantic clusters.</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td><code>normalized_entropy</code></td>
+<td>$H_{norm}(X) = H(X) / \ln(N)$</td>
+<td style="text-align:center">$[0.0, 1.0]$</td>
+<td>Scale-invariant semantic entropy; $0 = \text{consensus}$, $1 = \text{dispersion}$.</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td><code>dominant_agreement</code></td>
+<td>$p_1 = N_1 / N$</td>
+<td style="text-align:center">$[1/N, 1.0]$</td>
+<td>Proportion of samples supporting the most common interpretation.</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td><code>second_agreement</code></td>
+<td>$p_2 = N_2 / N$ (or $0.0$ if $K=1$)</td>
+<td style="text-align:center">$[0.0, 0.5]$</td>
+<td>Proportion supporting the second most common interpretation.</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td><code>agreement_margin</code></td>
+<td>$\Delta p = p_1 - p_2$</td>
+<td style="text-align:center">$[0.0, 1.0]$</td>
+<td>Separation between primary and secondary interpretations.</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td><code>cluster_count</code></td>
+<td>$K = | {C_1, \dots, C_K} |$</td>
+<td style="text-align:center">$[1, N]$</td>
+<td>Raw number of semantic equivalence classes formed.</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td><code>cluster_ratio</code></td>
+<td>$K / N$</td>
+<td style="text-align:center">$[1/N, 1.0]$</td>
+<td>Density of semantic dispersion relative to sample count.</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td><code>mean_pairwise_similarity</code></td>
+<td>$\bar{S} = \frac{2}{N(N-1)} \sum_{i &lt; j} \mathbf{v}_i^\top \mathbf{v}_j$</td>
+<td style="text-align:center">$[-1.0, 1.0]$</td>
+<td>Global semantic cohesion across all generated samples.</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td><code>min_pairwise_similarity</code></td>
+<td>$S_{min} = \min_{i &lt; j} \mathbf{v}_i^\top \mathbf{v}_j$</td>
+<td style="text-align:center">$[-1.0, 1.0]$</td>
+<td>Semantic distance between the two most divergent responses.</td>
+</tr>
+<tr>
+<td style="text-align:center">9</td>
+<td><code>response_len_mean</code></td>
+<td>$\mu_L = \frac{1}{N} \sum_{i=1}^N |r_i|$ (character length)</td>
+<td style="text-align:center">$[0, \infty)$</td>
+<td>Verbosity metric; refusals and factual answers exhibit characteristic lengths.</td>
+</tr>
+<tr>
+<td style="text-align:center">10</td>
+<td><code>response_len_std</code></td>
+<td>$\sigma_L = \sqrt{\frac{1}{N} \sum_{i=1}^N (|r_i| - \mu_L)^2}$</td>
+<td style="text-align:center">$[0, \infty)$</td>
+<td>Length stability; high variance indicates mixed response strategies.</td>
+</tr>
+<tr>
+<td style="text-align:center">11</td>
+<td><code>distinct_1gram_ratio</code></td>
+<td>$| \text{Unique Unigrams} | / | \text{Total Unigrams} |$</td>
+<td style="text-align:center">$(0.0, 1.0]$</td>
+<td>Lexical diversity; high diversity correlates with unconstrained hallucination.</td>
+</tr>
+<tr>
+<td style="text-align:center">12</td>
+<td><code>distinct_2gram_ratio</code></td>
+<td>$| \text{Unique Bigrams} | / | \text{Total Bigrams} |$</td>
+<td style="text-align:center">$(0.0, 1.0]$</td>
+<td>Syntactic diversity across response sequences.</td>
+</tr>
+<tr>
+<td style="text-align:center">13</td>
+<td><code>question_overlap_mean</code></td>
+<td>$\frac{1}{N} \sum_{i=1}^N \frac{| T_q \cap T_{r_i} |}{| T_q \cup T_{r_i} |}$ (token Jaccard)</td>
+<td style="text-align:center">$[0.0, 1.0]$</td>
+<td>Content overlap between question prompt and generated responses.</td>
+</tr>
+<tr>
+<td style="text-align:center">14</td>
+<td><code>hedging_score</code></td>
+<td>Mean occurrences of hedging regex patterns per response</td>
+<td style="text-align:center">$[0, \infty)$</td>
+<td>Epistemic modesty markers (<em>perhaps</em>, <em>maybe</em>, <em>depends on</em>).</td>
+</tr>
+<tr>
+<td style="text-align:center">15</td>
+<td><code>negation_count</code></td>
+<td>Mean occurrences of preserved negation tokens per response</td>
+<td style="text-align:center">$[0, \infty)$</td>
+<td>Detection of denials, contradictions, and explicit refusals.</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="section-9" class="doc-heading doc-h2">9. XGBoost Classification Architecture</h2>
+<p>The supervised uncertainty classifier is defined in [<code>src/classification/classifier.py</code>](file:///Users/rahuljain/Documents/Rahul%20Jain/ML%20proj/src/classification/classifier.py):</p>
+<h3 id="section-9-1" class="doc-heading doc-h3">9.1 Underlying Model &amp; Fallback Hierarchy</h3>
+<ol>
+<li><strong>Primary Model</strong>: <code>xgboost.XGBClassifier</code> configured for multi-class classification:
+<ul>
+<li>Objective: <code>multi:softprob</code> (producing a calibrated probability distribution $[P(\text{KNOWN}), P(\text{AMBIGUOUS}), P(\text{UNKNOWN})]$).</li>
+<li>Evaluation Metric: <code>mlogloss</code>.</li>
+<li>Estimators: $n_estimators = 100$.</li>
+<li>Tree Depth: $max_depth = 4$ (shallow trees prevent overfitting on small feature spaces).</li>
+<li>Learning Rate: $\eta = 0.05$.</li>
+<li>Random State: $42$ (enforcing deterministic training).</li>
+</ul>
+</li>
+<li><strong>Fallback Model</strong>: If native XGBoost C-APIs or OpenMP runtimes are unavailable, the system transparently falls back to <code>sklearn.ensemble.HistGradientBoostingClassifier(max_iter=100, max_depth=4, learning_rate=0.05, random_state=42)</code>.</li>
+</ol>
+<h3 id="section-9-2" class="doc-heading doc-h3">9.2 Label Encoding &amp; Probability Output</h3>
+<p>The classifier maps between textual classes and numeric identifiers:
+$$\text{KNOWN} \leftrightarrow 0, \quad \text{AMBIGUOUS} \leftrightarrow 1, \quad \text{UNKNOWN} \leftrightarrow 2$$
+Predictions return a dictionary containing:</p>
+<ul>
+<li><code>predicted_label</code>: String name of the argmax class.</li>
+<li><code>confidence</code>: $\max_c P(y = c \mid \mathbf{x})$.</li>
+<li><code>probabilities</code>: Complete mapping ${c: P(y = c \mid \mathbf{x})}$.</li>
+<li><code>status</code>: <code>&quot;PREDICTED&quot;</code>.</li>
+</ul>
+<hr />
+<h2 id="section-10" class="doc-heading doc-h2">10. Fast-Path Assessment</h2>
+<p>Implemented in [<code>src/classification/fast_path_assessor.py</code>](file:///Users/rahuljain/Documents/Rahul%20Jain/ML%20proj/src/classification/fast_path_assessor.py).</p>
+<h3 id="section-10-1" class="doc-heading doc-h3">10.1 Motivation &amp; Principles</h3>
+<p>Generating 10 stochastic responses for simple, closed-domain arithmetic (e.g. <em>&quot;What is 2 + 2?&quot;</em>) or standard textbook definitions introduces unnecessary latency ($&gt; 5\text{s}$) and compute cost. However, a fast-path strategy must adhere to strict principles:</p>
+<ol>
+<li><strong>Execution Strategy $\neq$ Hardcoded Label</strong>: Routing a question to the fast path describes an execution optimization (generating 1 sample instead of 10); it must <strong>not</strong> automatically assign <code>KNOWN</code>.</li>
+<li><strong>Distributional Invariance</strong>: Passing $N=1$ features to an $N=10$ classifier violates distributional assumptions (e.g. $p_1=1.0, H=0.0, \sigma_L=0.0$ trivially on $N=1$).</li>
+<li><strong>Escalation Protocol</strong>: If the single initial response contains hedging, ambiguity triggers, or refusal phrases, the Fast Path assessor refuses to classify and escalates the query to <code>MULTI_RESPONSE</code>.</li>
+</ol>
+<h3 id="section-10-2" class="doc-heading doc-h3">10.2 Assessment Rules</h3>
+<ul>
+<li><strong>Arithmetic Queries</strong>: Evaluated against strict regex arithmetic patterns. If the response contains a direct numeric solution without refusal, classified as <code>KNOWN</code> with confidence $0.98$ (<code>ASSESSED_FAST_PATH_DETERMINISTIC_ARITHMETIC</code>).</li>
+<li><strong>Concept Definitions</strong>: Queries matching <em>&quot;What is X?&quot;</em> or <em>&quot;Define X&quot;</em>. If the response provides an unhedged, authoritative definition without polysemy triggers, classified as <code>KNOWN</code> with confidence $0.95$ (<code>ASSESSED_FAST_PATH_CONCEPT_DEFINITION</code>).</li>
+<li><strong>Direct Facts</strong>: Concise factual queries receiving direct answers without hedging are classified as <code>KNOWN</code> with confidence $0.90$.</li>
+</ul>
+<hr />
+<h2 id="section-11" class="doc-heading doc-h2">11. Criterion Ambiguity Assessment</h2>
+<p>Implemented in [<code>src/classification/ambiguity_assessor.py</code>](file:///Users/rahuljain/Documents/Rahul%20Jain/ML%20proj/src/classification/ambiguity_assessor.py).</p>
+<h3 id="section-11-1" class="doc-heading doc-h3">11.1 The Decoupling Problem</h3>
+<p>When an LLM is asked a subjective question lacking evaluation criteria (e.g., <em>&quot;What is the best programming language?&quot;</em> or <em>&quot;Who is the greatest athlete of all time?&quot;</em>), the model's pre-training prior often causes it to repeatedly generate the same cultural default (e.g. Python, Michael Jordan). Consequently, multi-response clustering yields:
+$$p_1 \ge 0.90, \quad H_{norm} \le 0.10, \quad \Delta p \ge 0.80$$
+An unconstrained classifier interprets these metrics as high factual certainty and misclassifies the question as <code>KNOWN</code>.</p>
+<h3 id="section-11-2" class="doc-heading doc-h3">11.2 The Criterion Ambiguity Assessor</h3>
+<p><code>CriterionAmbiguityAssessor</code> decouples surface agreement from objective answerability:</p>
+<ol>
+<li><strong>Superlative Morphological Detection</strong>: Identifies unconstrained superlatives (<em>best</em>, <em>greatest</em>, <em>most beautiful</em>, <em>most successful</em>).</li>
+<li><strong>Objective Criteria Check</strong>: Verifies whether the prompt supplies an objective constraint (e.g. <em>&quot;by population&quot;</em>, <em>&quot;by GDP&quot;</em>, <em>&quot;in 2020&quot;</em>). If an objective metric is present, the superlative is determinate and the check passes.</li>
+<li><strong>Response-Level Subjectivity Evidence</strong>: Scans generated responses for phrases acknowledging subjectivity (<em>&quot;no single best&quot;</em>, <em>&quot;depends on the criteria&quot;</em>, <em>&quot;subjective&quot;</em>).</li>
+<li><strong>Intervention</strong>: If a subjective superlative lacks objective constraints and responses acknowledge subjectivity, the assessor overrides any spurious <code>KNOWN</code> prediction to <strong><code>AMBIGUOUS</code></strong> with heuristic confidence $0.95$.</li>
+</ol>
+<hr />
+<h2 id="section-12" class="doc-heading doc-h2">12. Inaccessibility Safeguards</h2>
+<p>Implemented in [<code>src/classification/inaccessibility_assessor.py</code>](file:///Users/rahuljain/Documents/Rahul%20Jain/ML%20proj/src/classification/inaccessibility_assessor.py).</p>
+<h3 id="section-12-1" class="doc-heading doc-h3">12.1 The Refusal Dispersion Failure Mode</h3>
+<p>When an LLM is queried about private credentials or inaccessible personal states (e.g., <em>&quot;What is the secret password in my safe?&quot;</em>), it cannot know the answer. Across 10 stochastic samples, it generates refusals with differing stylistic phrasing:</p>
+<ul>
+<li>Cluster 1 (Count 6): <em>&quot;As an AI, I cannot access your personal safe password.&quot;</em></li>
+<li>Cluster 2 (Count 4): <em>&quot;I do not know your private safe combination.&quot;</em></li>
+</ul>
+<p>Because the embedding model maps these distinct phrasings into two separate clusters with counts 6 and 4:
+$$p_1 = 0.60, \quad p_2 = 0.40, \quad \Delta p = 0.20$$
+The trained XGBoost classifier recognizes this bimodal distribution as competing interpretations and misclassifies the query as <code>AMBIGUOUS</code>.</p>
+<h3 id="section-12-2" class="doc-heading doc-h3">12.2 Dual-Condition Inaccessibility Safeguard</h3>
+<p>To fix this without breaking legitimate ambiguity classification:</p>
+<ol>
+<li><strong>Question-Level Inaccessibility Pattern Matching</strong>: Requires explicit question morphology targeting private credentials (<em>passwords, PINs, safe combinations, Wi-Fi keys</em>), unrecorded mental states (<em>&quot;What was I thinking at 9 AM?&quot;</em>), or private documents (<em>diaries, hidden notes</em>).</li>
+<li><strong>Concept Definition Whitelist</strong>: Explicitly excludes queries that define security concepts rather than requesting private values (e.g., <em>&quot;What is a one-time password?&quot;</em> or <em>&quot;What does WPA2 mean?&quot;</em> remain answerable definitions $\to$ <code>KNOWN</code>).</li>
+<li><strong>Response-Level Refusal Verification</strong>: Verifies that the majority of generated samples contain legitimate refusal or inability triggers (<em>&quot;cannot determine&quot;</em>, <em>&quot;unknown&quot;</em>, <em>&quot;not recorded&quot;</em>).</li>
+<li><strong>Intervention</strong>: When both question-level inaccessibility and response-level refusal are confirmed, the safeguard overrides spurious <code>AMBIGUOUS</code> predictions to <strong><code>UNKNOWN</code></strong> with confidence $0.95$.</li>
+</ol>
+<hr />
+<h2 id="section-13" class="doc-heading doc-h2">13. Dataset &amp; Benchmark Design</h2>
+<h3 id="section-13-1" class="doc-heading doc-h3">13.1 Benchmark Evolution: Pilot (60 Qs) to Candidate v1.1 (300 Qs)</h3>
+<p>The project began with a 60-question pilot dataset (<code>data/benchmarks/pilot_uncertainty_benchmark.jsonl</code>). To enable rigorous scientific evaluation, we designed, audited, and produced a 300-question ground-truth candidate benchmark (<code>data/benchmarks/uncertainty_benchmark_300_candidate_v1.1.jsonl</code>).</p>
+<h3 id="section-13-2" class="doc-heading doc-h3">13.2 Category Quotas &amp; Class Distribution (Exact 100/100/100 Balance)</h3>
+<pre><code>300-Question Uncertainty Benchmark
+├── KNOWN (100 Questions)
+│   ├── Category 1: Determinate Factual Questions (Quota: 50)
+│   └── Category 2: Established Concept Definitions (Quota: 50)
+├── AMBIGUOUS (100 Questions)
+│   ├── Category 3: Subjective Questions without Objective Metrics (Quota: 40)
+│   └── Category 4: Genuine Entity Polysemy &amp; Linguistic Ambiguity (Quota: 60)
+└── UNKNOWN (100 Questions)
+    ├── Category 5: Private or Inaccessible Information (Quota: 35)
+    ├── Category 6: Unknowable Future Events (Quota: 35)
+    └── Category 7: False Premises &amp; Presupposition Failures (Quota: 30)
+</code></pre>
+<h3 id="section-13-3" class="doc-heading doc-h3">13.3 Audited Boundary Corrections &amp; Audit Trail</h3>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>Record ID</th>
+<th>Category</th>
+<th>Previous Draft Question</th>
+<th>Corrected Candidate v1.1 Question</th>
+<th>Epistemic Justification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>draft_unk_fut_023</code><br><code>draft_unk_fut_024</code></td>
+<td><code>unknowable_future_events</code></td>
+<td><em>&quot;What papal name will be chosen by the person elected as successor to Pope Francis?&quot;</em></td>
+<td><em>&quot;As of November 2026, what papal name will be chosen by the person elected as the successor to Pope Leo XIV?&quot;</em></td>
+<td><strong>Historical Shift</strong>: Pope Francis was succeeded by Pope Leo XIV on May 8, 2025. Asking for Pope Francis's successor was historically settled (<code>KNOWN</code>). Shifted to successor to Pope Leo XIV with <code>2026-11</code> temporal anchor to preserve <code>UNKNOWN</code>.</td>
+</tr>
+<tr>
+<td><code>draft_unk_fut_027</code><br><code>draft_unk_fut_028</code></td>
+<td><code>unknowable_future_events</code></td>
+<td><em>&quot;Which city will host the 2048 Summer Olympics?&quot;</em></td>
+<td><em>&quot;As of November 2026, which city will host the Games of the XXXIX Olympiad (2048 Summer Olympics)?&quot;</em></td>
+<td><strong>Temporal Grounding</strong>: IOC host selection is unscheduled; added explicit <code>2026-11</code> anchor to prevent obsolescence upon future vote.</td>
+</tr>
+<tr>
+<td><code>draft_unk_false_013</code><br><code>draft_unk_false_014</code></td>
+<td><code>false_premises</code></td>
+<td><em>&quot;How many sharp 90-degree corners does a perfect round circle have?&quot;</em></td>
+<td><em>&quot;What is the interior angle measurement in degrees of each corner of a standard geometric round circle?&quot;</em></td>
+<td><strong>Presupposition Loophole Fixed</strong>: Original query allowed a literal, factual answer of &quot;0&quot; (<code>KNOWN</code>). Rephrased to query nonexistent vertex angle measurements (strictly impossible $\to$ <code>UNKNOWN</code>).</td>
+</tr>
+<tr>
+<td><code>draft_unk_false_021</code><br><code>draft_unk_false_022</code></td>
+<td><code>false_premises</code></td>
+<td><em>&quot;How many miles of coastline does California share with the Atlantic Ocean?&quot;</em></td>
+<td><em>&quot;What is the name of the commercial deepwater seaport in California that opens directly onto the Atlantic Ocean?&quot;</em></td>
+<td><strong>Presupposition Loophole Fixed</strong>: Original query allowed literal answer of &quot;0 miles&quot; (<code>KNOWN</code>). Rephrased to Atlantic seaport entity query (nonexistent $\to$ <code>UNKNOWN</code>).</td>
+</tr>
+<tr>
+<td><code>draft_known_fact_048</code></td>
+<td><code>determinate_factual</code></td>
+<td><em>&quot;Who was the initial person to serve as President of the United States?&quot;</em></td>
+<td><em>&quot;Under the United States Constitution, who was the initial person to serve as President of the United States?&quot;</em></td>
+<td><strong>Historical Disambiguation</strong>: Resolved ambiguity with John Hanson under the Articles of Confederation (1781–1789).</td>
+</tr>
+<tr>
+<td><code>draft_known_fact_029</code><br><code>draft_known_fact_030</code></td>
+<td><code>determinate_factual</code></td>
+<td><em>&quot;What is the capital city of Japan?&quot;</em></td>
+<td><em>&quot;What is the capital city of Japan?&quot;</em></td>
+<td><strong>De Facto Statutory Note</strong>: Rationale updated to document Tokyo as de facto seat of government under ISO 3166-1 despite absence of single codified statutory clause.</td>
+</tr>
+<tr>
+<td><code>draft_ambig_poly_055</code></td>
+<td><code>genuine_ambiguity</code></td>
+<td><em>&quot;What is the capital of Columbia?&quot;</em></td>
+<td><em>&quot;What is the capital of Columbia?&quot;</em></td>
+<td><strong>Orthographic Homophone</strong>: Retained as <code>AMBIGUOUS</code> explicitly evaluating homophone ambiguity between Columbia (SC/MO/DC) and Colombia (Bogota).</td>
+</tr>
+<tr>
+<td><code>draft_unk_priv_023</code></td>
+<td><code>private_inaccessible_info</code></td>
+<td><em>&quot;What are the exact GPS coordinates of the final resting place of Alexander the Great's body?&quot;</em></td>
+<td><em>&quot;What are the exact GPS coordinates of the final resting place of Alexander the Great's body?&quot;</em></td>
+<td><strong>Lost Location</strong>: Retained as <code>UNKNOWN</code> due to lost archaeological burial site, documenting the modern satellite coordinate framing.</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="section-14" class="doc-heading doc-h2">14. Union-Find Group Partitioning &amp; Leakage Prevention</h2>
+<p>Implemented in [<code>src/evaluation/data_validator.py</code>](file:///Users/rahuljain/Documents/Rahul%20Jain/ML%20proj/src/evaluation/data_validator.py).</p>
+<h3 id="section-14-1" class="doc-heading doc-h3">14.1 The Data Leakage Vulnerability</h3>
+<p>Standard train/test random splits allocate questions independently. If a dataset contains paraphrases (e.g. <em>&quot;What is the capital of France?&quot;</em> and <em>&quot;Which city is France's capital?&quot;</em>), one lands in train and the other in test, leading to inflated evaluation metrics.</p>
+<p>More critically, in <strong>adversarial pairs</strong> designed to test boundary conditions:</p>
+<ul>
+<li><code>draft_known_fact_011</code>: <em>&quot;What is the exact speed of light in a vacuum in meters per second?&quot;</em> (<code>KNOWN</code>)</li>
+<li><code>draft_unk_false_029</code>: <em>&quot;What is the speed of sound through a complete vacuum in meters per second?&quot;</em> (<code>UNKNOWN</code>)</li>
+</ul>
+<p>If treated as separate groups, standard group-splitting puts one in training and one in testing. The classifier learns the lexical surface frame (<em>&quot;... in a vacuum in meters per second?&quot;</em>) during training and misapplies it during evaluation.</p>
+<h3 id="section-14-2" class="doc-heading doc-h3">14.2 Union-Find Connected Component Algorithm</h3>
+<p>To guarantee mutual disjointness:</p>
+<ol>
+<li><strong>Normalization</strong>: Every record's question text is normalized by stripping punctuation, lowercasing, and collapsing whitespace.</li>
+<li><strong>Disjoint-Set Union (Union-Find)</strong>:
+<ul>
+<li>Identical normalized questions across records are unified into the same set:
+$$\text{Union}(\text{record}_i, \text{record}_j) \quad \text{if } \text{norm}(q_i) = \text{norm}(q_j)$$</li>
+<li>Records sharing any declared group identifier (<code>group_id</code>, <code>question_group_id</code>, <code>group_key</code>) are unified:
+$$\text{Union}(\text{record}_i, \text{record}_j) \quad \text{if } \text{group_ids}(r_i) \cap \text{group_ids}(r_j) \neq \emptyset$$</li>
+</ul>
+</li>
+<li><strong>Component Closure</strong>: The algorithm extracts connected components. Overlapping composite groups are transitively unified into indivisible atomic components.</li>
+<li><strong>Cross-Label Adversarial Support</strong>: Connected components may contain records with differing gold labels (e.g., <code>grp_adv_vacuum_wave_speed</code> contains 2 <code>KNOWN</code> and 2 <code>UNKNOWN</code> records). Group label homogeneity is not required.</li>
+<li><strong>Strict Partition Invariant</strong>:
+$$\text{Groups}(\text{Train}) \cap \text{Groups}(\text{Val}) = \emptyset, \quad \text{Groups}(\text{Train}) \cap \text{Groups}(\text{Test}) = \emptyset, \quad \text{Groups}(\text{Val}) \cap \text{Groups}(\text{Test}) = \emptyset$$</li>
+</ol>
+<hr />
+<h2 id="section-15" class="doc-heading doc-h2">15. Training &amp; Evaluation Methodology</h2>
+<h3 id="section-15-1" class="doc-heading doc-h3">15.1 Stratified Group Allocation</h3>
+<p>Partitioning allocates connected components across <code>train</code> (70%), <code>val</code> (15%), and <code>test</code> (15%) using greedy multi-label knapsack allocation to maintain exact class balance across partitions while preserving component indivisibility.</p>
+<h3 id="section-15-2" class="doc-heading doc-h3">15.2 Comprehensive Evaluation Metrics</h3>
+<ol>
+<li><strong>Macro-Averaged F1 Score</strong>:
+$$\text{Macro-F1} = \frac{1}{3} \sum_{c \in {\text{KNOWN}, \text{AMBIGUOUS}, \text{UNKNOWN}}} F1_c$$</li>
+<li><strong>Per-Class Metrics</strong>: Precision ($P_c$), Recall ($R_c$), and $F_1$-score ($F1_c$) for each class $c$.</li>
+<li><strong>Full Contingency Confusion Matrix</strong>: $3 \times 3$ matrix identifying inter-class misclassification patterns.</li>
+<li><strong>Expected Calibration Error (ECE)</strong> across $M=10$ confidence bins:
+$$\text{ECE} = \sum_{m=1}^{M} \frac{|B_m|}{N} \Big| \text{acc}(B_m) - \text{conf}(B_m) \Big|$$</li>
+<li><strong>Brier Score</strong>: Multi-class quadratic loss measuring probability calibration:
+$$\text{Brier} = \frac{1}{N} \sum_{i=1}^N \sum_{c=1}^3 (p_{ic} - y_{ic})^2$$</li>
+</ol>
+<h3 id="section-15-3" class="doc-heading doc-h3">15.3 Evaluated Baselines &amp; Ablations</h3>
+<ul>
+<li><strong>Majority Baseline</strong>: Always predicts the most frequent training class.</li>
+<li><strong>Pure Semantic Entropy Thresholding</strong>: Simple heuristic thresholding on $H(X)$ without supervised feature learning.</li>
+<li><strong>Ablation Models</strong>: Training the classifier while holding out subsets of features (e.g. linguistic features only, entropy features only, clustering features only) to isolate information contribution.</li>
+</ul>
+<hr />
+<h2 id="section-16" class="doc-heading doc-h2">16. Existing Experimental Results &amp; Documented Limitations</h2>
+<h3 id="section-16-1" class="doc-heading doc-h3">16.1 Verified Empirical Results</h3>
+<h4 id="sec-1-baseline-pilot-model-amp-dataset-lineage" class="doc-heading doc-h4">1. Baseline Pilot Model &amp; Dataset Lineage</h4>
+<ul>
+<li><strong>Saved Model Weights</strong>: [<code>models/uncertainty_classifier.joblib</code>](file:///Users/rahuljain/Documents/Rahul%20Jain/ML%20proj/models/uncertainty_classifier.joblib) (MD5: <code>b49b0704ad56af8602d218aaac59b3c3</code>, SHA-256: <code>e0adc459629d284ecd11d6f1dee0c3e9d437cddb34c1dde5d56979f589fce733</code>).</li>
+<li><strong>Feature Vector</strong>: Exactly 16 canonical features.</li>
+<li><strong>Sample Count Reconciliation</strong>:
+<ul>
+<li><strong>Seed Pilot</strong>: $N=24$ questions ([<code>data/benchmarks/pilot_uncertainty_benchmark.jsonl</code>](file:///Users/rahuljain/Documents/Rahul%20Jain/ML%20proj/data/benchmarks/pilot_uncertainty_benchmark.jsonl)).</li>
+<li><strong>Expanded Pilot Benchmark (v2)</strong>: $N=60$ questions ([<code>data/benchmarks/uncertainty_benchmark_v2.jsonl</code>](file:///Users/rahuljain/Documents/Rahul%20Jain/ML%20proj/data/benchmarks/uncertainty_benchmark_v2.jsonl)).</li>
+<li><strong>Extracted Feature Records</strong>: $N=67$ feature vectors across 62 groups ([<code>data/features.jsonl</code>](file:///Users/rahuljain/Documents/Rahul%20Jain/ML%20proj/data/features.jsonl)), incorporating exploratory iterative re-runs.</li>
+<li><strong>Saved Model Fit</strong>: $N=44$ training instances recorded in [<code>models/uncertainty_classifier_metadata.json</code>](file:///Users/rahuljain/Documents/Rahul%20Jain/ML%20proj/models/uncertainty_classifier_metadata.json).</li>
+<li><strong>Formal Group Split</strong>: In [<code>experiments/results/training_report.json</code>](file:///Users/rahuljain/Documents/Rahul%20Jain/ML%20proj/experiments/results/training_report.json), the 67 records were partitioned into disjoint groups: <strong>Train = 25</strong>, <strong>Val = 21</strong>, <strong>Test = 21</strong>.</li>
+</ul>
+</li>
+<li><strong>Held-Out Test Performance ($N_{\text{test}} = 21$)</strong>:
+<ul>
+<li><strong>Accuracy</strong>: $0.667$ (vs. $0.238$ majority baseline)</li>
+<li><strong>Macro-F1</strong>: $0.623$ (vs. $0.128$ majority baseline)</li>
+<li><strong>Per-Class $F_1$</strong>: <code>UNKNOWN</code> = <strong>0.889</strong> ($P=1.000, R=0.800$), <code>AMBIGUOUS</code> = <strong>0.615</strong> ($P=0.571, R=0.667$), <code>KNOWN</code> = <strong>0.364</strong> ($P=0.333, R=0.400$).</li>
+</ul>
+</li>
+</ul>
+<h4 id="sec-2-live-canonical-baseline-5-questions-amp-safeguard-boundary-verification-4-queries-9-total-queries" class="doc-heading doc-h4">2. Live Canonical Baseline (5 Questions) &amp; Safeguard Boundary Verification (4 Queries) [9 Total Queries]</h4>
+<p>The end-to-end adaptive pipeline with inaccessibility safeguards was evaluated in two stages across 9 total queries: (1) the original 5 canonical baseline questions evaluating core routing and classification, and (2) 4 supplementary boundary queries specifically evaluating the inaccessibility safeguard against false-positive suppression:</p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>Question Prompt</th>
+<th style="text-align:center">Evaluation Phase</th>
+<th style="text-align:center">Expected Label</th>
+<th style="text-align:center">Pipeline Predicted Label</th>
+<th style="text-align:center">Execution Route</th>
+<th>Assessment Mechanism</th>
+<th style="text-align:center">Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>&quot;What is 2 + 2?&quot;</em></td>
+<td style="text-align:center">Canonical Baseline</td>
+<td style="text-align:center"><code>KNOWN</code></td>
+<td style="text-align:center"><code>KNOWN</code></td>
+<td style="text-align:center"><code>FAST_PATH</code></td>
+<td>Deterministic arithmetic rule</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td><em>&quot;What is the capital of France?&quot;</em></td>
+<td style="text-align:center">Canonical Baseline</td>
+<td style="text-align:center"><code>KNOWN</code></td>
+<td style="text-align:center"><code>KNOWN</code></td>
+<td style="text-align:center"><code>FAST_PATH</code></td>
+<td>Direct fact rule</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td><em>&quot;What is the best programming language?&quot;</em></td>
+<td style="text-align:center">Canonical Baseline</td>
+<td style="text-align:center"><code>AMBIGUOUS</code></td>
+<td style="text-align:center"><code>AMBIGUOUS</code></td>
+<td style="text-align:center"><code>MULTI_RESPONSE</code></td>
+<td>Criterion Ambiguity Assessor</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td><em>&quot;What is the secret password in my safe?&quot;</em></td>
+<td style="text-align:center">Canonical Baseline</td>
+<td style="text-align:center"><code>UNKNOWN</code></td>
+<td style="text-align:center"><code>UNKNOWN</code></td>
+<td style="text-align:center"><code>MULTI_RESPONSE</code></td>
+<td>Inaccessibility Safeguard</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td><em>&quot;What was I thinking at exactly 9 AM yesterday?&quot;</em></td>
+<td style="text-align:center">Canonical Baseline</td>
+<td style="text-align:center"><code>UNKNOWN</code></td>
+<td style="text-align:center"><code>UNKNOWN</code></td>
+<td style="text-align:center"><code>MULTI_RESPONSE</code></td>
+<td>Inaccessibility Safeguard</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td><em>&quot;What is a one-time password?&quot;</em></td>
+<td style="text-align:center">Boundary Safeguard</td>
+<td style="text-align:center"><code>KNOWN</code></td>
+<td style="text-align:center"><code>KNOWN</code></td>
+<td style="text-align:center"><code>FAST_PATH</code></td>
+<td>Concept definition (whitelist)</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td><em>&quot;What does WPA2 mean?&quot;</em></td>
+<td style="text-align:center">Boundary Safeguard</td>
+<td style="text-align:center"><code>KNOWN</code></td>
+<td style="text-align:center"><code>KNOWN</code></td>
+<td style="text-align:center"><code>FAST_PATH</code></td>
+<td>Concept definition (whitelist)</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td><em>&quot;What is the capital of Georgia?&quot;</em></td>
+<td style="text-align:center">Boundary Safeguard</td>
+<td style="text-align:center"><code>AMBIGUOUS</code></td>
+<td style="text-align:center"><code>AMBIGUOUS</code></td>
+<td style="text-align:center"><code>MULTI_RESPONSE</code></td>
+<td>Multi-response clustering ($p_2 \ge 0.25$)</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td><em>&quot;What is the Wi-Fi password for my home router?&quot;</em></td>
+<td style="text-align:center">Boundary Safeguard</td>
+<td style="text-align:center"><code>UNKNOWN</code></td>
+<td style="text-align:center"><code>UNKNOWN</code></td>
+<td style="text-align:center"><code>MULTI_RESPONSE</code></td>
+<td>Inaccessibility Safeguard</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="section-16-2" class="doc-heading doc-h3">16.2 Documented Limitations</h3>
+<ol>
+<li><strong>Model Scale &amp; Training Sample Size</strong>: The active saved classifier artifact was trained on the 44-sample pilot split. Retraining on the 300-question benchmark has not yet been executed.</li>
+<li><strong>Unverified Candidate Status of Benchmark</strong>: The 300-question benchmark candidate v1.1 is structurally validated, quota-checked, and balanced, but remains in draft state (<code>annotation_status: &quot;needs_human_review&quot;</code>). Human annotator logging has not been finalized.</li>
+<li><strong>Batch Generation Latency</strong>: Generating 10 stochastic responses across 300 questions requires 3,000 local Ollama inference calls, which will take approximately 1.5 to 2.5 hours of continuous local compute.</li>
+</ol>
+<hr />
+<h2 id="section-17" class="doc-heading doc-h2">17. Future Research Roadmap</h2>
+<div class="diagram-wrapper">
+  <div class="diagram-container">
+    <div class="mermaid">
+flowchart LR
+    Phase1["Milestone 1<br/>Data Validator & Union-Find<br/>(COMPLETED)"] --> Phase2["Milestone 2<br/>300-Q Adjudication & v1.1<br/>(COMPLETED)"]
+    Phase2 --> Phase3["Milestone 3<br/>Design Documentation & Evidence<br/>(CURRENT)"]
+    Phase3 --> Phase4["Milestone 4<br/>Batch Ollama Inference<br/>(3,000 Samples)"]
+    Phase4 --> Phase5["Milestone 5<br/>Feature Extraction & Freezing<br/>(Train / Val / Test Splits)"]
+    Phase5 --> Phase6["Milestone 6<br/>Model Retraining & Calibration<br/>(Macro-F1 & ECE Evaluation)"]
+    Phase6 --> Phase7["Milestone 7<br/>Production Export & Release<br/>(Final Artifact Freezing)"]
+    </div>
+  </div>
+  <div class="diagram-caption">Figure 2: Multi-Phase Future Implementation & Verification Roadmap</div>
+</div>
+<h3 id="sec-next-implementation-milestones" class="doc-heading doc-h3">Next Implementation Milestones</h3>
+<ol>
+<li><strong>Milestone 3 (Current)</strong>: Finalize formal project design document, evidence register, and documentation validation.</li>
+<li><strong>Milestone 4</strong>: Launch batch multi-response generation ($10 \times 300 = 3,000$ calls) using <code>OllamaClient</code> (<code>qwen2.5:3b</code>, $T=0.7$, $top_p=0.9$) across candidate v1.1 with checkpointing.</li>
+<li><strong>Milestone 5</strong>: Run <code>FeatureExtractor</code> across all 300 response sets to generate the 300-row $\times$ 16-feature matrix. Partition into frozen train/val/test splits using <code>DatasetValidator.group_train_val_test_split(random_seed=42)</code>.</li>
+<li><strong>Milestone 6</strong>: Retrain <code>UncertaintyClassifier</code> on the frozen train partition, perform probability calibration (Platt scaling / Isotonic regression) on validation, and evaluate true held-out Macro-F1 on the read-only test set.</li>
+<li><strong>Milestone 7</strong>: Package final production weights, documentation PDF, and publishable research artifact.</li>
+</ol>
+
+      </section>
+
+    </article>
+  </main>
+</div>
+
+<script>
+// Highlight active section in sidebar on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.getAttribute('id');
+      document.querySelectorAll('.toc-list a').forEach(a => {
+        if (a.getAttribute('href') === '#' + id) {
+          a.style.color = '#1e3a8a';
+          a.style.fontWeight = '700';
+          a.style.backgroundColor = '#f1f5f9';
+        } else {
+          a.style.color = '';
+          a.style.fontWeight = '';
+          a.style.backgroundColor = '';
+        }
+      });
+    }
+  });
+}, { rootMargin: '0px 0px -75% 0px' });
+
+document.querySelectorAll('.doc-heading').forEach(h => observer.observe(h));
+</script>
+</body>
+</html>

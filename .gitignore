@@ -50,3 +50,8 @@ long_hallucinations/
 experiments/results/*.json
 !experiments/results/.gitkeep
 data/raw/
+
+# Temporary & Backup Artifacts
+data/benchmarks/*.backup.jsonl
+scripts/render_pdf.js
+
