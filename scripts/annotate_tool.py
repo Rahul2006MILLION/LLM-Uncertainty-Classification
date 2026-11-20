@@ -700,11 +700,28 @@ def _atomic_save(filepath: str, records: List[Dict[str, Any]]):
     os.replace(temp_path, filepath)
 
 
+DEFAULT_ANNOTATOR_PATHS = {
+    "A": "data/annotation/blinded_annotation_annotator_a.jsonl",
+    "B": "data/annotation/blinded_annotation_annotator_b.jsonl",
+}
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Launch the local human annotation interface (web or CLI)."
     )
-    parser.add_argument("filepath", help="Path to the blinded annotation JSONL file.")
+    parser.add_argument(
+        "filepath",
+        nargs="?",
+        default=None,
+        help="Path to the blinded annotation JSONL file.",
+    )
+    parser.add_argument(
+        "--annotator",
+        choices=["A", "B", "a", "b"],
+        default=None,
+        help="Launch interface for Annotator A or Annotator B (loads default file).",
+    )
     parser.add_argument(
         "--port",
         type=int,
@@ -719,12 +736,19 @@ def main():
 
     args = parser.parse_args()
 
-    if not os.path.exists(args.filepath):
-        print(f"Error: File not found: {args.filepath}")
+    target_path = args.filepath
+    if not target_path and args.annotator:
+        target_path = DEFAULT_ANNOTATOR_PATHS.get(args.annotator.upper())
+
+    if not target_path:
+        parser.error("Either a filepath or --annotator [A|B] must be specified.")
+
+    if not os.path.exists(target_path):
+        print(f"Error: File not found: {target_path}")
         sys.exit(1)
 
     records: List[Dict[str, Any]] = []
-    with open(args.filepath, "r", encoding="utf-8") as f:
+    with open(target_path, "r", encoding="utf-8") as f:
         for line in f:
             line_str = line.strip()
             if line_str:
@@ -733,18 +757,18 @@ def main():
     validator = AnnotationValidator(expected_count=len(records), allow_unannotated=False)
 
     if args.cli:
-        run_cli_mode(args.filepath, records, validator)
+        run_cli_mode(target_path, records, validator)
     else:
         host = "127.0.0.1"
         handler = lambda *h_args, **h_kwargs: AnnotationServerHandler(
-            records, args.filepath, validator, *h_args, **h_kwargs
+            records, target_path, validator, *h_args, **h_kwargs
         )
 
         with socketserver.TCPServer((host, args.port), handler) as httpd:
             print(f"\n{'=' * 65}")
             print(f" LOCAL ANNOTATION SERVER ACTIVE")
             print(f"{'=' * 65}")
-            print(f"Target File:      {args.filepath}")
+            print(f"Target File:      {target_path}")
             print(f"Total Questions:  {len(records)}")
             print(f"Access URL:       http://{host}:{args.port}")
             print(f"Binding:          STRICT LOOPBACK ONLY (127.0.0.1)")
