@@ -1,0 +1,17 @@
+experiment_id: exp_05_proposed_xgboost
+description: Proposed XGBoost uncertainty classifier on canonical 16 consistency features
+dataset_path: data/benchmarks/uncertainty_benchmark_300_gold_v1.0.jsonl
+features_path: data/features/features_300_v1.1.jsonl
+split_path: data/experiments/gold_split_v1.json
+cv_path: data/experiments/gold_cv5_v1.json
+manifest_path: data/benchmarks/gold_benchmark_manifest_v1.0.json
+model_name: xgboost
+feature_set: canonical_16
+random_seed: 42
+cv_folds: 5
+output_dir: experiments/results
+dry_run: false
+hyperparameters:
+  n_estimators: 100
+  max_depth: 4
+  learning_rate: 0.05
