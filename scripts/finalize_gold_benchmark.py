@@ -383,6 +383,76 @@ def main():
 
     print("Annotation completeness verified. Proceeding with benchmark assembly...")
 
+    if not os.path.exists(args.blinding_key):
+        print(f"Error: Blinding key not found: {args.blinding_key}")
+        sys.exit(1)
+
+    with open(args.blinding_key, "r", encoding="utf-8") as f:
+        blinding_key = json.load(f)
+
+    adjudication_map = {}
+    if args.adjudication_log and os.path.exists(args.adjudication_log):
+        with open(args.adjudication_log, "r", encoding="utf-8") as f:
+            for line in f:
+                if line.strip():
+                    entry = json.loads(line)
+                    qid = entry.get("underlying_question_id") or entry.get("question_id")
+                    if qid:
+                        adjudication_map[qid] = entry
+
+    map_a = blinding_key.get("mapping_annotator_a", {})
+    map_b = blinding_key.get("mapping_annotator_b", {})
+
+    bid_to_qid_a = {bid: (v["original_id"] if isinstance(v, dict) else v) for bid, v in map_a.items()}
+    bid_to_qid_b = {bid: (v["original_id"] if isinstance(v, dict) else v) for bid, v in map_b.items()}
+
+    rec_a_by_qid = {bid_to_qid_a.get(r["blinded_id"]): r for r in recs_a if bid_to_qid_a.get(r["blinded_id"])}
+    rec_b_by_qid = {bid_to_qid_b.get(r["blinded_id"]): r for r in recs_b if bid_to_qid_b.get(r["blinded_id"])}
+
+    timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    gold_records = []
+    for cand in candidate_records:
+        qid = cand["id"]
+        ra = rec_a_by_qid.get(qid)
+        rb = rec_b_by_qid.get(qid)
+        if not ra or not rb:
+            print(f"Error: Missing annotator record for question ID '{qid}'")
+            sys.exit(1)
+        g_rec = assemble_gold_record(cand, ra, rb, adjudication_map, timestamp)
+        gold_records.append(g_rec)
+
+    is_valid, val_errors = validator.validate_records(gold_records, candidate_records)
+    if not is_valid:
+        print("Error: Assembled gold records failed validation:")
+        for e in val_errors[:20]:
+            print(f"  - {e}")
+        sys.exit(1)
+
+    gold_out_dir = os.path.dirname(os.path.abspath(args.output_gold))
+    if gold_out_dir:
+        os.makedirs(gold_out_dir, exist_ok=True)
+    with open(args.output_gold, "w", encoding="utf-8") as f:
+        for r in gold_records:
+            f.write(json.dumps(r) + "\n")
+
+    manifest = build_reproducibility_manifest(
+        candidate_benchmark_path=args.candidate,
+        annotator_a_path=args.annotator_a,
+        annotator_b_path=args.annotator_b,
+        blinding_key_path=args.blinding_key,
+        adjudication_path=args.adjudication_log if (args.adjudication_log and os.path.exists(args.adjudication_log)) else None,
+        gold_benchmark_path=args.output_gold,
+        gold_records=gold_records,
+    )
+    manifest_out_dir = os.path.dirname(os.path.abspath(args.output_manifest))
+    if manifest_out_dir:
+        os.makedirs(manifest_out_dir, exist_ok=True)
+    with open(args.output_manifest, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2)
+
+    print(f"Successfully finalized gold benchmark: {args.output_gold} ({len(gold_records)} records)")
+    print(f"Manifest written to: {args.output_manifest}")
+
 
 if __name__ == "__main__":
     main()
