@@ -1,22 +1,23 @@
 #!/usr/bin/env python3
-"""Inter-Annotator Agreement (IAA) Analysis and Adjudication Docket Generator.
+"""Inter-Annotator Agreement (IAA) Analysis Pipeline and Adjudication Docket Generator.
 
-Implements the statistical methodology specified in data/annotation/AGREEMENT_ANALYSIS_PLAN.md:
-- Raw observed agreement (Po)
-- Expected chance agreement (Pe)
-- Cohen's Kappa coefficient (kappa), standard error, and 95% confidence interval
-- Krippendorff's Alpha for nominal categories
-- 3x3 epistemic confusion matrix (KNOWN, AMBIGUOUS, UNKNOWN)
-- Class-specific agreement and F1 scores
-- Diagnostic disagreement stratification
-- Adjudication docket generation (adjudication_docket.jsonl)
-
-Enforces the Blinding Key Release Gate:
-The blinding key is only accessed when both annotators have completed all records
-and passed full validation.
+Implements the formal statistical methodology specified in data/annotation/AGREEMENT_ANALYSIS_PLAN.md
+and Milestone 7.5.2 protocol:
+- Independent loading and validation of Annotator A and B records
+- Robust underlying question alignment via blinding key mapping (never by file order or assumed sequence)
+- Annotation completeness gate (halts if annotations are incomplete or null)
+- Observed Raw Agreement (Po) with exact numerator, denominator, and percentage
+- Cohen's Kappa coefficient (kappa) with observed, chance expected (Pe), SE, and 95% CI
+- Krippendorff's Alpha (nominal formulation)
+- Canonical 3x3 Epistemic Confusion Matrix (Rows = Annotator A, Columns = Annotator B)
+- Mathematically sound class-wise specific agreement
+- Independent class distribution reporting
+- Non-leaking disagreement extraction and Adjudication Docket generation
+- Reproducible machine-readable JSON and human-readable Markdown reporting
 """
 
 import argparse
+import datetime
 import json
 import math
 import os
@@ -26,334 +27,616 @@ from typing import Dict, Any, List, Tuple, Optional, Set
 CLASSES = ["KNOWN", "AMBIGUOUS", "UNKNOWN"]
 CLASS_TO_IDX = {c: i for i, c in enumerate(CLASSES)}
 
+DEFAULT_A_PATH = "data/annotation/blinded_annotation_annotator_a.jsonl"
+DEFAULT_B_PATH = "data/annotation/blinded_annotation_annotator_b.jsonl"
+DEFAULT_KEY_PATH = "data/annotation/annotation_blinding_key.json"
+DEFAULT_OUT_JSON = "data/annotation/agreement_analysis_results.json"
+DEFAULT_OUT_MD = "data/annotation/AGREEMENT_ANALYSIS_REPORT.md"
+DEFAULT_DOCKET = "data/annotation/adjudication_docket.jsonl"
 
-def compute_raw_agreement(y_a: List[str], y_b: List[str]) -> float:
-    """Calculates observed proportion of agreement Po."""
+
+def load_annotation_file(filepath: str, expected_annotator: Optional[str] = None) -> Tuple[List[Dict[str, Any]], List[str]]:
+    """Loads and validates JSONL records for an individual annotator."""
+    errors = []
+    records = []
+
+    if not os.path.exists(filepath):
+        errors.append(f"File not found: {filepath}")
+        return records, errors
+
+    seen_ids = set()
+    with open(filepath, "r", encoding="utf-8") as f:
+        for idx, line in enumerate(f, start=1):
+            line_str = line.strip()
+            if not line_str:
+                errors.append(f"Line {idx}: Empty line in JSONL file")
+                continue
+            try:
+                rec = json.loads(line_str)
+            except json.JSONDecodeError as jde:
+                errors.append(f"Line {idx}: Malformed JSON - {jde}")
+                continue
+
+            if not isinstance(rec, dict):
+                errors.append(f"Line {idx}: Record is not a JSON object")
+                continue
+
+            bid = rec.get("blinded_id")
+            if not bid or not isinstance(bid, str):
+                errors.append(f"Line {idx}: Missing or invalid 'blinded_id'")
+            else:
+                if expected_annotator:
+                    prefix = f"ANN_{expected_annotator.upper()}_"
+                    if not bid.startswith(prefix):
+                        errors.append(f"Line {idx}: Blinded ID '{bid}' does not match expected prefix '{prefix}'")
+                if bid in seen_ids:
+                    errors.append(f"Line {idx}: Duplicate blinded_id '{bid}'")
+                seen_ids.add(bid)
+
+            if not rec.get("question") or not isinstance(rec.get("question"), str):
+                errors.append(f"Line {idx}: Missing or invalid 'question' field")
+
+            records.append(rec)
+
+    return records, errors
+
+
+def check_completeness_gate(
+    records_a: List[Dict[str, Any]],
+    records_b: List[Dict[str, Any]],
+    expected_count: int = 300,
+) -> Tuple[bool, Dict[str, Any]]:
+    """Evaluates whether both annotation files meet the completeness requirements."""
+    completed_a = sum(1 for r in records_a if r.get("assigned_label") in CLASSES)
+    unannotated_a = sum(1 for r in records_a if r.get("assigned_label") is None)
+    invalid_a = [r.get("assigned_label") for r in records_a if r.get("assigned_label") is not None and r.get("assigned_label") not in CLASSES]
+
+    completed_b = sum(1 for r in records_b if r.get("assigned_label") in CLASSES)
+    unannotated_b = sum(1 for r in records_b if r.get("assigned_label") is None)
+    invalid_b = [r.get("assigned_label") for r in records_b if r.get("assigned_label") is not None and r.get("assigned_label") not in CLASSES]
+
+    failures = []
+    if len(records_a) != expected_count:
+        failures.append(f"Annotator A total records ({len(records_a)}) != expected ({expected_count})")
+    if unannotated_a > 0:
+        failures.append(f"Annotator A has {unannotated_a} unannotated records (assigned_label is null)")
+    if invalid_a:
+        failures.append(f"Annotator A has {len(invalid_a)} invalid labels: {set(invalid_a)}")
+
+    if len(records_b) != expected_count:
+        failures.append(f"Annotator B total records ({len(records_b)}) != expected ({expected_count})")
+    if unannotated_b > 0:
+        failures.append(f"Annotator B has {unannotated_b} unannotated records (assigned_label is null)")
+    if invalid_b:
+        failures.append(f"Annotator B has {len(invalid_b)} invalid labels: {set(invalid_b)}")
+
+    is_complete = (len(failures) == 0 and completed_a == expected_count and completed_b == expected_count)
+
+    stats = {
+        "is_complete": is_complete,
+        "annotator_a": {
+            "total": len(records_a),
+            "completed": completed_a,
+            "remaining": unannotated_a,
+            "invalid_count": len(invalid_a),
+        },
+        "annotator_b": {
+            "total": len(records_b),
+            "completed": completed_b,
+            "remaining": unannotated_b,
+            "invalid_count": len(invalid_b),
+        },
+        "failures": failures,
+    }
+    return is_complete, stats
+
+
+def align_annotations_via_mapping(
+    records_a: List[Dict[str, Any]],
+    records_b: List[Dict[str, Any]],
+    mapping_data: Dict[str, Any],
+) -> Tuple[bool, List[Dict[str, Any]], List[str]]:
+    """Aligns Annotator A and B records to the same underlying question using the blinding mapping.
+
+    Guarantees that records are aligned strictly by canonical underlying question ID
+    and NOT by file position, line number, or randomized presentation order.
+    """
+    errors = []
+    map_a = mapping_data.get("mapping_annotator_a", {})
+    map_b = mapping_data.get("mapping_annotator_b", {})
+
+    if not map_a or not map_b:
+        errors.append("Invalid mapping structure: missing 'mapping_annotator_a' or 'mapping_annotator_b'")
+        return False, [], errors
+
+    # Map blinded_id -> underlying question ID
+    bid_to_qid_a = {bid: v["original_id"] for bid, v in map_a.items()}
+    bid_to_qid_b = {bid: v["original_id"] for bid, v in map_b.items()}
+
+    # Index annotator records by underlying question ID
+    records_by_qid_a: Dict[str, Dict[str, Any]] = {}
+    for r in records_a:
+        bid = r.get("blinded_id")
+        qid = bid_to_qid_a.get(bid)
+        if not qid:
+            errors.append(f"Annotator A blinded_id '{bid}' not found in mapping key")
+            continue
+        if qid in records_by_qid_a:
+            errors.append(f"Annotator A multiple records map to same question ID '{qid}'")
+        records_by_qid_a[qid] = r
+
+    records_by_qid_b: Dict[str, Dict[str, Any]] = {}
+    for r in records_b:
+        bid = r.get("blinded_id")
+        qid = bid_to_qid_b.get(bid)
+        if not qid:
+            errors.append(f"Annotator B blinded_id '{bid}' not found in mapping key")
+            continue
+        if qid in records_by_qid_b:
+            errors.append(f"Annotator B multiple records map to same question ID '{qid}'")
+        records_by_qid_b[qid] = r
+
+    # Determine common underlying question IDs
+    qids_a = set(records_by_qid_a.keys())
+    qids_b = set(records_by_qid_b.keys())
+
+    missing_in_b = qids_a - qids_b
+    missing_in_a = qids_b - qids_a
+    if missing_in_b:
+        errors.append(f"Question IDs present in Annotator A but missing in B: {len(missing_in_b)}")
+    if missing_in_a:
+        errors.append(f"Question IDs present in Annotator B but missing in A: {len(missing_in_a)}")
+
+    aligned_records = []
+    common_qids = sorted(list(qids_a.intersection(qids_b)))
+
+    for qid in common_qids:
+        rec_a = records_by_qid_a[qid]
+        rec_b = records_by_qid_b[qid]
+
+        # Verify underlying question text identity
+        if rec_a.get("question") != rec_b.get("question"):
+            errors.append(f"Question text mismatch for aligned question ID '{qid}' between annotators")
+
+        aligned_records.append({
+            "underlying_question_id": qid,
+            "blinded_id_a": rec_a.get("blinded_id"),
+            "blinded_id_b": rec_b.get("blinded_id"),
+            "question": rec_a.get("question"),
+            "label_a": rec_a.get("assigned_label"),
+            "label_b": rec_b.get("assigned_label"),
+            "confidence_a": rec_a.get("confidence"),
+            "confidence_b": rec_b.get("confidence"),
+            "rationale_a": rec_a.get("rationale", ""),
+            "rationale_b": rec_b.get("rationale", ""),
+            "flag_a": rec_a.get("requires_adjudication", False),
+            "flag_b": rec_b.get("requires_adjudication", False),
+        })
+
+    is_aligned = (len(errors) == 0 and len(aligned_records) > 0 and len(aligned_records) == len(records_a))
+    return is_aligned, aligned_records, errors
+
+
+def compute_raw_agreement(y_a: List[str], y_b: List[str]) -> Dict[str, Any]:
+    """Calculates observed raw agreement proportion Po with numerator and denominator."""
     assert len(y_a) == len(y_b) and len(y_a) > 0
-    matches = sum(1 for a, b in zip(y_a, y_b) if a == b)
-    return matches / len(y_a)
+    total = len(y_a)
+    agreements = sum(1 for a, b in zip(y_a, y_b) if a == b)
+    disagreements = total - agreements
+    proportion = agreements / total
+    return {
+        "numerator": agreements,
+        "denominator": total,
+        "disagreements": disagreements,
+        "raw_agreement_po": proportion,
+        "percentage": round(proportion * 100.0, 2),
+    }
 
 
-def compute_expected_agreement(y_a: List[str], y_b: List[str]) -> Tuple[float, Dict[str, float], Dict[str, float]]:
-    """Calculates expected agreement by chance Pe."""
+def compute_expected_agreement(y_a: List[str], y_b: List[str]) -> float:
+    """Calculates chance-expected agreement Pe across canonical classes."""
     n = len(y_a)
+    assert n > 0 and len(y_b) == n
     p_a = {c: sum(1 for a in y_a if a == c) / n for c in CLASSES}
     p_b = {c: sum(1 for b in y_b if b == c) / n for c in CLASSES}
-    p_e = sum(p_a[c] * p_b[c] for c in CLASSES)
-    return p_e, p_a, p_b
+    return sum(p_a[c] * p_b[c] for c in CLASSES)
 
 
 def compute_cohens_kappa(y_a: List[str], y_b: List[str]) -> Dict[str, Any]:
-    """Computes Cohen's Kappa, SE, and 95% CI."""
+    """Calculates Cohen's Kappa, chance expected agreement, SE, and 95% CI."""
     n = len(y_a)
-    p_o = compute_raw_agreement(y_a, y_b)
-    p_e, p_a, p_b = compute_expected_agreement(y_a, y_b)
+    raw = compute_raw_agreement(y_a, y_b)
+    p_o = raw["raw_agreement_po"]
+
+    p_a = {c: sum(1 for a in y_a if a == c) / n for c in CLASSES}
+    p_b = {c: sum(1 for b in y_b if b == c) / n for c in CLASSES}
+    p_e = compute_expected_agreement(y_a, y_b)
 
     if math.isclose(p_e, 1.0):
+        # Degenerate case: both raters assign 100% of items to one single class
         kappa = 1.0 if math.isclose(p_o, 1.0) else 0.0
         se = 0.0
+        ci_lower, ci_upper = kappa, kappa
     else:
         kappa = (p_o - p_e) / (1.0 - p_e)
         denom = n * ((1.0 - p_e) ** 2)
         var = (p_o * (1.0 - p_o)) / denom if denom > 0 else 0.0
         se = math.sqrt(max(0.0, var))
-
-    ci_lower = max(-1.0, kappa - 1.96 * se)
-    ci_upper = min(1.0, kappa + 1.96 * se)
+        ci_lower = max(-1.0, kappa - 1.96 * se)
+        ci_upper = min(1.0, kappa + 1.96 * se)
 
     return {
         "n": n,
-        "raw_agreement_po": p_o,
+        "observed_agreement_po": p_o,
         "expected_agreement_pe": p_e,
         "cohens_kappa": kappa,
         "standard_error": se,
         "ci_95_lower": ci_lower,
         "ci_95_upper": ci_upper,
-        "marginal_a": p_a,
-        "marginal_b": p_b,
+        "marginal_annotator_a": p_a,
+        "marginal_annotator_b": p_b,
     }
 
 
 def compute_krippendorffs_alpha_nominal(y_a: List[str], y_b: List[str]) -> float:
-    """Computes Krippendorff's Alpha for nominal 2-rater complete data."""
+    """Calculates Krippendorff's Alpha for nominal 2-rater complete data."""
     n = len(y_a)
     if n == 0:
         return 0.0
 
-    # Total ratings
     total_ratings = 2 * n
-
-    # Total frequency of each class across both annotators
     n_c = {c: 0 for c in CLASSES}
     for a, b in zip(y_a, y_b):
         n_c[a] += 1
         n_c[b] += 1
 
-    # Observed coincidence: pairs of identical ratings on the same item
-    # For 2 raters: if a == b, coincidences for class a += 2*1*(1)/1 = 2; if a != b, 0
     d_o = sum(1 for a, b in zip(y_a, y_b) if a != b) / n
-
-    # Expected disagreement
     d_e = sum(n_c[c] * (total_ratings - n_c[c]) for c in CLASSES) / (total_ratings * (total_ratings - 1))
 
     if math.isclose(d_e, 0.0):
         return 1.0 if math.isclose(d_o, 0.0) else 0.0
 
-    alpha = 1.0 - (d_o / d_e)
-    return alpha
+    return 1.0 - (d_o / d_e)
 
 
 def compute_confusion_matrix(y_a: List[str], y_b: List[str]) -> Dict[str, Any]:
-    """Generates 3x3 confusion matrix and per-class agreement / F1 scores."""
+    """Generates canonical 3x3 confusion matrix and class-wise specific agreement."""
+    # Rows = Annotator A, Columns = Annotator B
     matrix = {row: {col: 0 for col in CLASSES} for row in CLASSES}
     for a, b in zip(y_a, y_b):
         matrix[a][b] += 1
 
-    per_class = {}
+    class_wise = {}
     for c in CLASSES:
         tp = matrix[c][c]
-        row_sum = sum(matrix[c][col] for col in CLASSES)
-        col_sum = sum(matrix[row][c] for row in CLASSES)
-        total_mentions = row_sum + col_sum
+        row_sum = sum(matrix[c][col] for col in CLASSES)  # Annotator A assigned c
+        col_sum = sum(matrix[row][c] for row in CLASSES)  # Annotator B assigned c
+        denom = row_sum + col_sum
 
-        # Specific agreement (Cicchetti & Feinstein)
-        specific_agreement = (2.0 * tp / total_mentions) if total_mentions > 0 else 0.0
+        # Fleiss / Cicchetti specific agreement: 2*A_c / (R_A + R_B)
+        specific_agreement = (2.0 * tp / denom) if denom > 0 else 0.0
 
-        # Dice / F1
-        f1 = (2.0 * tp / (row_sum + col_sum)) if (row_sum + col_sum) > 0 else 0.0
-
-        per_class[c] = {
+        class_wise[c] = {
             "annotator_a_count": row_sum,
             "annotator_b_count": col_sum,
             "unanimous_count": tp,
             "specific_agreement": specific_agreement,
-            "f1_score": f1,
+            "percentage": round(specific_agreement * 100.0, 2),
         }
 
     return {
+        "rows": "Annotator A",
+        "columns": "Annotator B",
+        "order": CLASSES,
         "matrix": matrix,
-        "per_class": per_class,
+        "class_wise_agreement": class_wise,
     }
 
 
-def extract_disagreements_and_docket(
-    records_a: List[Dict[str, Any]],
-    records_b: List[Dict[str, Any]],
-    blinding_key: Optional[Dict[str, Any]] = None,
-) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
-    """Identifies all discordant items and creates an adjudication docket.
+def compute_annotation_distributions(records: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Computes class frequency distribution and percentages for an annotator."""
+    total = len(records)
+    counts = {c: 0 for c in CLASSES}
+    for r in records:
+        lbl = r.get("assigned_label")
+        if lbl in counts:
+            counts[lbl] += 1
 
-    Matches records between Annotator A and B by underlying question string.
-    If blinding key is authorized, also maps to candidate original_id.
-    """
-    map_b_by_q = {r["question"]: r for r in records_b}
+    pcts = {c: round((counts[c] / total * 100.0), 2) if total > 0 else 0.0 for c in CLASSES}
+    return {
+        "total": total,
+        "counts": counts,
+        "percentages": pcts,
+    }
 
+
+def extract_disagreements_and_docket(aligned_records: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    """Extracts all discordant queries and builds the adjudication docket."""
     disagreements = []
     docket = []
 
     docket_num = 1
-    for r_a in records_a:
-        q = r_a["question"]
-        r_b = map_b_by_q.get(q)
-        if not r_b:
-            continue
-
-        lbl_a = r_a.get("assigned_label")
-        lbl_b = r_b.get("assigned_label")
-        adj_a = r_a.get("requires_adjudication", False)
-        adj_b = r_b.get("requires_adjudication", False)
-        conf_a = r_a.get("confidence", "NONE")
-        conf_b = r_b.get("confidence", "NONE")
+    for rec in aligned_records:
+        lbl_a = rec["label_a"]
+        lbl_b = rec["label_b"]
+        flag_a = rec["flag_a"]
+        flag_b = rec["flag_b"]
+        conf_a = rec["confidence_a"]
+        conf_b = rec["confidence_b"]
 
         is_disagreement = (lbl_a != lbl_b)
-        is_escalated = adj_a or adj_b
-        is_double_low_conf = (conf_a == "LOW" and conf_b == "LOW")
+        is_escalated = flag_a or flag_b
+        is_double_low = (conf_a == "LOW" and conf_b == "LOW")
 
-        needs_adjudication = is_disagreement or is_escalated or is_double_low_conf
+        needs_adjudication = is_disagreement or is_escalated or is_double_low
 
         if is_disagreement:
             axis = f"{min(lbl_a, lbl_b)} vs {max(lbl_a, lbl_b)}"
             disagreements.append({
-                "blinded_id_a": r_a.get("blinded_id"),
-                "blinded_id_b": r_b.get("blinded_id"),
-                "question": q,
+                "underlying_question_id": rec["underlying_question_id"],
+                "blinded_id_a": rec["blinded_id_a"],
+                "blinded_id_b": rec["blinded_id_b"],
+                "question": rec["question"],
                 "label_a": lbl_a,
                 "label_b": lbl_b,
                 "confidence_a": conf_a,
                 "confidence_b": conf_b,
-                "rationale_a": r_a.get("rationale", ""),
-                "rationale_b": r_b.get("rationale", ""),
+                "rationale_a": rec["rationale_a"],
+                "rationale_b": rec["rationale_b"],
                 "axis": axis,
             })
 
         if needs_adjudication:
-            entry = {
+            trigger = "LABEL_DISAGREEMENT" if is_disagreement else ("EXPLICIT_ESCALATION" if is_escalated else "DOUBLE_LOW_CONFIDENCE")
+            docket.append({
                 "docket_id": f"ADJ_{docket_num:03d}",
-                "blinded_id_a": r_a.get("blinded_id"),
-                "blinded_id_b": r_b.get("blinded_id"),
-                "question": q,
+                "underlying_question_id": rec["underlying_question_id"],
+                "blinded_id_a": rec["blinded_id_a"],
+                "blinded_id_b": rec["blinded_id_b"],
+                "question": rec["question"],
                 "label_a": lbl_a,
                 "label_b": lbl_b,
                 "confidence_a": conf_a,
                 "confidence_b": conf_b,
-                "rationale_a": r_a.get("rationale", ""),
-                "rationale_b": r_b.get("rationale", ""),
-                "flagged_by_a": adj_a,
-                "flagged_by_b": adj_b,
-                "trigger_reason": "LABEL_DISAGREEMENT" if is_disagreement else ("EXPLICIT_ESCALATION" if is_escalated else "DOUBLE_LOW_CONFIDENCE"),
+                "rationale_a": rec["rationale_a"],
+                "rationale_b": rec["rationale_b"],
+                "flagged_by_a": flag_a,
+                "flagged_by_b": flag_b,
+                "trigger_reason": trigger,
                 "adjudicated_label": None,
                 "adjudication_rationale": "",
                 "adjudicator": None,
                 "timestamp": None,
-            }
-            docket.append(entry)
+            })
             docket_num += 1
 
     return disagreements, docket
 
 
-def check_blinding_release_gate(
-    path_a: str,
-    path_b: str,
-    records_a: List[Dict[str, Any]],
-    records_b: List[Dict[str, Any]],
-    expected_count: int = 300,
-) -> Tuple[bool, List[str]]:
-    """Checks whether the 5 formal conditions for blinding key release are met."""
-    reasons = []
+def generate_markdown_report(
+    results: Dict[str, Any],
+    filepath: str,
+):
+    """Generates human-readable Markdown report conforming to Phase 5."""
+    raw = results["raw_agreement"]
+    kappa = results["cohens_kappa"]
+    dist_a = results["distribution_annotator_a"]
+    dist_b = results["distribution_annotator_b"]
+    cm = results["confusion_matrix"]
 
-    # Condition 1: Annotator A complete
-    un_a = sum(1 for r in records_a if r.get("assigned_label") is None)
-    if len(records_a) != expected_count:
-        reasons.append(f"Annotator A count mismatch: {len(records_a)} != {expected_count}")
-    if un_a > 0:
-        reasons.append(f"Annotator A has {un_a} unannotated records")
+    lines = [
+        "# Human Annotation Agreement Analysis Report",
+        "",
+        f"**Project:** LLM Uncertainty Classification Using Multi-Response Consistency and Feature-Based Machine Learning  ",
+        f"**Generated:** {results['timestamp']}  ",
+        f"**Benchmark Questions:** {results['total_aligned']}  ",
+        "",
+        "---",
+        "",
+        "## 1. Executive Summary",
+        "",
+        f"- **Raw Observed Agreement ($P_o$):** {raw['percentage']}% ({raw['numerator']} / {raw['denominator']})",
+        f"- **Cohen's Kappa ($\\kappa$):** {kappa['cohens_kappa']:.4f} (SE: {kappa['standard_error']:.4f}, 95% CI: [{kappa['ci_95_lower']:.4f}, {kappa['ci_95_upper']:.4f}])",
+        f"- **Krippendorff's Alpha ($\\alpha$):** {results['krippendorffs_alpha']:.4f}",
+        f"- **Total Disagreements:** {len(results['disagreements'])} ({round(len(results['disagreements'])/results['total_aligned']*100, 2)}%)",
+        f"- **Items Requiring Adjudication:** {len(results['adjudication_docket'])}",
+        "",
+        "---",
+        "",
+        "## 2. Independent Annotation Distributions",
+        "",
+        "| Class | Annotator A Count | Annotator A % | Annotator B Count | Annotator B % |",
+        "| :--- | :---: | :---: | :---: | :---: |",
+    ]
 
-    # Condition 2: Annotator B complete
-    un_b = sum(1 for r in records_b if r.get("assigned_label") is None)
-    if len(records_b) != expected_count:
-        reasons.append(f"Annotator B count mismatch: {len(records_b)} != {expected_count}")
-    if un_b > 0:
-        reasons.append(f"Annotator B has {un_b} unannotated records")
+    for c in CLASSES:
+        lines.append(f"| **{c}** | {dist_a['counts'][c]} | {dist_a['percentages'][c]}% | {dist_b['counts'][c]} | {dist_b['percentages'][c]}% |")
 
-    # Condition 3: Schema validation
-    for i, r in enumerate(records_a):
-        if r.get("assigned_label") not in CLASSES:
-            reasons.append(f"Annotator A line {i+1}: invalid label '{r.get('assigned_label')}'")
-            break
-    for i, r in enumerate(records_b):
-        if r.get("assigned_label") not in CLASSES:
-            reasons.append(f"Annotator B line {i+1}: invalid label '{r.get('assigned_label')}'")
-            break
+    lines.extend([
+        "",
+        "---",
+        "",
+        "## 3. Confusion Matrix ($3 \\times 3$)",
+        "",
+        "*Rows = Annotator A, Columns = Annotator B*",
+        "",
+        "| Annotator A \\ Annotator B | KNOWN | AMBIGUOUS | UNKNOWN | Total A |",
+        "| :--- | :---: | :---: | :---: | :---: |",
+    ])
 
-    # Condition 4: Files exist on disk
-    if not os.path.exists(path_a):
-        reasons.append(f"Annotator A file not found: {path_a}")
-    if not os.path.exists(path_b):
-        reasons.append(f"Annotator B file not found: {path_b}")
+    for row_c in CLASSES:
+        row_counts = [cm["matrix"][row_c][col_c] for col_c in CLASSES]
+        lines.append(f"| **{row_c}** | {row_counts[0]} | {row_counts[1]} | {row_counts[2]} | {sum(row_counts)} |")
 
-    can_release = (len(reasons) == 0)
-    return can_release, reasons
+    lines.extend([
+        "",
+        "---",
+        "",
+        "## 4. Class-Wise Specific Agreement",
+        "",
+        "| Class | Unanimous Matches | Specific Agreement ($P_{\\text{specific}}$) |",
+        "| :--- | :---: | :---: |",
+    ])
+    for c in CLASSES:
+        lines.append(f"| **{c}** | {cm['class_wise_agreement'][c]['unanimous_count']} | {cm['class_wise_agreement'][c]['percentage']}% |")
+
+    lines.extend([
+        "",
+        "---",
+        "",
+        "## 5. Scientific Limitations",
+        "",
+        "> **Methodological Notice:**  ",
+        "> Inter-annotator agreement measures consistency between annotators. High agreement does not establish that the assigned labels are objectively correct.  ",
+        "",
+        "- Agreement magnitude depends on rubric clarity and annotator calibration.",
+        "- Cohen's Kappa can be affected by class distribution prevalence.",
+        "- Agreement statistics do not replace formal adjudication.",
+        "- All discordant items require independent human adjudication under established rubric criteria.",
+        "",
+    ])
+
+    os.makedirs(os.path.dirname(os.path.abspath(filepath)), exist_ok=True)
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
 
 
 def main():
     parser = argparse.ArgumentParser(
         description="Compute inter-annotator agreement and generate adjudication docket."
     )
-    parser.add_argument("file_a", help="Path to completed Annotator A JSONL file.")
-    parser.add_argument("file_b", help="Path to completed Annotator B JSONL file.")
     parser.add_argument(
-        "--blinding-key",
-        default=None,
-        help="Optional path to blinding key (quarantined unless release gate passed).",
+        "--annotator-a",
+        default=DEFAULT_A_PATH,
+        help="Path to Annotator A JSONL file.",
     )
     parser.add_argument(
-        "--docket-out",
-        default="data/annotation/adjudication_docket.jsonl",
+        "--annotator-b",
+        default=DEFAULT_B_PATH,
+        help="Path to Annotator B JSONL file.",
+    )
+    parser.add_argument(
+        "--mapping",
+        default=DEFAULT_KEY_PATH,
+        help="Path to blinding key mapping file (coordinator access only).",
+    )
+    parser.add_argument(
+        "--output",
+        default=DEFAULT_OUT_JSON,
+        help="Output path for machine-readable JSON results.",
+    )
+    parser.add_argument(
+        "--report",
+        default=DEFAULT_OUT_MD,
+        help="Output path for human-readable Markdown report.",
+    )
+    parser.add_argument(
+        "--docket",
+        default=DEFAULT_DOCKET,
         help="Output path for adjudication docket JSONL.",
     )
     parser.add_argument(
-        "--json", action="store_true", help="Output summary report as JSON."
+        "--expected-count",
+        type=int,
+        default=300,
+        help="Expected total number of benchmark questions (default: 300).",
     )
 
     args = parser.parse_args()
 
-    if not os.path.exists(args.file_a) or not os.path.exists(args.file_b):
-        print("Error: Input annotation files do not exist.")
-        sys.exit(1)
+    recs_a, errs_a = load_annotation_file(args.annotator_a, expected_annotator="A")
+    recs_b, errs_b = load_annotation_file(args.annotator_b, expected_annotator="B")
 
-    with open(args.file_a, "r", encoding="utf-8") as f:
-        records_a = [json.loads(line) for line in f if line.strip()]
-    with open(args.file_b, "r", encoding="utf-8") as f:
-        records_b = [json.loads(line) for line in f if line.strip()]
-
-    # Blinding release gate check
-    can_release, gate_failures = check_blinding_release_gate(
-        args.file_a, args.file_b, records_a, records_b
+    is_complete, comp_stats = check_completeness_gate(
+        recs_a, recs_b, expected_count=args.expected_count
     )
 
-    if not can_release:
-        print("\n" + "=" * 65)
-        print(" BLINDING RELEASE GATE: LOCKED (RELEASE REFUSED)")
-        print("=" * 65)
-        print("Human annotation is NOT yet complete and validated.")
-        print("Gate failures:")
-        for fail in gate_failures:
-            print(f"  - {fail}")
-        print("\nSTATISTICAL AGREEMENT ANALYSIS CANNOT BE PERFORMED.")
-        print("DO NOT FABRICATE ANNOTATION COMPLETION.")
-        print("=" * 65 + "\n")
+    if not is_complete:
+        print("\n" + "=" * 50)
+        print("ANNOTATION AGREEMENT ANALYSIS")
+        print("=" * 50)
+        print("\nAnnotator A:")
+        print(f"Completed: {comp_stats['annotator_a']['completed']}/{args.expected_count}")
+        print(f"Remaining: {comp_stats['annotator_a']['remaining']}")
+        print("\nAnnotator B:")
+        print(f"Completed: {comp_stats['annotator_b']['completed']}/{args.expected_count}")
+        print(f"Remaining: {comp_stats['annotator_b']['remaining']}")
+        print("\nAlignment:\nNOT VERIFIED")
+        print("\nValidation:\nINCOMPLETE")
+        print("\nAgreement Analysis:\nBLOCKED")
+        print("\nReason:")
+        print("Human annotation is incomplete.")
+        for f in comp_stats["failures"]:
+            print(f"  - {f}")
+        print("\n" + "=" * 50 + "\n")
         sys.exit(2)
 
-    # Align labels by question string
-    map_b = {r["question"]: r.get("assigned_label") for r in records_b}
-    aligned_a = []
-    aligned_b = []
-    for r in records_a:
-        q = r["question"]
-        lbl_a = r.get("assigned_label")
-        lbl_b = map_b.get(q)
-        if lbl_a and lbl_b:
-            aligned_a.append(lbl_a)
-            aligned_b.append(lbl_b)
+    # Check mapping file
+    if not os.path.exists(args.mapping):
+        print(f"Error: Mapping file not found: {args.mapping}")
+        sys.exit(1)
 
-    kappa_res = compute_cohens_kappa(aligned_a, aligned_b)
-    alpha = compute_krippendorffs_alpha_nominal(aligned_a, aligned_b)
-    conf_matrix = compute_confusion_matrix(aligned_a, aligned_b)
-    disagreements, docket = extract_disagreements_and_docket(records_a, records_b)
+    with open(args.mapping, "r", encoding="utf-8") as f:
+        mapping_data = json.load(f)
 
-    # Save docket
-    os.makedirs(os.path.dirname(os.path.abspath(args.docket_out)), exist_ok=True)
-    with open(args.docket_out, "w", encoding="utf-8") as f:
+    is_aligned, aligned_records, align_errors = align_annotations_via_mapping(
+        recs_a, recs_b, mapping_data
+    )
+
+    if not is_aligned:
+        print("Error: Alignment validation failed:")
+        for err in align_errors:
+            print(f"  - {err}")
+        sys.exit(1)
+
+    y_a = [r["label_a"] for r in aligned_records]
+    y_b = [r["label_b"] for r in aligned_records]
+
+    raw = compute_raw_agreement(y_a, y_b)
+    kappa = compute_cohens_kappa(y_a, y_b)
+    alpha = compute_krippendorffs_alpha_nominal(y_a, y_b)
+    cm = compute_confusion_matrix(y_a, y_b)
+    dist_a = compute_annotation_distributions(recs_a)
+    dist_b = compute_annotation_distributions(recs_b)
+    disagreements, docket = extract_disagreements_and_docket(aligned_records)
+
+    results = {
+        "status": "COMPLETED_AND_CALCULATED",
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "total_aligned": len(aligned_records),
+        "raw_agreement": raw,
+        "cohens_kappa": kappa,
+        "krippendorffs_alpha": alpha,
+        "confusion_matrix": cm,
+        "distribution_annotator_a": dist_a,
+        "distribution_annotator_b": dist_b,
+        "disagreements": disagreements,
+        "adjudication_docket": docket,
+    }
+
+    # Save outputs
+    os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
+    with open(args.output, "w", encoding="utf-8") as f:
+        json.dump(results, f, indent=2)
+
+    generate_markdown_report(results, args.report)
+
+    os.makedirs(os.path.dirname(os.path.abspath(args.docket)), exist_ok=True)
+    with open(args.docket, "w", encoding="utf-8") as f:
         for entry in docket:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
-    summary = {
-        "status": "COMPLETED_AND_CALCULATED",
-        "total_aligned": len(aligned_a),
-        "cohens_kappa": kappa_res,
-        "krippendorffs_alpha": alpha,
-        "confusion_matrix": conf_matrix,
-        "disagreement_count": len(disagreements),
-        "docket_item_count": len(docket),
-        "docket_file": args.docket_out,
-    }
-
-    if args.json:
-        print(json.dumps(summary, indent=2))
-    else:
-        print("\n" + "=" * 65)
-        print(" INTER-ANNOTATOR AGREEMENT REPORT")
-        print("=" * 65)
-        print(f"Total Evaluated Items: {len(aligned_a)}")
-        print(f"Raw Observed Agreement (Po): {kappa_res['raw_agreement_po']:.4f}")
-        print(f"Expected Chance Agreement (Pe): {kappa_res['expected_agreement_pe']:.4f}")
-        print(f"Cohen's Kappa (kappa):        {kappa_res['cohens_kappa']:.4f} (SE: {kappa_res['standard_error']:.4f})")
-        print(f"95% Confidence Interval:       [{kappa_res['ci_95_lower']:.4f}, {kappa_res['ci_95_upper']:.4f}]")
-        print(f"Krippendorff's Alpha:          {alpha:.4f}")
-        print(f"Disagreements (A != B):        {len(disagreements)}")
-        print(f"Items in Adjudication Docket:  {len(docket)}")
-        print("=" * 65 + "\n")
+    print("\n" + "=" * 50)
+    print("ANNOTATION AGREEMENT ANALYSIS: SUCCESS")
+    print("=" * 50)
+    print(f"Total Aligned Questions:      {len(aligned_records)}")
+    print(f"Raw Observed Agreement (Po):  {raw['percentage']}% ({raw['numerator']}/{raw['denominator']})")
+    print(f"Cohen's Kappa:                {kappa['cohens_kappa']:.4f} (SE: {kappa['standard_error']:.4f})")
+    print(f"Krippendorff's Alpha:         {alpha:.4f}")
+    print(f"Disagreements:                {len(disagreements)}")
+    print(f"Adjudication Docket Items:    {len(docket)}")
+    print(f"Reports saved to:             {args.output} and {args.report}")
+    print("=" * 50 + "\n")
 
 
 if __name__ == "__main__":
