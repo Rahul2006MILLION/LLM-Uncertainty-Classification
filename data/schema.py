@@ -72,3 +72,6 @@ class ExperimentRecord(BaseModel):
     )
     ambiguity_type: Optional[str] = None
     clarification_reason: Optional[str] = None
+    clarity_status: Optional[str] = Field(default=None, description="Diagnostic query clarity: UNAMBIGUOUS or AMBIGUOUS")
+    clarity_confidence: Optional[float] = Field(default=None, description="Confidence in clarity assessment")
+    clarification_required: Optional[bool] = Field(default=None, description="Whether clarification is required before factual processing")

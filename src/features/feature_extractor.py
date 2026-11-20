@@ -150,6 +150,46 @@ class FeatureExtractor:
         return features
 
     @staticmethod
+    def extract_single_response_features(question: str, response: str) -> Dict[str, float]:
+        """Extract strictly single-response linguistic features from an individual response text (e.g. response 0).
+        
+        Guaranteed: NO multi-response statistics, NO standard deviations, NO multi-sample token pooling.
+        """
+        tokens = tokenize_preserving_negation(response)
+        q_tokens = set(tokenize_preserving_negation(question))
+        
+        # 1. Length of this individual response
+        resp_len = float(len(response))
+        
+        # 2. Distinct unigram ratio within this individual response
+        distinct_1g = float(len(set(tokens)) / len(tokens)) if tokens else 0.0
+        
+        # 3. Distinct bigram ratio within this individual response
+        bigrams = [f"{tokens[i]}_{tokens[i+1]}" for i in range(len(tokens) - 1)] if len(tokens) >= 2 else []
+        distinct_2g = float(len(set(bigrams)) / len(bigrams)) if bigrams else 0.0
+        
+        # 4. Question-response overlap (Jaccard) for this individual response
+        r_tokens = set(tokens)
+        union = q_tokens | r_tokens
+        overlap = float(len(q_tokens & r_tokens) / len(union)) if union else 0.0
+        
+        # 5. Hedging score for this individual response
+        r_lower = response.lower()
+        h_count = sum(1 for pat in HEDGING_PATTERNS if re.search(pat, r_lower))
+        
+        # 6. Negation count for this individual response
+        n_count = sum(1 for t in tokens if t in NEGATION_WORDS)
+        
+        return {
+            "response_len": resp_len,
+            "distinct_1gram_ratio": distinct_1g,
+            "distinct_2gram_ratio": distinct_2g,
+            "question_overlap": overlap,
+            "hedging_score": float(h_count),
+            "negation_count": float(n_count),
+        }
+
+    @staticmethod
     def get_feature_names() -> List[str]:
         """Return the fixed list of feature names in column order."""
         return list(FEATURE_NAMES)

@@ -16,6 +16,7 @@ from dataclasses import dataclass, field
 
 from src.classification.inaccessibility_assessor import InaccessibilityAssessor
 from src.classification.ambiguity_assessor import CriterionAmbiguityAssessor
+from src.classification.clarity_assessor import QuestionClarityAssessor
 from src.classification.hitl_prompts import (
     sanitize_user_input,
     is_user_declining,
@@ -37,6 +38,10 @@ class AmbiguityType(str, Enum):
     ENTITY_POLYSEMY = "ENTITY_POLYSEMY"
     SUBJECTIVE_CRITERIA = "SUBJECTIVE_CRITERIA"
     UNDERSPECIFIED_CONTEXT = "UNDERSPECIFIED_CONTEXT"
+    MISSING_REFERENT = "MISSING_REFERENT"
+    MISSING_COMPARISON = "MISSING_COMPARISON"
+    MISSING_CONTEXT = "MISSING_CONTEXT"
+    MULTIPLE_INTERPRETATIONS = "MULTIPLE_INTERPRETATIONS"
     INACCESSIBLE_PRIVATE = "INACCESSIBLE_PRIVATE"
     INHERENTLY_UNKNOWABLE = "INHERENTLY_UNKNOWABLE"
     FALSE_PREMISE = "FALSE_PREMISE"
@@ -254,6 +259,29 @@ class HITLEngine:
                     confidence=0.95,
                 )
 
+        # 3.5. QUESTION CLARITY ASSESSMENT: Missing referents, missing comparison, or missing context
+        clarity = QuestionClarityAssessor.assess(q_clean)
+        if clarity.status == "AMBIGUOUS" and clarity.clarification_required:
+            ambig_enum = (
+                AmbiguityType[clarity.ambiguity_type]
+                if clarity.ambiguity_type in AmbiguityType._member_map_
+                else AmbiguityType.UNDERSPECIFIED_CONTEXT
+            )
+            if conversation_state:
+                conversation_state.detected_ambiguity_type = ambig_enum.value
+                conversation_state.interaction_status = "PENDING"
+            q_prompt, why, options = generate_fallback_clarification(q_clean, ambiguity_reason=clarity.reason)
+            return ClarificationDecision(
+                decision=ClarificationState.CLARIFICATION_REQUIRED,
+                ambiguity_type=ambig_enum,
+                reason=clarity.reason,
+                clarification_prompt=q_prompt,
+                options=options,
+                why_it_matters=why,
+                can_user_resolve=True,
+                confidence=clarity.confidence,
+            )
+
         # 4. RESOLVABLE AMBIGUITY: Lexical Polysemy & Name Collisions
         for pat in self.KNOWN_POLYSEMIC_TERMS:
             if re.search(pat, q_lower):
@@ -459,6 +487,54 @@ class HITLEngine:
                     confidence=0.75,
                     metadata={**metadata, "model_disagreement": True},
                 )
+
+        # Priority 5: Inherent question ambiguity from clarity assessment
+        clarity = QuestionClarityAssessor.assess(q_clean)
+        if clarity.status == "AMBIGUOUS" and clarity.clarification_required and not (conversation_state and conversation_state.is_clarified):
+            ambig_enum = (
+                AmbiguityType[clarity.ambiguity_type]
+                if clarity.ambiguity_type in AmbiguityType._member_map_
+                else AmbiguityType.UNDERSPECIFIED_CONTEXT
+            )
+            if conversation_state:
+                conversation_state.detected_ambiguity_type = ambig_enum.value
+                conversation_state.interaction_status = "PENDING"
+            q_prompt, why, options = generate_fallback_clarification(q_clean, ambiguity_reason=clarity.reason)
+            return ClarificationDecision(
+                decision=ClarificationState.CLARIFICATION_REQUIRED,
+                ambiguity_type=ambig_enum,
+                reason=clarity.reason,
+                clarification_prompt=q_prompt,
+                options=options,
+                why_it_matters=why,
+                can_user_resolve=True,
+                confidence=clarity.confidence,
+                metadata=metadata,
+            )
+
+        # Priority 6: Consistency with classifier label
+        # If classifier predicted AMBIGUOUS and question clarity is AMBIGUOUS on an unclarified query, trigger clarification
+        if classifier_label == "AMBIGUOUS" and clarity.status == "AMBIGUOUS" and not (conversation_state and conversation_state.is_clarified):
+            ambig_enum = (
+                AmbiguityType[clarity.ambiguity_type]
+                if clarity.ambiguity_type and clarity.ambiguity_type in AmbiguityType._member_map_
+                else AmbiguityType.UNDERSPECIFIED_CONTEXT
+            )
+            if conversation_state:
+                conversation_state.detected_ambiguity_type = ambig_enum.value
+                conversation_state.interaction_status = "PENDING"
+            q_prompt, why, options = generate_fallback_clarification(q_clean, ambiguity_reason="Query flagged as ambiguous by classifier")
+            return ClarificationDecision(
+                decision=ClarificationState.CLARIFICATION_REQUIRED,
+                ambiguity_type=ambig_enum,
+                reason="Classifier predicted ambiguity and query requires context resolution.",
+                clarification_prompt=q_prompt,
+                options=options,
+                why_it_matters=why,
+                can_user_resolve=True,
+                confidence=0.80,
+                metadata=metadata,
+            )
 
         # Default: Confirmed answerable or single dominant cluster
         return ClarificationDecision(

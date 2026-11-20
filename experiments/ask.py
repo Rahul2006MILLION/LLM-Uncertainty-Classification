@@ -25,6 +25,7 @@ from src.classification.classifier import UncertaintyClassifier
 from src.classification.ambiguity_assessor import CriterionAmbiguityAssessor
 from src.classification.inaccessibility_assessor import InaccessibilityAssessor
 from src.classification.fast_path_assessor import FastPathAnswerabilityAssessor
+from src.classification.clarity_assessor import QuestionClarityAssessor
 from src.classification.hitl_engine import HITLEngine, ClarificationDecision, ClarificationState, ConversationState, AmbiguityType
 from src.classification.hitl_prompts import format_clarification_prompt
 from data.schema import ExperimentRecord
@@ -128,12 +129,15 @@ def run_pipeline(
                 except Exception as e:
                     logger.warning("Could not load classifier from %s: %s", candidate_path, e)
 
-    # 2. Step 1: Initial Response Generation
+    # 2. Step 0: Question Clarity Assessment
+    clarity_assessment = QuestionClarityAssessor.assess(question)
+
+    # 3. Step 1: Initial Response Generation
     t0 = time.time()
     initial_res = generator.generate_single(question, temperature=0.0)  # Greedy for initial response
     initial_text = initial_res["text"]
 
-    # 3. Step 2: Route question
+    # 4. Step 2: Route question
     decision = router.route(question, initial_text)
 
     # Gate 1: Early Clarification Gate (Polysemy & Missing Criteria)
@@ -217,6 +221,11 @@ def run_pipeline(
                     fast_interaction = "RESOLVED"
                     fast_ambig = conversation_state.detected_ambiguity_type
                     fast_reason = "Ambiguity successfully resolved through human clarification."
+            elif pred_label == "AMBIGUOUS" or clarity_assessment.status == "AMBIGUOUS":
+                fast_decision = "CLARIFICATION_REQUIRED"
+                fast_interaction = "PENDING"
+                fast_ambig = clarity_assessment.ambiguity_type or conversation_state.detected_ambiguity_type or "MISSING_REFERENT"
+                fast_reason = clarity_assessment.reason or fast_assessment.reason
             else:
                 fast_decision = "ABSTAIN" if pred_label == "UNKNOWN" else "ANSWERABLE"
                 fast_interaction = "NOT_REQUIRED"
@@ -254,6 +263,9 @@ def run_pipeline(
                 interaction_status=fast_interaction,
                 ambiguity_type=fast_ambig,
                 clarification_reason=fast_reason,
+                clarity_status=clarity_assessment.status,
+                clarity_confidence=clarity_assessment.confidence,
+                clarification_required=clarity_assessment.clarification_required,
             )
             return rec
 
@@ -446,6 +458,11 @@ def run_pipeline(
         rec_decision = "UNRESOLVED"
         rec_ambig_type = post_dec.ambiguity_type.value if post_dec.ambiguity_type != AmbiguityType.NONE else None
         rec_reason = post_dec.reason
+    elif pred_label == "AMBIGUOUS" and not conversation_state.is_clarified:
+        rec_interaction_status = "PENDING" if conversation_state.can_clarify() else "NOT_REQUIRED"
+        rec_decision = "CLARIFICATION_REQUIRED" if conversation_state.can_clarify() else "UNRESOLVED"
+        rec_ambig_type = clarity_assessment.ambiguity_type or (post_dec.ambiguity_type.value if (post_dec and post_dec.ambiguity_type != AmbiguityType.NONE) else "UNDERSPECIFIED_CONTEXT")
+        rec_reason = clarity_assessment.reason or (post_dec.reason if post_dec else "Ambiguity requires context resolution.")
     else:
         rec_interaction_status = "NOT_REQUIRED"
         rec_decision = "ANSWERABLE"
@@ -491,6 +508,9 @@ def run_pipeline(
         interaction_status=rec_interaction_status,
         ambiguity_type=rec_ambig_type,
         clarification_reason=rec_reason,
+        clarity_status=clarity_assessment.status,
+        clarity_confidence=clarity_assessment.confidence,
+        clarification_required=clarity_assessment.clarification_required,
     )
     return rec
 
@@ -581,6 +601,18 @@ def main():
     ]
     if record.predicted_label:
         lines.append(f"PREDICTED CLASS:   {record.predicted_label} (conf: {record.confidence:.2f})")
+
+    # Diagnostic Question Clarity Section
+    if record.clarity_status == "UNAMBIGUOUS":
+        lines.append(f"QUESTION CLARITY:  UNAMBIGUOUS")
+        lines.append(f"CLARITY CONFIDENCE:[{record.clarity_confidence:.2f}]")
+    elif record.clarity_status == "AMBIGUOUS":
+        lines.append(f"QUESTION CLARITY:  AMBIGUOUS")
+        if record.ambiguity_type:
+            lines.append(f"AMBIGUITY TYPE:    {record.ambiguity_type}")
+        req_str = "YES" if record.clarification_required else "NO"
+        lines.append(f"CLARIFICATION REQUIRED: {req_str}")
+
     if record.is_clarified:
         lines.append(f"ORIGINAL QUERY:    {record.original_question}")
         lines.append(f"CLARIFIED QUERY:   {record.clarified_question}")

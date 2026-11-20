@@ -4,6 +4,8 @@ import re
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
 
+from src.classification.clarity_assessor import QuestionClarityAssessor
+
 
 @dataclass
 class FastPathAssessment:
@@ -97,6 +99,19 @@ class FastPathAnswerabilityAssessor:
         resp_clean = response.strip()
         q_lower = q_clean.lower()
         resp_lower = resp_clean.lower()
+
+        # 0. Check Question Clarity (missing referent, missing context, polysemy)
+        clarity = QuestionClarityAssessor.assess(q_clean)
+        if clarity.status == "AMBIGUOUS" and clarity.clarification_required:
+            return FastPathAssessment(
+                is_assessed=True,
+                predicted_label="AMBIGUOUS",
+                confidence=clarity.confidence,
+                confidence_type="rule_based_heuristic",
+                status="ASSESSED_FAST_PATH_AMBIGUITY",
+                reason=f"Question clarity assessment flagged {clarity.ambiguity_type}: {clarity.reason}",
+                evidence=clarity.evidence,
+            )
 
         # 1. Check for explicit inability/refusal in response -> UNKNOWN
         for pat in cls.REFUSAL_TRIGGERS:
