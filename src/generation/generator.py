@@ -35,64 +35,102 @@ class ResponseGenerator:
         question: str,
         temperature: Optional[float] = None,
         seed: Optional[int] = None,
+        max_sample_retries: int = 2,
     ) -> Dict[str, Any]:
-        """Generate a single initial response."""
+        """Generate a single response with automatic retry for empty outputs."""
         temp = self.temperature if temperature is None else temperature
-        start_time = time.time()
-        result = self.client.generate(
-            prompt=question,
-            model=self.model,
-            system=self.system_prompt,
-            temperature=temp,
-            top_p=self.top_p,
-            seed=seed,
-        )
-        elapsed = time.time() - start_time
-        return {
-            "index": 0,
-            "text": result["response"],
-            "model": self.model,
-            "temperature": temp,
-            "elapsed_seconds": elapsed,
-            "eval_count": result.get("eval_count", 0),
-        }
+
+        for attempt in range(max_sample_retries + 1):
+            start_time = time.time()
+            result = self.client.generate(
+                prompt=question,
+                model=self.model,
+                system=self.system_prompt,
+                temperature=temp,
+                top_p=self.top_p,
+                seed=seed,
+            )
+            elapsed = time.time() - start_time
+            text = result.get("response", "").strip()
+
+            # Check for empty response and retry if retries remain
+            if not text:
+                if attempt < max_sample_retries:
+                    logger.warning(
+                        "Ollama returned empty response for query '%s' (attempt %d/%d). Retrying...",
+                        question[:40], attempt + 1, max_sample_retries + 1
+                    )
+                    time.sleep(0.5)
+                    continue
+                else:
+                    logger.error(
+                        "Ollama returned empty response for query '%s' after %d attempts.",
+                        question[:40], max_sample_retries + 1
+                    )
+
+            return {
+                "index": 0,
+                "text": text,
+                "model": self.model,
+                "temperature": temp,
+                "elapsed_seconds": elapsed,
+                "eval_count": result.get("eval_count", 0),
+            }
 
     def generate_multi(
         self,
         question: str,
         initial_response: Optional[Dict[str, Any]] = None,
         target_total_count: int = 10,
+        stochastic_temperature: Optional[float] = None,
+        greedy_temperature: float = 0.0,
     ) -> List[Dict[str, Any]]:
         """Generate exactly target_total_count responses.
-        
-        If initial_response is provided, uses it as index 0 and generates
-        (target_total_count - 1) additional sequential stochastic responses.
+
+        Preserves canonical sampling methodology:
+        - Response 0: Deterministic greedy generation at temperature=0.0 (or uses initial_response).
+        - Responses 1..N-1: Stochastic sampling at temperature=0.7, top_p=0.9.
         """
         responses: List[Dict[str, Any]] = []
+        stoch_temp = self.temperature if stochastic_temperature is None else stochastic_temperature
 
+        # 1. Deterministic / initial sample at index 0 (T=0.0)
         if initial_response is not None:
             init_copy = dict(initial_response)
             init_copy["index"] = 0
             responses.append(init_copy)
         else:
-            first = self.generate_single(question)
-            responses.append(first)
+            try:
+                first = self.generate_single(question, temperature=greedy_temperature)
+                first["index"] = 0
+                responses.append(first)
+            except Exception as e:
+                logger.error("Failed to generate initial greedy response: %s", e)
+                responses.append({
+                    "index": 0,
+                    "text": "",
+                    "model": self.model,
+                    "temperature": greedy_temperature,
+                    "elapsed_seconds": 0.0,
+                    "eval_count": 0,
+                    "error": str(e),
+                })
 
+        # 2. Sequential stochastic samples at indices 1..(target_total_count - 1) (T=0.7, top_p=0.9)
         needed = target_total_count - len(responses)
         for i in range(needed):
             idx = len(responses)
             try:
-                res = self.generate_single(question)
+                res = self.generate_single(question, temperature=stoch_temp)
                 res["index"] = idx
                 responses.append(res)
             except Exception as e:
-                logger.error("Error generating response %d: %s", idx, e)
-                # Fallback empty string marked so clustering handles cleanly
+                logger.error("Error generating stochastic response %d: %s", idx, e)
                 responses.append({
                     "index": idx,
                     "text": "",
                     "model": self.model,
-                    "temperature": self.temperature,
+                    "temperature": stoch_temp,
                     "elapsed_seconds": 0.0,
                     "eval_count": 0,
                     "error": str(e),

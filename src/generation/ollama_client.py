@@ -59,6 +59,39 @@ class OllamaClient:
             logger.warning("Failed to list Ollama models: %s", e)
             return []
 
+    def get_version(self) -> str:
+        """Return Ollama daemon version string."""
+        try:
+            resp = self.session.get(f"{self.host}/api/version", timeout=3.0)
+            if resp.status_code == 200:
+                return resp.json().get("version", "unknown")
+            return "unknown"
+        except Exception as e:
+            logger.warning("Failed to get Ollama version: %s", e)
+            return "unknown"
+
+    def get_model_info(self, model: str) -> Dict[str, Any]:
+        """Return model metadata including digest and details."""
+        try:
+            resp = self.session.get(f"{self.host}/api/tags", timeout=5.0)
+            if resp.status_code == 200:
+                data = resp.json()
+                for m in data.get("models", []):
+                    m_name = m.get("name", "")
+                    if m_name == model or m_name.split(":")[0] == model.split(":")[0]:
+                        return {
+                            "name": m.get("name"),
+                            "model": m.get("model"),
+                            "digest": m.get("digest"),
+                            "size": m.get("size"),
+                            "modified_at": m.get("modified_at"),
+                            "details": m.get("details", {}),
+                        }
+            return {}
+        except Exception as e:
+            logger.warning("Failed to get model info for %s: %s", model, e)
+            return {}
+
     def generate(
         self,
         prompt: str,

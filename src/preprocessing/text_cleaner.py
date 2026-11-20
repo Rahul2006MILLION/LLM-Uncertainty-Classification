@@ -45,6 +45,9 @@ def clean_text_for_embedding(text: str) -> str:
     cleaned = strip_boilerplate(text)
     # Collapse multiple whitespaces and newlines
     cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    # Truncate to safe context length (~800 characters / ~150 words) to prevent embedding context overflow
+    if len(cleaned) > 800:
+        cleaned = cleaned[:800].rsplit(" ", 1)[0]
     return cleaned
 
 

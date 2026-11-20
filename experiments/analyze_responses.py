@@ -16,6 +16,7 @@ from src.generation.ollama_client import OllamaClient
 from src.preprocessing.embeddings import EmbeddingEngine
 from src.features.clustering import SemanticClusterer
 from src.features.feature_extractor import FeatureExtractor
+from src.evaluation.data_validator import DatasetValidator
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("analyze_responses")
@@ -79,17 +80,41 @@ def main():
                 cluster_result=cluster_res,
             )
 
+            # Robust label extraction supporting gold_label, ground_truth_label, and label
+            label = None
+            if "label" in item or "gold_label" in item:
+                try:
+                    label = DatasetValidator.extract_label(item)
+                except Exception:
+                    label = item.get("gold_label") or item.get("label") or item.get("ground_truth_label")
+            else:
+                label = item.get("ground_truth_label")
+
+            # Group preservation
+            try:
+                group_ids = DatasetValidator.extract_group_ids(item)
+                primary_group_id = group_ids[0] if group_ids else DatasetValidator.get_question_group_key(q_text)
+            except Exception:
+                primary_group_id = item.get("question_group_id") or DatasetValidator.get_question_group_key(q_text)
+                group_ids = item.get("question_group_ids") or [primary_group_id]
+
             # Join features with metadata and target label (preventing any leakage during feature calculation)
             out_record = {
                 "id": item["id"],
                 "question": q_text,
-                "label": item.get("ground_truth_label"),
+                "label": label,
+                "gold_label": label,
+                "question_group_id": primary_group_id,
+                "question_group_ids": group_ids,
+                "category": item.get("category"),
+                "intended_interpretation": item.get("intended_interpretation"),
+                "temporal_anchor": item.get("temporal_anchor"),
                 "domain": item.get("domain", "general"),
                 "source": item.get("source"),
                 "similarity_threshold": sim_threshold,
                 "features": features,
             }
-            out_f.write(json.dumps(out_record) + "\n")
+            out_f.write(json.dumps(out_record, ensure_ascii=False) + "\n")
 
     logger.info("Feature extraction complete. Saved to %s", args.output)
 
