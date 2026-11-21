@@ -4,6 +4,7 @@ from src.classification.classifier import UncertaintyClassifier, LABEL_TO_ID, ID
 from src.classification.inaccessibility_assessor import InaccessibilityAssessor, InaccessibilityAssessment
 from src.classification.ambiguity_assessor import CriterionAmbiguityAssessor, AmbiguityAssessment
 from src.classification.fast_path_assessor import FastPathAnswerabilityAssessor, FastPathAssessment
+from src.classification.clarity_assessor import QuestionClarityAssessor, ClarityAssessment
 
 __all__ = [
     "AdaptiveRouter",
@@ -17,5 +18,7 @@ __all__ = [
     "AmbiguityAssessment",
     "FastPathAnswerabilityAssessor",
     "FastPathAssessment",
+    "QuestionClarityAssessor",
+    "ClarityAssessment",
 ]
 

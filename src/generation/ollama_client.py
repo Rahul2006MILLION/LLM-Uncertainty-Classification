@@ -29,7 +29,7 @@ class OllamaClient:
     def __init__(
         self,
         host: str = "http://localhost:11434",
-        request_timeout: float = 45.0,
+        request_timeout: float = 120.0,
         max_retries: int = 3,
         backoff_factor: float = 1.5,
     ):

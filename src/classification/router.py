@@ -4,7 +4,7 @@ import re
 from typing import Dict, Any, Tuple
 from dataclasses import dataclass
 
-# Question patterns that inherently contain polysemy, multiple criteria, or unanswerability
+from src.classification.clarity_assessor import QuestionClarityAssessor
 AMBIGUITY_QUESTION_PATTERNS = [
     # Polysemic entities with well-known multiple referents (documented regression cases & geographic polysemy)
     r"\b(georgia|jordan|washington|columbia|alexandria|victoria|mercury)\b",
@@ -76,6 +76,17 @@ class AdaptiveRouter:
                 reason="Fast path is globally disabled in configuration.",
                 confidence=1.0,
                 triggers=["fast_path_disabled"],
+            )
+
+        # Pre-Routing Gate: Question Clarity Assessment
+        # Obvious missing-referent or uncontextualized questions must not enter FAST_PATH
+        clarity = QuestionClarityAssessor.assess(q_clean)
+        if clarity.status == "AMBIGUOUS" and clarity.clarification_required:
+            return RoutingDecision(
+                path="MULTI_RESPONSE",
+                reason=f"Question clarity assessment flagged ambiguity ({clarity.ambiguity_type}): {clarity.reason}",
+                confidence=clarity.confidence,
+                triggers=[f"clarity_{clarity.ambiguity_type.lower()}"],
             )
 
         # 1. Check for explicit fast path triggers (arithmetic, simple definitional questions)
