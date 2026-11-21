@@ -1,8 +1,8 @@
 """Unit tests for semantic final answer selection and ambiguity explanation."""
 
 import unittest
-from src.features.semantic_analysis import SemanticCluster
 from src.features.answer_extractor import (
+    SemanticCluster,
     extract_concise_answer,
     select_semantic_final_answer,
 )

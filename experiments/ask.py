@@ -1,452 +1,634 @@
-"""Adaptive LLM Uncertainty Classification - Interactive CLI.
+#!/usr/bin/env python3
+"""Interactive and CLI Adaptive QA Pipeline for LLM Uncertainty Classification."""
 
-Executes the research prototype:
-- Verifies Ollama availability and effective runtime context window.
-- Fast path: Direct conversational handling for greetings and single-response fast-path
-  for straightforward, unambiguous questions.
-- Multi-response path: Sequentially generates 9 additional responses (10 total) when
-  material uncertainty or ambiguity is flagged.
-- Transparent NLP pipeline: Sentence embeddings, cosine similarity matrix, semantic clustering,
-  empirical semantic entropy, and medoid-based final candidate selection.
-- Supervised classification: Integrates trained uncertainty classifier or explicitly reports
-  'CLASSIFIER NOT TRAINED' if no validated model weights exist.
-"""
-
-import json
-from pathlib import Path
-import re
 import sys
+import os
 import time
-from typing import Any, Dict, List, Optional, Tuple
+import json
+import argparse
+import datetime
+import logging
+from typing import Dict, Any, List, Optional
+import yaml
 
-# Ensure project root is in sys.path
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
+# Ensure project root is on PYTHONPATH
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from configs.config import (
-    DEFAULT_MODEL_CONFIG,
-    DEFAULT_NLP_CONFIG,
-    DEFAULT_PATH_CONFIG,
-)
-from src.generation.ollama_generator import (
-    OllamaConnectionError,
-    OllamaError,
-    OllamaModelNotFoundError,
-    check_ollama_server,
-    generate_response,
-    generate_multiple_responses,
-    verify_runtime_context,
-)
-from src.features.semantic_analysis import analyze_semantic_responses
-from src.features.answer_extractor import (
-    extract_concise_answer,
-    select_semantic_final_answer,
-)
+from src.generation.ollama_client import OllamaClient, OllamaClientError
+from src.generation.generator import ResponseGenerator
+from src.preprocessing.embeddings import EmbeddingEngine
+from src.features.clustering import SemanticClusterer
+from src.features.entropy import compute_semantic_entropy_metrics
+from src.features.feature_extractor import FeatureExtractor
+from src.classification.router import AdaptiveRouter
 from src.classification.classifier import UncertaintyClassifier
+from src.classification.ambiguity_assessor import CriterionAmbiguityAssessor
+from src.classification.inaccessibility_assessor import InaccessibilityAssessor
+from src.classification.fast_path_assessor import FastPathAnswerabilityAssessor
+from src.classification.clarity_assessor import QuestionClarityAssessor
+from src.classification.hitl_engine import HITLEngine, ClarificationDecision, ClarificationState, ConversationState, AmbiguityType
+from src.classification.hitl_prompts import format_clarification_prompt
+from data.schema import ExperimentRecord
+
+logging.basicConfig(level=logging.WARNING, format="%(asctime)s [%(levelname)s] %(message)s")
+logger = logging.getLogger("ask")
 
 
-GREETING_PATTERNS = [
-    r"^hello[\s!\.]*$",
-    r"^hi[\s!\.]*$",
-    r"^hey[\s!\.]*$",
-    r"^greetings[\s!\.]*$",
-    r"^good (morning|afternoon|evening|day)[\s!\.]*$",
-    r"^how are you[\s\?]*$",
-    r"^who are you[\s\?]*$",
-    r"^thank you[\s!\.]*$",
-    r"^thanks[\s!\.]*$",
-    r"^bye[\s!\.]*$",
-    r"^goodbye[\s!\.]*$",
-]
+def load_config(config_path: str = "configs/default.yaml") -> Dict[str, Any]:
+    """Load configuration YAML with safe fallbacks."""
+    if os.path.exists(config_path):
+        with open(config_path, "r", encoding="utf-8") as f:
+            return yaml.safe_load(f)
+    return {}
 
 
-def is_conversational_input(text: str) -> bool:
-    """Detect if an input is simple conversational small-talk / greeting."""
-    cleaned = text.strip().lower()
-    for pattern in GREETING_PATTERNS:
-        if re.match(pattern, cleaned):
-            return True
-    return False
-
-
-def assess_uncertainty(
-    question: str,
-    initial_answer: str,
-    model: str = DEFAULT_MODEL_CONFIG.model_name,
-    context_window: Optional[int] = None,
-) -> Tuple[str, str]:
-    """Strictly evaluate whether an initial response requires multi-response analysis.
-
-    Returns:
-        (decision, reason) where decision is 'FAST_PATH' or 'ANALYZE_10'.
-    """
-    prompt = f"""You are an objective uncertainty evaluator for an LLM research experiment.
-
-Analyze the question and initial answer below:
-
-Question:
-{question}
-
-Initial Answer:
-{initial_answer}
-
-Evaluation Criteria:
-1. Choose FAST_PATH if:
-   - The question has a single clear, well-defined meaning.
-   - The answer directly and coherently answers the question.
-   - It is a standard definition, established factual calculation, or straightforward concept.
-   - There are no major contradictions, hallucinations, or expressions of severe lack of knowledge.
-   - NOTE: Having several examples, detailed steps, or a long explanation is completely NORMAL for a definition and does NOT justify ANALYZE_10.
-
-2. Choose ANALYZE_10 if:
-   - The question has multiple materially different interpretations (e.g. ambiguity in proper names or geographical entities).
-   - The answer explicitly states it lacks the necessary information or cannot answer.
-   - The answer contains contradictory factual assertions.
-   - The question asks about rapidly changing or current events that cannot be reliably verified.
-   - The model expresses substantial uncertainty affecting its core conclusion.
-
-Output Format:
-First line: FAST_PATH or ANALYZE_10
-Second line: A concise reason explaining your choice.
-"""
-    try:
-        raw_output = generate_response(
-            question=prompt,
-            model=model,
-            temperature=0.0,
-            top_p=1.0,
-            num_ctx=context_window,
-        ).strip()
-    except OllamaError:
-        # On evaluation error, default safely to ANALYZE_10
-        return "ANALYZE_10", "Error communicating with uncertainty assessor model."
-
-    lines = [line.strip() for line in raw_output.splitlines() if line.strip()]
-    if not lines:
-        return "ANALYZE_10", "Empty assessment from assessor."
-
-    first_line_upper = lines[0].upper()
-    reason = " ".join(lines[1:]) if len(lines) > 1 else "Assessment completed."
-
-    if "FAST_PATH" in first_line_upper:
-        return "FAST_PATH", reason or "Clear question and coherent response with no uncertainty flags."
-    if "ANALYZE_10" in first_line_upper:
-        return "ANALYZE_10", reason or "Potential ambiguity or uncertainty signals detected."
-
-    # Robust fallback: look for keyword in raw output
-    if "FAST_PATH" in raw_output:
-        return "FAST_PATH", "Fast path selected based on response criteria."
-
-    return "ANALYZE_10", f"Ambiguity or unverified assessment format: {lines[0]}"
-
-
-def save_experiment_results(data: Dict[str, Any]) -> Path:
-    """Save experiment metadata and results under a unique timestamped filename."""
-    out_dir = DEFAULT_PATH_CONFIG.raw_generations_dir
-    out_dir.mkdir(parents=True, exist_ok=True)
-
-    timestamp = time.strftime("%Y%m%d_%H%M%S")
-    # Microsecond precision suffix to ensure strict uniqueness
-    ms_suffix = int((time.time() % 1) * 1000)
-    out_file = out_dir / f"adaptive_{timestamp}_{ms_suffix:03d}.json"
-
-    with out_file.open("w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
-
-    return out_file
+def format_terminal_box(title: str, lines: List[str], width: int = 70) -> str:
+    """Format clean ASCII box for readable terminal display."""
+    border = "=" * width
+    sub_border = "-" * width
+    out = [border, f"  {title.center(width - 4)}", sub_border]
+    for line in lines:
+        out.append(f"  {line}")
+    out.append(border)
+    return "\n".join(out)
 
 
 def run_pipeline(
     question: str,
-    classifier: UncertaintyClassifier,
-    interactive: bool = True,
-) -> Dict[str, Any]:
-    """Execute the end-to-end adaptive uncertainty classification pipeline."""
-    start_total_time = time.time()
-    model = DEFAULT_MODEL_CONFIG.model_name
-    temp = DEFAULT_MODEL_CONFIG.temperature
-    top_p = DEFAULT_MODEL_CONFIG.top_p
+    config: Optional[Dict[str, Any]] = None,
+    force_multi_response: bool = False,
+    generator: Optional[Any] = None,
+    classifier: Optional[Any] = None,
+    router: Optional[Any] = None,
+    embedder: Optional[Any] = None,
+    interactive_hitl: bool = False,
+    hitl_engine: Optional[Any] = None,
+    conversation_state: Optional[ConversationState] = None,
+    clarification_callback: Optional[Any] = None,
+) -> ExperimentRecord:
+    """Execute the end-to-end adaptive QA pipeline on a given question."""
+    start_total_t = time.time()
+    cfg = config or load_config()
 
-    # Step 1: Verify Ollama and runtime context window
-    try:
-        runtime_ctx = verify_runtime_context(model=model)
-    except (OllamaConnectionError, OllamaModelNotFoundError) as e:
-        print(f"\n[Error] {e}")
-        return {"error": str(e)}
+    if conversation_state is None:
+        conversation_state = ConversationState(original_question=question, current_question=question)
+    if interactive_hitl and hitl_engine is None:
+        hitl_engine = HITLEngine()
 
-    # Step 2: Check for simple conversational inputs
-    if is_conversational_input(question):
-        t0 = time.time()
-        initial_answer = generate_response(
-            question=question,
-            model=model,
-            temperature=temp,
-            top_p=top_p,
-            num_ctx=runtime_ctx,
-        )
-        gen_latency = time.time() - t0
-        total_latency = time.time() - start_total_time
+    ollama_cfg = cfg.get("ollama", {})
+    host = ollama_cfg.get("host", "http://localhost:11434")
+    gen_model = ollama_cfg.get("generation_model", "qwen2.5:3b")
+    emb_model = ollama_cfg.get("embedding_model", "all-minilm")
+    temperature = float(ollama_cfg.get("temperature", 0.7))
+    top_p = float(ollama_cfg.get("top_p", 0.9))
 
-        print(f"\nQuestion: {question}\n")
-        print(f"Answer: {initial_answer}\n")
-        print("Path: FAST (Conversational)\n")
-        print("Generations: 1\n")
-        print("Classification: N/A — Ordinary conversation\n")
-        print("Confidence: Uncalibrated (Conversational input)\n")
+    pipe_cfg = cfg.get("pipeline", {})
+    routing_cfg = cfg.get("routing", {})
+    fast_path_enabled = (
+        pipe_cfg.get("fast_path_enabled", routing_cfg.get("fast_path_enabled", True))
+    ) and not force_multi_response
+    multi_count = int(pipe_cfg.get("multi_response_count", routing_cfg.get("multi_response_count", 10)))
 
-        experiment_data = {
-            "question": question,
-            "model": model,
-            "parameters": {
-                "temperature": temp,
-                "top_p": top_p,
-                "effective_runtime_context": runtime_ctx,
-            },
-            "path": "FAST",
-            "is_conversational": True,
-            "decision": "FAST_PATH",
-            "decision_reason": "Ordinary greeting or small talk.",
-            "generations_count": 1,
-            "responses": [initial_answer],
-            "final_answer": initial_answer,
-            "classification": "N/A",
-            "confidence": "uncalibrated",
-            "latencies": {
-                "initial_answer_latency": gen_latency,
-                "total_latency": total_latency,
-            },
-        }
-        saved_path = save_experiment_results(experiment_data)
-        print(f"[Results saved to {saved_path.name}]")
-        return experiment_data
+    clust_cfg = cfg.get("clustering", {})
+    sim_threshold = float(clust_cfg.get("similarity_threshold", 0.80))
+    linkage = clust_cfg.get("linkage", "average")
 
-    # Step 3: Fast path candidate - Generate initial response
-    if interactive:
-        print("\nGenerating initial answer...")
+    out_cfg = cfg.get("output_selection", {})
+    expl_threshold = float(out_cfg.get("explanation_threshold", 0.25))
+
+    clf_cfg = cfg.get("classifier", {})
+    model_save_path = clf_cfg.get("model_save_path", "models/uncertainty_classifier.joblib")
+
+    # 1. Initialize Clients and Modules
+    client = None
+    if generator is None or embedder is None:
+        client = OllamaClient(host=host, request_timeout=float(ollama_cfg.get("request_timeout", 45.0)))
+
+    if generator is None:
+        if not client.is_available():
+            raise OllamaClientError(
+                f"Cannot connect to Ollama at {host}. Please verify that the Ollama service is running."
+            )
+        generator = ResponseGenerator(client=client, model=gen_model, temperature=temperature, top_p=top_p)
+
+    if router is None:
+        router = AdaptiveRouter(fast_path_enabled=fast_path_enabled)
+
+    clusterer = SemanticClusterer(similarity_threshold=sim_threshold, linkage=linkage)
+    feature_extractor = FeatureExtractor(clusterer=clusterer)
+    if embedder is None:
+        embedder = EmbeddingEngine(client=client, embedding_model=emb_model)
+
+    # Load classifier if present and not provided
+    if classifier is None:
+        for candidate_path in [model_save_path, "models/uncertainty_classifier.joblib", "models/uncertainty_classifier.json"]:
+            if os.path.exists(candidate_path):
+                try:
+                    classifier = UncertaintyClassifier.load(candidate_path)
+                    break
+                except Exception as e:
+                    logger.warning("Could not load classifier from %s: %s", candidate_path, e)
+
+    # 2. Step 0: Question Clarity Assessment
+    clarity_assessment = QuestionClarityAssessor.assess(question)
+
+    # 3. Step 1: Initial Response Generation
     t0 = time.time()
-    initial_answer = generate_response(
-        question=question,
-        model=model,
-        temperature=temp,
-        top_p=top_p,
-        num_ctx=runtime_ctx,
-    )
-    initial_latency = time.time() - t0
+    initial_res = generator.generate_single(question, temperature=0.0)  # Greedy for initial response
+    initial_text = initial_res["text"]
 
-    # Step 4: Evaluate uncertainty
-    if interactive:
-        print("Assessing uncertainty...")
-    t_assess = time.time()
-    decision, reason = assess_uncertainty(
-        question=question,
-        initial_answer=initial_answer,
-        model=model,
-        context_window=runtime_ctx,
-    )
-    assessment_latency = time.time() - t_assess
+    # 4. Step 2: Route question
+    decision = router.route(question, initial_text)
 
-    # FAST PATH BRANCH
-    if decision == "FAST_PATH":
-        total_latency = time.time() - start_total_time
-        concise_ans = extract_concise_answer(initial_answer)
+    # Gate 1: Early Clarification Gate (Polysemy & Missing Criteria)
+    if interactive_hitl and hitl_engine is not None and conversation_state.can_clarify():
+        early_dec = hitl_engine.evaluate_early(
+            question=question,
+            initial_response=initial_text,
+            router_triggers=decision.triggers,
+            conversation_state=conversation_state,
+        )
+        if early_dec.decision == ClarificationState.CLARIFICATION_REQUIRED:
+            user_input = None
+            if clarification_callback:
+                user_input = clarification_callback(early_dec, conversation_state)
+            if user_input:
+                conversation_state, clarified_q, success = hitl_engine.apply_clarification(
+                    conversation_state, user_input, early_dec
+                )
+                if success:
+                    logger.info("Gate 1 clarification applied: '%s' -> '%s'", question, clarified_q)
+                    return run_pipeline(
+                        question=clarified_q,
+                        config=config,
+                        force_multi_response=force_multi_response,
+                        generator=generator,
+                        classifier=classifier,
+                        router=router,
+                        embedder=embedder,
+                        interactive_hitl=interactive_hitl,
+                        hitl_engine=hitl_engine,
+                        conversation_state=conversation_state,
+                        clarification_callback=clarification_callback,
+                    )
 
-        # Check classifier prediction if trained
-        clf_result = classifier.predict({}) if classifier.is_trained else {
-            "prediction": "CLASSIFIER NOT TRAINED",
-            "confidence": "Uncalibrated (requires multi-response feature extraction and labeled training)",
-        }
-
-        classification_str = (
-            "KNOWN"
-            if classifier.is_trained and clf_result.get("prediction") == "KNOWN"
-            else "CLASSIFIER NOT TRAINED"
+    # 4. Path Branching
+    if decision.path == "FAST_PATH":
+        # Explicit fast-path answerability assessment
+        # Avoids feeding single-response features into 10-response multi-class classifier
+        fast_assessment = FastPathAnswerabilityAssessor.assess(
+            question=question,
+            response=initial_text,
         )
 
-        print(f"\nQuestion: {question}\n")
-        print(f"Answer: {concise_ans}\n")
-        print("Path: FAST\n")
-        print("Generations: 1\n")
-        print(f"Classification: {classification_str}")
-        print(f"Confidence: {clf_result.get('confidence', 'Uncalibrated')}\n")
+        if not fast_assessment.is_assessed or fast_assessment.predicted_label is None:
+            # Uncertain fast-path response: escalate to multi-response consistency analysis
+            logger.info("Fast path assessment uncertain for '%s'; escalating to multi-response analysis.", question)
+            decision.path = "MULTI_RESPONSE"
+        else:
+            elapsed_total = time.time() - start_total_t
+            # Extract genuine single-response features for logging/record schema
+            single_emb = embedder.embed_batch([initial_text])
+            features = feature_extractor.extract_features(
+                question=question,
+                responses=[initial_text],
+                embeddings=single_emb,
+            )
 
-        experiment_data = {
-            "question": question,
-            "model": model,
-            "parameters": {
-                "temperature": temp,
-                "top_p": top_p,
-                "effective_runtime_context": runtime_ctx,
-            },
-            "path": "FAST",
-            "is_conversational": False,
-            "decision": decision,
-            "decision_reason": reason,
-            "generations_count": 1,
-            "responses": [initial_answer],
-            "final_answer": concise_ans,
-            "classification": classification_str,
-            "confidence": clf_result.get("confidence", "uncalibrated"),
-            "latencies": {
-                "initial_answer_latency": initial_latency,
-                "uncertainty_assessment_latency": assessment_latency,
-                "total_latency": total_latency,
-            },
-        }
-        saved_path = save_experiment_results(experiment_data)
-        print(f"[Results saved to {saved_path.name}]")
-        return experiment_data
+            pred_label = fast_assessment.predicted_label
+            pred_conf = fast_assessment.confidence
+            clf_status = fast_assessment.status
 
-    # MULTI-RESPONSE BRANCH
-    print(f"\nQuestion: {question}\n")
-    print(f"Initial answer: {initial_answer}\n")
-    print(f"Reason for deeper analysis: {reason}\n")
-    print("Generating additional responses: 9/9")
+            # Fast path epistemic and interaction outcome determination
+            if conversation_state.round_count >= conversation_state.max_rounds:
+                fast_decision = "UNRESOLVED"
+                fast_interaction = "MAX_ROUNDS_REACHED"
+                fast_ambig = conversation_state.detected_ambiguity_type or "UNDERSPECIFIED_CONTEXT"
+                fast_reason = "Maximum clarification rounds reached without ambiguity resolution."
+            elif conversation_state.user_declined:
+                fast_decision = "UNRESOLVED"
+                fast_interaction = "USER_DECLINED"
+                fast_ambig = conversation_state.detected_ambiguity_type or "UNDERSPECIFIED_CONTEXT"
+                fast_reason = "Clarification declined or skipped by user; ambiguity remains unresolved."
+            elif conversation_state.is_clarified:
+                if pred_label == "UNKNOWN":
+                    fast_decision = "ABSTAIN"
+                    fast_interaction = "RESOLVED"
+                    fast_ambig = conversation_state.detected_ambiguity_type
+                    fast_reason = fast_assessment.reason or "Epistemic refusal or unanswerable query on clarified fast path."
+                else:
+                    fast_decision = "ANSWERABLE"
+                    fast_interaction = "RESOLVED"
+                    fast_ambig = conversation_state.detected_ambiguity_type
+                    fast_reason = "Ambiguity successfully resolved through human clarification."
+            elif pred_label == "AMBIGUOUS" or clarity_assessment.status == "AMBIGUOUS":
+                fast_decision = "CLARIFICATION_REQUIRED"
+                fast_interaction = "PENDING"
+                fast_ambig = clarity_assessment.ambiguity_type or conversation_state.detected_ambiguity_type or "MISSING_REFERENT"
+                fast_reason = clarity_assessment.reason or fast_assessment.reason
+            else:
+                fast_decision = "ABSTAIN" if pred_label == "UNKNOWN" else "ANSWERABLE"
+                fast_interaction = "NOT_REQUIRED"
+                fast_ambig = None
+                fast_reason = fast_assessment.reason if pred_label == "UNKNOWN" else None
 
-    t_add = time.time()
+            rec = ExperimentRecord(
+                timestamp=datetime.datetime.now().isoformat(),
+                question=question,
+                path="FAST_PATH",
+                final_answer=initial_text,
+                response_count=1,
+                cluster_count=1,
+                dominant_cluster_agreement=1.0,
+                second_cluster_agreement=0.0,
+                agreement_margin=1.0,
+                semantic_entropy=0.0,
+                normalized_entropy=0.0,
+                mean_pairwise_similarity=1.0,
+                elapsed_seconds=elapsed_total,
+                classifier_status=clf_status,
+                predicted_label=pred_label,
+                confidence=pred_conf,
+                features=features,
+                responses=[initial_res],
+                clusters={"labels": [0], "cluster_counts": [1], "dominant_rep_idx": 0, "second_rep_idx": None},
+                model=gen_model,
+                embedding_model=emb_model,
+                original_question=conversation_state.original_question,
+                clarified_question=conversation_state.current_question if conversation_state.is_clarified else None,
+                is_clarified=conversation_state.is_clarified,
+                clarification_rounds=conversation_state.round_count,
+                clarification_history=conversation_state.history,
+                clarification_decision=fast_decision,
+                interaction_status=fast_interaction,
+                ambiguity_type=fast_ambig,
+                clarification_reason=fast_reason,
+                clarity_status=clarity_assessment.status,
+                clarity_confidence=clarity_assessment.confidence,
+                clarification_required=clarity_assessment.clarification_required,
+            )
+            return rec
 
-    def progress(current: int, total: int):
-        print(f"  • Generating response {current}/{total}...", end="\r", flush=True)
-
-    additional = generate_multiple_responses(
+    # 5. Multi-Response Path: exactly 10 responses total
+    all_responses = generator.generate_multi(
         question=question,
-        model=model,
-        num_generations=9,
-        temperature=temp,
-        top_p=top_p,
-        num_ctx=runtime_ctx,
-        progress_callback=progress,
+        initial_response=initial_res,
+        target_total_count=multi_count,
     )
-    print()  # newline after progress
-    additional_latency = time.time() - t_add
+    response_texts = [r["text"] for r in all_responses]
 
-    responses = [initial_answer] + [item.response for item in additional]
+    # 6. Preprocessing and Semantic Embeddings
+    embeddings = embedder.embed_batch(response_texts)
 
-    print("\n" + "=" * 60)
-    print("ALL 10 RESPONSES")
-    print("=" * 60)
-    for idx, r in enumerate(responses, start=1):
-        print(f"\nResponse {idx}:\n{r.strip()}")
-    print("\n" + "=" * 60)
+    # 7. Semantic Clustering
+    cluster_res = clusterer.cluster_responses(response_texts, embeddings)
+    cluster_counts = cluster_res["cluster_counts"]
+    dom_rep_idx = cluster_res["dominant_representative_idx"]
+    sec_rep_idx = cluster_res["second_representative_idx"]
 
-    # Step 5: Run NLP semantic analysis
-    if interactive:
-        print("\nRunning NLP semantic analysis and clustering...")
-    t_feat = time.time()
-    analysis = analyze_semantic_responses(
-        responses=responses,
+    # 8. Entropy, Agreement & Features
+    features = feature_extractor.extract_features(
         question=question,
-        similarity_threshold=DEFAULT_NLP_CONFIG.similarity_threshold,
+        responses=response_texts,
+        embeddings=embeddings,
+        cluster_result=cluster_res,
     )
-    feature_latency = time.time() - t_feat
 
-    # Step 6: Select final candidate answer using semantic clusters
-    answer_result = select_semantic_final_answer(
-        clusters=analysis.clusters,
-        majority_agreement=analysis.majority_cluster_agreement,
-        second_agreement=analysis.second_cluster_agreement,
-        question=question,
-    )
-    final_answer = answer_result["final_answer"]
+    # 9. Output Selection & Synthesis
+    dom_text = response_texts[dom_rep_idx] if dom_rep_idx >= 0 and dom_rep_idx < len(response_texts) else initial_text
+    p1 = features["dominant_agreement"]
+    p2 = features["second_agreement"]
 
-    # Step 7: Classify using ML classifier if trained
-    clf_result = classifier.predict(analysis.features)
-
-    if classifier.is_trained:
-        classification_str = clf_result["prediction"]
-        confidence_str = clf_result["confidence"]
+    if p2 >= expl_threshold and sec_rep_idx is not None and sec_rep_idx < len(response_texts):
+        sec_text = response_texts[sec_rep_idx]
+        final_answer = (
+            f"Multiple plausible interpretations detected:\n"
+            f"  • [Interpretation 1 ({p1:.0%} consensus)]: {dom_text}\n"
+            f"  • [Interpretation 2 ({p2:.0%} consensus)]: {sec_text}"
+        )
     else:
-        classification_str = "CLASSIFIER NOT TRAINED"
-        confidence_str = "Uncalibrated (classifier infrastructure ready; awaits validated labeled data)"
+        final_answer = dom_text
 
-    total_latency = time.time() - start_total_time
+    # 10. Classifier Inference & Criterion Ambiguity Assessment
+    clf_status = "CLASSIFIER NOT TRAINED"
+    pred_label = None
+    pred_conf = None
+    if classifier is not None and classifier.is_trained:
+        pred_res = classifier.predict(features)
+        clf_status = pred_res.get("status", "PREDICTED")
+        pred_label = pred_res.get("predicted_label")
+        pred_conf = pred_res.get("confidence")
 
-    # Output according to required specification
-    print(f"\nSemantic answer groups: {analysis.num_clusters}")
-    print(f"Majority agreement: {analysis.majority_cluster_agreement:.1%}")
-    print(
-        f"Semantic entropy: {analysis.raw_semantic_entropy:.3f} "
-        f"(normalized: {analysis.normalized_semantic_entropy:.3f})\n"
+    # Evaluate Criterion Ambiguity: decouple response consensus from objective truth
+    ambig_check = CriterionAmbiguityAssessor.assess(
+        question=question,
+        responses=response_texts,
+        features=features,
     )
-    print(f"Final answer: {final_answer}\n")
-    print(f"Classification: {classification_str}")
-    print(f"Confidence: {confidence_str}\n")
+    if ambig_check.is_ambiguous and pred_label != "AMBIGUOUS":
+        pred_label = "AMBIGUOUS"
+        pred_conf = ambig_check.confidence
+        clf_status = f"ASSESSED_AMBIGUOUS_RULE_HEURISTIC ({ambig_check.evidence[0]})"
 
-    # Record and save
-    experiment_data = {
-        "question": question,
-        "model": model,
-        "parameters": {
-            "temperature": temp,
-            "top_p": top_p,
-            "effective_runtime_context": runtime_ctx,
-            "similarity_threshold": DEFAULT_NLP_CONFIG.similarity_threshold,
-        },
-        "path": "MULTI_RESPONSE",
-        "is_conversational": False,
-        "decision": decision,
-        "decision_reason": reason,
-        "generations_count": 10,
-        "responses": responses,
-        "semantic_groups_count": analysis.num_clusters,
-        "majority_agreement": analysis.majority_cluster_agreement,
-        "second_agreement": analysis.second_cluster_agreement,
-        "agreement_margin": analysis.agreement_margin,
-        "semantic_entropy": analysis.raw_semantic_entropy,
-        "normalized_semantic_entropy": analysis.normalized_semantic_entropy,
-        "extracted_features": analysis.features,
-        "final_answer": final_answer,
-        "classification": classification_str,
-        "confidence": confidence_str,
-        "latencies": {
-            "initial_answer_latency": initial_latency,
-            "uncertainty_assessment_latency": assessment_latency,
-            "additional_generation_latency": additional_latency,
-            "feature_extraction_latency": feature_latency,
-            "total_latency": total_latency,
-        },
-    }
+    # Evaluate Inaccessibility Safeguard: prevent multi-cluster refusal masquerading as ambiguity
+    inacc_check = InaccessibilityAssessor.assess(
+        question=question,
+        responses=response_texts,
+        features=features,
+    )
+    if inacc_check.is_inaccessible:
+        pred_label = "UNKNOWN"
+        pred_conf = inacc_check.confidence
+        clf_status = f"ASSESSED_INACCESSIBLE_RULE_HEURISTIC ({inacc_check.evidence[0]})"
 
-    saved_path = save_experiment_results(experiment_data)
-    print(f"[Results saved to {saved_path.name}]")
-    return experiment_data
+    # Gate 2: Post-Consistency Clarification Gate (Cluster Polysemy & Unstated Criteria)
+    post_dec = None
+    if interactive_hitl and hitl_engine is not None and conversation_state.can_clarify():
+        post_dec = hitl_engine.evaluate_post_consistency(
+            question=question,
+            responses=response_texts,
+            features=features,
+            cluster_result=cluster_res,
+            classifier_label=pred_label,
+            inaccessibility_assessment=inacc_check,
+            ambiguity_assessment=ambig_check,
+            conversation_state=conversation_state,
+        )
+        if post_dec.decision == ClarificationState.CLARIFICATION_REQUIRED:
+            user_input = None
+            if clarification_callback:
+                user_input = clarification_callback(post_dec, conversation_state)
+            if user_input:
+                conversation_state, clarified_q, success = hitl_engine.apply_clarification(
+                    conversation_state, user_input, post_dec
+                )
+                if success:
+                    logger.info("Gate 2 clarification applied: '%s' -> '%s'", question, clarified_q)
+                    return run_pipeline(
+                        question=clarified_q,
+                        config=config,
+                        force_multi_response=force_multi_response,
+                        generator=generator,
+                        classifier=classifier,
+                        router=router,
+                        embedder=embedder,
+                        interactive_hitl=interactive_hitl,
+                        hitl_engine=hitl_engine,
+                        conversation_state=conversation_state,
+                        clarification_callback=clarification_callback,
+                    )
+
+    # 11. Final Decision & Synthesis Formatting
+    if post_dec and post_dec.decision == ClarificationState.MODEL_DISAGREEMENT:
+        sec_text = response_texts[sec_rep_idx] if (sec_rep_idx is not None and sec_rep_idx < len(response_texts)) else "Alternative claim"
+        final_answer = (
+            f"Conflicting factual claims detected across model generations (model disagreement / unreliability):\n"
+            f"  • Claim 1 ({p1:.0%} consensus): {dom_text}\n"
+            f"  • Claim 2 ({p2:.0%} consensus): {sec_text}"
+        )
+
+    # Determine epistemic decision, interaction status, and ambiguity provenance
+    if conversation_state.round_count >= conversation_state.max_rounds:
+        rec_interaction_status = "MAX_ROUNDS_REACHED"
+        rec_decision = "UNRESOLVED"
+        rec_ambig_type = conversation_state.detected_ambiguity_type or (post_dec.ambiguity_type.value if (post_dec and post_dec.ambiguity_type != AmbiguityType.NONE) else "UNDERSPECIFIED_CONTEXT")
+        rec_reason = "Maximum clarification rounds reached without ambiguity resolution."
+    elif conversation_state.user_declined:
+        rec_interaction_status = "USER_DECLINED"
+        rec_decision = "UNRESOLVED"
+        rec_ambig_type = conversation_state.detected_ambiguity_type or (post_dec.ambiguity_type.value if (post_dec and post_dec.ambiguity_type != AmbiguityType.NONE) else "UNDERSPECIFIED_CONTEXT")
+        rec_reason = "Clarification declined or skipped by user; ambiguity remains unresolved."
+    elif conversation_state.is_clarified:
+        # Clarified query evaluated through post-consistency analysis
+        if post_dec and post_dec.decision == ClarificationState.ANSWERABLE:
+            rec_decision = "ANSWERABLE"
+            rec_interaction_status = "RESOLVED"
+            rec_ambig_type = conversation_state.detected_ambiguity_type
+            rec_reason = "Ambiguity successfully resolved through human clarification."
+        elif post_dec and post_dec.decision == ClarificationState.MODEL_DISAGREEMENT:
+            rec_decision = "MODEL_DISAGREEMENT"
+            rec_interaction_status = "RESOLVED"
+            rec_ambig_type = conversation_state.detected_ambiguity_type or post_dec.ambiguity_type.value
+            rec_reason = post_dec.reason or "Response divergence reflects factual inconsistency on clarified query."
+        elif post_dec and post_dec.decision == ClarificationState.ABSTAIN:
+            rec_decision = "ABSTAIN"
+            rec_interaction_status = "RESOLVED"
+            rec_ambig_type = conversation_state.detected_ambiguity_type or post_dec.ambiguity_type.value
+            rec_reason = post_dec.reason or "Clarified query identified as epistemically unanswerable or inaccessible."
+        elif post_dec and post_dec.decision == ClarificationState.CLARIFICATION_REQUIRED:
+            if conversation_state.can_clarify():
+                rec_decision = "CLARIFICATION_REQUIRED"
+                rec_interaction_status = "PENDING"
+            else:
+                rec_decision = "UNRESOLVED"
+                rec_interaction_status = "MAX_ROUNDS_REACHED"
+            rec_ambig_type = conversation_state.detected_ambiguity_type or post_dec.ambiguity_type.value
+            rec_reason = post_dec.reason or "Ambiguity persists following clarification attempt."
+        elif post_dec and post_dec.decision == ClarificationState.UNRESOLVED:
+            rec_decision = "UNRESOLVED"
+            rec_interaction_status = "MAX_ROUNDS_REACHED" if conversation_state.round_count >= conversation_state.max_rounds else "USER_DECLINED"
+            rec_ambig_type = conversation_state.detected_ambiguity_type or post_dec.ambiguity_type.value
+            rec_reason = post_dec.reason or "Clarification ended without ambiguity resolution."
+        else:
+            rec_decision = "ANSWERABLE"
+            rec_interaction_status = "RESOLVED"
+            rec_ambig_type = conversation_state.detected_ambiguity_type
+            rec_reason = "Ambiguity successfully resolved through human clarification."
+    elif post_dec and post_dec.decision == ClarificationState.MODEL_DISAGREEMENT:
+        rec_interaction_status = "NOT_REQUIRED"
+        rec_decision = "MODEL_DISAGREEMENT"
+        rec_ambig_type = post_dec.ambiguity_type.value if post_dec.ambiguity_type != AmbiguityType.NONE else "MODEL_DISAGREEMENT"
+        rec_reason = post_dec.reason
+    elif post_dec and post_dec.decision == ClarificationState.ABSTAIN:
+        rec_interaction_status = "NOT_REQUIRED"
+        rec_decision = "ABSTAIN"
+        rec_ambig_type = post_dec.ambiguity_type.value if post_dec.ambiguity_type != AmbiguityType.NONE else None
+        rec_reason = post_dec.reason
+    elif post_dec and post_dec.decision == ClarificationState.CLARIFICATION_REQUIRED:
+        if conversation_state.can_clarify():
+            rec_decision = "CLARIFICATION_REQUIRED"
+            rec_interaction_status = "PENDING"
+        else:
+            rec_decision = "UNRESOLVED"
+            rec_interaction_status = "MAX_ROUNDS_REACHED"
+        rec_ambig_type = post_dec.ambiguity_type.value if post_dec.ambiguity_type != AmbiguityType.NONE else None
+        rec_reason = post_dec.reason
+    elif post_dec and post_dec.decision == ClarificationState.UNRESOLVED:
+        rec_interaction_status = "NOT_REQUIRED"
+        rec_decision = "UNRESOLVED"
+        rec_ambig_type = post_dec.ambiguity_type.value if post_dec.ambiguity_type != AmbiguityType.NONE else None
+        rec_reason = post_dec.reason
+    elif pred_label == "AMBIGUOUS" and not conversation_state.is_clarified:
+        rec_interaction_status = "PENDING" if conversation_state.can_clarify() else "NOT_REQUIRED"
+        rec_decision = "CLARIFICATION_REQUIRED" if conversation_state.can_clarify() else "UNRESOLVED"
+        rec_ambig_type = clarity_assessment.ambiguity_type or (post_dec.ambiguity_type.value if (post_dec and post_dec.ambiguity_type != AmbiguityType.NONE) else "UNDERSPECIFIED_CONTEXT")
+        rec_reason = clarity_assessment.reason or (post_dec.reason if post_dec else "Ambiguity requires context resolution.")
+    else:
+        rec_interaction_status = "NOT_REQUIRED"
+        rec_decision = "ANSWERABLE"
+        rec_ambig_type = post_dec.ambiguity_type.value if (post_dec and post_dec.ambiguity_type != AmbiguityType.NONE) else None
+        rec_reason = post_dec.reason if post_dec else None
+
+    elapsed_total = time.time() - start_total_t
+
+    # Serialize experiment record
+    rec = ExperimentRecord(
+        timestamp=datetime.datetime.now().isoformat(),
+        question=question,
+        path="MULTI_RESPONSE",
+        final_answer=final_answer,
+        response_count=len(all_responses),
+        cluster_count=int(features["cluster_count"]),
+        dominant_cluster_agreement=p1,
+        second_cluster_agreement=p2,
+        agreement_margin=features["agreement_margin"],
+        semantic_entropy=features["semantic_entropy"],
+        normalized_entropy=features["normalized_entropy"],
+        mean_pairwise_similarity=features["mean_pairwise_similarity"],
+        elapsed_seconds=elapsed_total,
+        classifier_status=clf_status,
+        predicted_label=pred_label,
+        confidence=pred_conf,
+        features=features,
+        responses=all_responses,
+        clusters={
+            "labels": cluster_res["labels"],
+            "cluster_counts": cluster_counts,
+            "dominant_rep_idx": dom_rep_idx,
+            "second_rep_idx": sec_rep_idx,
+        },
+        model=gen_model,
+        embedding_model=emb_model,
+        original_question=conversation_state.original_question,
+        clarified_question=conversation_state.current_question if conversation_state.is_clarified else None,
+        is_clarified=conversation_state.is_clarified,
+        clarification_rounds=conversation_state.round_count,
+        clarification_history=conversation_state.history,
+        clarification_decision=rec_decision,
+        interaction_status=rec_interaction_status,
+        ambiguity_type=rec_ambig_type,
+        clarification_reason=rec_reason,
+        clarity_status=clarity_assessment.status,
+        clarity_confidence=clarity_assessment.confidence,
+        clarification_required=clarity_assessment.clarification_required,
+    )
+    return rec
 
 
 def main():
-    """Terminal entry point."""
-    print("=" * 60)
-    print("ADAPTIVE LLM UNCERTAINTY CLASSIFICATION")
-    print("Model: llama3.1:8b-research (Q4_K_M)")
-    print("=" * 60)
+    parser = argparse.ArgumentParser(description="Ask questions using adaptive LLM uncertainty pipeline.")
+    parser.add_argument("question", nargs="*", help="Question to ask (if omitted, prompts interactively)")
+    parser.add_argument("-q", "--query", type=str, default=None, help="Question text")
+    parser.add_argument("--config", type=str, default="configs/default.yaml", help="Path to config file")
+    parser.add_argument("--force-multi", action="store_true", help="Force multi-response analysis (bypass fast path)")
+    parser.add_argument("--interactive-hitl", dest="interactive_hitl", action="store_true", help="Enable Human-in-the-Loop clarification for ambiguous queries")
+    parser.add_argument("--no-hitl", dest="interactive_hitl", action="store_false", help="Disable Human-in-the-Loop clarification")
+    parser.set_defaults(interactive_hitl=True)
+    parser.add_argument("--json", action="store_true", help="Output raw JSON record to stdout")
+    args = parser.parse_args()
 
-    # Check Ollama connection on startup
-    if not check_ollama_server():
-        print(
-            "\n[Error] Cannot connect to Ollama server at http://localhost:11434.\n"
-            "Please ensure Ollama is running (`ollama serve`).\n"
-        )
-        return
+    # Determine question
+    q_tokens = args.question
+    question = args.query or (" ".join(q_tokens) if q_tokens else None)
 
-    # Load classifier (will cleanly show 'CLASSIFIER NOT TRAINED' if weights not present)
-    classifier = UncertaintyClassifier.load()
-
-    while True:
+    if not question:
         try:
-            question = input("\nEnter your question: ").strip()
+            print("\nEnter question (or Ctrl+C to exit):")
+            question = input("> ").strip()
         except (KeyboardInterrupt, EOFError):
             print("\nExiting.")
-            break
+            sys.exit(0)
 
-        if not question:
-            continue
-        if question.lower() == "exit":
-            print("Exiting.")
-            break
+    if not question:
+        print("Error: Empty question provided.")
+        sys.exit(1)
 
+    config = load_config(args.config)
+
+    def terminal_clarification_callback(decision: ClarificationDecision, state: ConversationState) -> Optional[str]:
+        prompt_text = format_clarification_prompt(
+            question=decision.clarification_prompt or "Please provide additional context for this question:",
+            why_it_matters=decision.why_it_matters,
+            options=decision.options,
+            round_num=state.round_count + 1,
+            max_rounds=state.max_rounds,
+        )
+        print(prompt_text)
         try:
-            run_pipeline(question, classifier=classifier, interactive=True)
-        except Exception as e:
-            print(f"\n[Execution Error] {e}")
+            val = input("> ").strip()
+            return val if val else "skip"
+        except (KeyboardInterrupt, EOFError):
+            print("\nClarification skipped by user.")
+            return "skip"
+
+    try:
+        record = run_pipeline(
+            question=question,
+            config=config,
+            force_multi_response=args.force_multi,
+            interactive_hitl=args.interactive_hitl,
+            clarification_callback=terminal_clarification_callback if args.interactive_hitl else None,
+        )
+    except Exception as e:
+        print(f"\n[PIPELINE ERROR]: {e}")
+        sys.exit(1)
+
+    # Save timestamped experiment record
+    results_dir = config.get("storage", {}).get("results_dir", "experiments/results")
+    os.makedirs(results_dir, exist_ok=True)
+    ts_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    out_filename = os.path.join(results_dir, f"ask_{ts_str}.json")
+    with open(out_filename, "w", encoding="utf-8") as f:
+        json.dump(record.model_dump(), f, indent=2)
+
+    if args.json:
+        print(json.dumps(record.model_dump(), indent=2))
+        return
+
+    # Print clean terminal report
+    lines = [
+        f"QUESTION:          {record.question}",
+        f"EXECUTION PATH:    {record.path}",
+        f"TOTAL RESPONSES:   {record.response_count}",
+        f"CLUSTERS FOUND:    {record.cluster_count}",
+        f"DOMINANT AGREEMENT:{record.dominant_cluster_agreement:.1%}",
+        f"SECOND AGREEMENT:  {record.second_cluster_agreement:.1%}",
+        f"AGREEMENT MARGIN:  {record.agreement_margin:.1%}",
+        f"SEMANTIC ENTROPY:  {record.semantic_entropy:.3f} nats (Norm: {record.normalized_entropy:.3f})",
+        f"MEAN PAIRWISE SIM: {record.mean_pairwise_similarity:.3f}",
+        f"ELAPSED TIME:      {record.elapsed_seconds:.2f}s",
+        f"CLASSIFIER STATUS: {record.classifier_status}",
+    ]
+    if record.predicted_label:
+        lines.append(f"PREDICTED CLASS:   {record.predicted_label} (conf: {record.confidence:.2f})")
+
+    # Diagnostic Question Clarity Section
+    if record.clarity_status == "UNAMBIGUOUS":
+        lines.append(f"QUESTION CLARITY:  UNAMBIGUOUS")
+        lines.append(f"CLARITY CONFIDENCE:[{record.clarity_confidence:.2f}]")
+    elif record.clarity_status == "AMBIGUOUS":
+        lines.append(f"QUESTION CLARITY:  AMBIGUOUS")
+        if record.ambiguity_type:
+            lines.append(f"AMBIGUITY TYPE:    {record.ambiguity_type}")
+        req_str = "YES" if record.clarification_required else "NO"
+        lines.append(f"CLARIFICATION REQUIRED: {req_str}")
+
+    if record.is_clarified:
+        lines.append(f"ORIGINAL QUERY:    {record.original_question}")
+        lines.append(f"CLARIFIED QUERY:   {record.clarified_question}")
+        lines.append(f"CLARIFICATION RDS: {record.clarification_rounds}")
+    elif record.clarification_decision:
+        lines.append(f"HITL DECISION:     {record.clarification_decision}")
+    if record.ambiguity_type:
+        lines.append(f"AMBIGUITY TYPE:    {record.ambiguity_type}")
+    lines.append(f"SAVED RECORD:      {out_filename}")
+    lines.append("")
+    lines.append("FINAL ANSWER:")
+    # Indent answer lines
+    for al in record.final_answer.split("\n"):
+        lines.append(f"  {al}")
+
+    print("\n" + format_terminal_box("ADAPTIVE QA UNCERTAINTY PIPELINE", lines) + "\n")
 
 
 if __name__ == "__main__":

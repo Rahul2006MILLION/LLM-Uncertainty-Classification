@@ -1,0 +1,47 @@
+{
+  "model_type": "xgboost",
+  "feature_names": [
+    "semantic_entropy",
+    "normalized_entropy",
+    "dominant_agreement",
+    "second_agreement",
+    "agreement_margin",
+    "cluster_count",
+    "cluster_ratio",
+    "mean_pairwise_similarity",
+    "min_pairwise_similarity",
+    "response_len_mean",
+    "response_len_std",
+    "distinct_1gram_ratio",
+    "distinct_2gram_ratio",
+    "question_overlap_mean",
+    "hedging_score",
+    "negation_count"
+  ],
+  "is_trained": true,
+  "metadata": {
+    "timestamp": "2026-10-21T11:14:12.036733",
+    "feature_count": 16,
+    "model_type": "xgboost",
+    "feature_names": [
+      "semantic_entropy",
+      "normalized_entropy",
+      "dominant_agreement",
+      "second_agreement",
+      "agreement_margin",
+      "cluster_count",
+      "cluster_ratio",
+      "mean_pairwise_similarity",
+      "min_pairwise_similarity",
+      "response_len_mean",
+      "response_len_std",
+      "distinct_1gram_ratio",
+      "distinct_2gram_ratio",
+      "question_overlap_mean",
+      "hedging_score",
+      "negation_count"
+    ],
+    "n_samples": 44,
+    "n_features": 16
+  }
+}

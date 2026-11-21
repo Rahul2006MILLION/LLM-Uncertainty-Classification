@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 740 400" width="740" height="400" style="background:#ffffff; font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;">
+      <text x="370" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="#1a202c">Model Macro-F1 across 4 Experimental Configurations (5-Fold Grouped CV)</text>
+      <line x1="80" y1="310" x2="700" y2="310" stroke="#718096" stroke-width="1.5" />
+      <line x1="80" y1="60" x2="80" y2="310" stroke="#718096" stroke-width="1.5" />
+      <text x="70" y="315" text-anchor="end" font-size="11" fill="#4a5568">0.0</text>
+      <text x="70" y="185" text-anchor="end" font-size="11" fill="#4a5568">0.5</text>
+      <text x="70" y="65" text-anchor="end" font-size="11" fill="#4a5568">1.0 F1</text>
+      <line x1="75" y1="185" x2="700" y2="185" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4" />
+    
+              <rect x="73" y="271.53846153846155" width="24" height="38.46153846153845" fill="#4a5568" rx="2" />
+              <text x="85" y="266.53846153846155" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#2d3748">0.15</text>
+            
+              <rect x="101" y="271.53846153846155" width="24" height="38.46153846153845" fill="#718096" rx="2" />
+              <text x="113" y="266.53846153846155" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#2d3748">0.15</text>
+            
+              <rect x="129" y="271.53846153846155" width="24" height="38.46153846153845" fill="#d69e2e" rx="2" />
+              <text x="141" y="266.53846153846155" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#2d3748">0.15</text>
+            
+              <rect x="157" y="271.53846153846155" width="24" height="38.46153846153845" fill="#2b6cb0" rx="2" />
+              <text x="169" y="266.53846153846155" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#2d3748">0.15</text>
+            <text x="115" y="335" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#2d3748">Majority_Bas</text>
+              <rect x="223" y="85.54232804232805" width="24" height="224.45767195767195" fill="#4a5568" rx="2" />
+              <text x="235" y="80.54232804232805" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#2d3748">0.90</text>
+            
+              <rect x="251" y="101.90476190476195" width="24" height="208.09523809523805" fill="#718096" rx="2" />
+              <text x="263" y="96.90476190476195" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#2d3748">0.83</text>
+            
+              <rect x="279" y="162.38095238095235" width="24" height="147.61904761904765" fill="#d69e2e" rx="2" />
+              <text x="291" y="157.38095238095235" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#2d3748">0.59</text>
+            
+              <rect x="307" y="100.4232804232804" width="24" height="209.5767195767196" fill="#2b6cb0" rx="2" />
+              <text x="319" y="95.4232804232804" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#2d3748">0.84</text>
+            <text x="265" y="335" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#2d3748">LogisticRegr</text>
+              <rect x="373" y="80.4232804232804" width="24" height="229.5767195767196" fill="#4a5568" rx="2" />
+              <text x="385" y="75.4232804232804" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#2d3748">0.92</text>
+            
+              <rect x="401" y="84.7883597883598" width="24" height="225.2116402116402" fill="#718096" rx="2" />
+              <text x="413" y="79.7883597883598" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#2d3748">0.90</text>
+            
+              <rect x="429" y="192.48677248677245" width="24" height="117.51322751322755" fill="#d69e2e" rx="2" />
+              <text x="441" y="187.48677248677245" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#2d3748">0.47</text>
+            
+              <rect x="457" y="80.25132275132273" width="24" height="229.74867724867727" fill="#2b6cb0" rx="2" />
+              <text x="469" y="75.25132275132273" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#2d3748">0.92</text>
+            <text x="415" y="335" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#2d3748">RandomForest</text>
+              <rect x="523" y="143.3068783068783" width="24" height="166.6931216931217" fill="#4a5568" rx="2" />
+              <text x="535" y="138.3068783068783" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#2d3748">0.67</text>
+            
+              <rect x="551" y="126.07142857142858" width="24" height="183.92857142857142" fill="#718096" rx="2" />
+              <text x="563" y="121.07142857142858" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#2d3748">0.74</text>
+            
+              <rect x="579" y="211.2698412698413" width="24" height="98.7301587301587" fill="#d69e2e" rx="2" />
+              <text x="591" y="206.2698412698413" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#2d3748">0.39</text>
+            
+              <rect x="607" y="139.80158730158732" width="24" height="170.19841269841268" fill="#2b6cb0" rx="2" />
+              <text x="619" y="134.80158730158732" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#2d3748">0.68</text>
+            <text x="565" y="335" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#2d3748">HistGradient</text>
+      <rect x="70" y="365" width="12" height="12" fill="#4a5568" />
+      <text x="88" y="375" font-size="10.5" fill="#2d3748">True Single (r₀)</text>
+      <rect x="220" y="365" width="12" height="12" fill="#718096" />
+      <text x="238" y="375" font-size="10.5" fill="#2d3748">Ensemble Ling (10)</text>
+      <rect x="400" y="365" width="12" height="12" fill="#d69e2e" />
+      <text x="418" y="375" font-size="10.5" fill="#2d3748">Consistency Only (9)</text>
+      <rect x="580" y="365" width="12" height="12" fill="#2b6cb0" />
+      <text x="598" y="375" font-size="10.5" fill="#2d3748">Full (All 16)</text>
+    </svg>
+    

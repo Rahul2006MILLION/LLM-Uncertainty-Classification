@@ -1,179 +1,180 @@
-"""Supervised ML Classifier for Uncertainty Classification.
+"""Uncertainty classifier for KNOWN, AMBIGUOUS, and UNKNOWN categories."""
 
-Predicts whether a question's response status is:
-- KNOWN
-- AMBIGUOUS
-- UNKNOWN
-
-Supports XGBoost with fallback to RandomForest. Strictly reports
-'CLASSIFIER NOT TRAINED' if no validated trained model exists, preventing
-fabricated research results.
-"""
-
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+import os
+import json
+import logging
+from typing import Dict, Any, List, Optional, Tuple, Union
 import numpy as np
 
-from configs.config import DEFAULT_PATH_CONFIG
-from src.classification.dataset import (
-    DatasetExample,
-    FEATURE_COLUMNS,
-    VALID_LABELS,
-)
-from src.evaluation.metrics import evaluate_predictions
+# Label mappings
+LABEL_TO_ID = {"KNOWN": 0, "AMBIGUOUS": 1, "UNKNOWN": 2}
+ID_TO_LABEL = {0: "KNOWN", 1: "AMBIGUOUS", 2: "UNKNOWN"}
 
-
-LABEL_TO_INT = {"KNOWN": 0, "AMBIGUOUS": 1, "UNKNOWN": 2}
-INT_TO_LABEL = {v: k for k, v in LABEL_TO_INT.items()}
+logger = logging.getLogger(__name__)
 
 
 class UncertaintyClassifier:
-    """Supervised classifier for predicting uncertainty state from NLP & entropy features."""
+    """Supervised classifier predicting query uncertainty type from consistency features."""
 
     def __init__(
         self,
         model_type: str = "xgboost",
         random_state: int = 42,
+        n_estimators: int = 100,
+        max_depth: int = 4,
+        learning_rate: float = 0.05,
     ):
         self.model_type = model_type
         self.random_state = random_state
-        self.model = None
-        self._is_trained = False
-        self.feature_names = list(FEATURE_COLUMNS)
+        self.n_estimators = n_estimators
+        self.max_depth = max_depth
+        self.learning_rate = learning_rate
+        self.feature_names: List[str] = []
+        self.is_trained: bool = False
+        self.model: Any = None
+        self.metadata: Dict[str, Any] = {}
 
-    @property
-    def is_trained(self) -> bool:
-        return self._is_trained
-
-    def _features_to_matrix(self, examples: List[DatasetExample]) -> np.ndarray:
-        matrix = []
-        for ex in examples:
-            row = [float(ex.features.get(f, 0.0)) for f in self.feature_names]
-            matrix.append(row)
-        return np.array(matrix, dtype=np.float32)
-
-    def fit(
-        self,
-        train_examples: List[DatasetExample],
-        val_examples: Optional[List[DatasetExample]] = None,
-    ) -> Dict[str, Any]:
-        """Fit the classifier on labeled training examples."""
-        if not train_examples:
-            raise ValueError("Cannot train classifier on empty dataset.")
-
-        X_train = self._features_to_matrix(train_examples)
-        y_train = np.array([LABEL_TO_INT[ex.label] for ex in train_examples], dtype=int)
-
-        clf = None
+    def _init_underlying_model(self):
+        """Instantiate XGBoost or scikit-learn fallback model."""
         if self.model_type == "xgboost":
             try:
                 import xgboost as xgb
-                clf = xgb.XGBClassifier(
-                    n_estimators=100,
-                    max_depth=4,
-                    learning_rate=0.1,
-                    objective="multi:softprob",
-                    num_class=3,
+                return xgb.XGBClassifier(
+                    n_estimators=self.n_estimators,
+                    max_depth=self.max_depth,
+                    learning_rate=self.learning_rate,
                     random_state=self.random_state,
                     eval_metric="mlogloss",
+                    verbosity=0,
                 )
-                clf.fit(X_train, y_train)
-            except Exception:
-                # Fallback to Random Forest
-                self.model_type = "random_forest"
+            except Exception as e:
+                logger.warning("XGBoost instantiation failed (%s), falling back to HistGradientBoosting", e)
+                self.model_type = "hist_gb"
 
-        if clf is None:
-            from sklearn.ensemble import RandomForestClassifier
-            clf = RandomForestClassifier(
-                n_estimators=100,
-                max_depth=5,
-                random_state=self.random_state,
-            )
-            clf.fit(X_train, y_train)
+        from sklearn.ensemble import HistGradientBoostingClassifier
+        return HistGradientBoostingClassifier(
+            max_iter=self.n_estimators,
+            max_depth=self.max_depth,
+            learning_rate=self.learning_rate,
+            random_state=self.random_state,
+        )
 
-        self.model = clf
-        self._is_trained = True
+    def train(
+        self,
+        X: np.ndarray,
+        y: np.ndarray,
+        feature_names: List[str],
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """Train the classifier on extracted feature matrix X and numeric labels y."""
+        self.feature_names = list(feature_names)
+        self.model = self._init_underlying_model()
+        self.model.fit(X, y)
+        self.is_trained = True
+        self.metadata = metadata or {}
+        self.metadata.update({
+            "model_type": self.model_type,
+            "feature_names": self.feature_names,
+            "n_samples": int(X.shape[0]),
+            "n_features": int(X.shape[1]),
+        })
+        return self.metadata
 
-        eval_report = {}
-        if val_examples:
-            X_val = self._features_to_matrix(val_examples)
-            y_val_preds = clf.predict(X_val)
-            y_val_true = [ex.label for ex in val_examples]
-            y_val_pred_labels = [INT_TO_LABEL[int(p)] for p in y_val_preds]
-            eval_report = evaluate_predictions(
-                y_true=y_val_true,
-                y_pred=y_val_pred_labels,
-                classes=sorted(list(VALID_LABELS)),
-            )
-
-        return eval_report
-
-    def predict(self, features: Dict[str, float]) -> Dict[str, Any]:
-        """Predict uncertainty class for a single feature dictionary.
-
-        If the model is not trained on validated data, returns 'CLASSIFIER NOT TRAINED'.
+    def predict(self, feature_dict: Dict[str, float]) -> Dict[str, Any]:
+        """Predict uncertainty category from a feature dictionary.
+        
+        If classifier is not trained, returns honest 'CLASSIFIER NOT TRAINED' status.
         """
-        if not self._is_trained or self.model is None:
+        if not self.is_trained or self.model is None:
             return {
-                "prediction": "CLASSIFIER NOT TRAINED",
-                "probabilities": {},
-                "confidence": "uncalibrated (model not trained on labeled data)",
-                "is_trained": False,
+                "status": "CLASSIFIER NOT TRAINED",
+                "predicted_label": None,
+                "probabilities": None,
+                "confidence": 0.0,
             }
 
-        x = np.array([[float(features.get(f, 0.0)) for f in self.feature_names]], dtype=np.float32)
-        pred_idx = int(self.model.predict(x)[0])
-        pred_label = INT_TO_LABEL[pred_idx]
-
-        probs_dict = {}
-        if hasattr(self.model, "predict_proba"):
-            probs = self.model.predict_proba(x)[0]
-            for idx, p in enumerate(probs):
-                if idx in INT_TO_LABEL:
-                    probs_dict[INT_TO_LABEL[idx]] = float(p)
-            top_prob = float(probs[pred_idx])
-            confidence_str = f"{top_prob:.1%} (model predicted probability; uncalibrated)"
-        else:
-            confidence_str = "uncalibrated"
-
-        return {
-            "prediction": pred_label,
-            "probabilities": probs_dict,
-            "confidence": confidence_str,
-            "is_trained": True,
-        }
-
-    def save(self, path: Optional[Path] = None) -> Path:
-        """Save trained model to disk."""
-        if not self._is_trained or self.model is None:
-            raise ValueError("Cannot save an untrained classifier.")
-
-        if path is None:
-            path = DEFAULT_PATH_CONFIG.models_dir / "uncertainty_classifier.joblib"
-
-        path.parent.mkdir(parents=True, exist_ok=True)
-        import joblib
-        joblib.dump({"model": self.model, "model_type": self.model_type, "feature_names": self.feature_names}, path)
-        return path
-
-    @classmethod
-    def load(cls, path: Optional[Path] = None) -> "UncertaintyClassifier":
-        """Load trained model from disk if available."""
-        if path is None:
-            path = DEFAULT_PATH_CONFIG.models_dir / "uncertainty_classifier.joblib"
-
-        instance = cls()
-        if not path.exists():
-            return instance
+        # Align features according to trained feature_names
+        x_vec = np.array([[feature_dict.get(fname, 0.0) for fname in self.feature_names]], dtype=np.float32)
 
         try:
-            import joblib
-            data = joblib.load(path)
-            instance.model = data["model"]
-            instance.model_type = data.get("model_type", "xgboost")
-            instance.feature_names = data.get("feature_names", list(FEATURE_COLUMNS))
-            instance._is_trained = True
-        except Exception:
-            instance._is_trained = False
+            pred_id = int(self.model.predict(x_vec)[0])
+            probs = self.model.predict_proba(x_vec)[0].tolist()
+            predicted_label = ID_TO_LABEL.get(pred_id, "UNKNOWN")
+            confidence = float(probs[pred_id])
 
-        return instance
+            prob_dict = {ID_TO_LABEL[i]: float(p) for i, p in enumerate(probs)}
+
+            return {
+                "status": "PREDICTED",
+                "predicted_label": predicted_label,
+                "predicted_class_id": pred_id,
+                "probabilities": prob_dict,
+                "confidence": confidence,
+            }
+        except Exception as e:
+            logger.error("Inference failed: %s", e)
+            return {
+                "status": f"ERROR: {str(e)}",
+                "predicted_label": None,
+                "probabilities": None,
+                "confidence": 0.0,
+            }
+
+    def save(self, filepath: str) -> None:
+        """Serialize model and metadata to disk.
+        
+        Saves the model artifact (via joblib) and exports a human-readable metadata JSON alongside it.
+        """
+        if not self.is_trained:
+            raise RuntimeError("Cannot save an untrained classifier.")
+
+        import joblib
+        os.makedirs(os.path.dirname(os.path.abspath(filepath)), exist_ok=True)
+        save_dict = {
+            "model": self.model,
+            "model_type": self.model_type,
+            "feature_names": self.feature_names,
+            "is_trained": self.is_trained,
+            "metadata": self.metadata,
+        }
+        joblib.dump(save_dict, filepath)
+        logger.info("Classifier binary saved to %s", filepath)
+
+        # Export accompanying human-readable JSON metadata file
+        meta_path = os.path.splitext(filepath)[0] + "_metadata.json"
+        try:
+            with open(meta_path, "w", encoding="utf-8") as f:
+                json.dump({
+                    "model_type": self.model_type,
+                    "feature_names": self.feature_names,
+                    "is_trained": self.is_trained,
+                    "metadata": self.metadata,
+                }, f, indent=2)
+            logger.info("Human-readable metadata exported to %s", meta_path)
+        except Exception as e:
+            logger.warning("Could not write metadata JSON: %s", e)
+
+    @classmethod
+    def load(cls, filepath: str) -> "UncertaintyClassifier":
+        """Load a trained classifier from disk, resolving .joblib and .json paths cleanly."""
+        import joblib
+
+        target_path = filepath
+        if not os.path.exists(target_path):
+            # Check alternative extensions
+            base = os.path.splitext(filepath)[0]
+            for alt in [f"{base}.joblib", f"{base}.json", f"{base}.pkl"]:
+                if os.path.exists(alt):
+                    target_path = alt
+                    break
+
+        if not os.path.exists(target_path):
+            raise FileNotFoundError(f"Model file not found at {filepath} (checked alternatives)")
+
+        data = joblib.load(target_path)
+        clf = cls(model_type=data.get("model_type", "xgboost"))
+        clf.model = data["model"]
+        clf.feature_names = data.get("feature_names", [])
+        clf.is_trained = data.get("is_trained", True)
+        clf.metadata = data.get("metadata", {})
+        return clf

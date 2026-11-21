@@ -1,0 +1,661 @@
+{
+  "dataset_name": "Batch_1_Controlled_Development_Corpus_50",
+  "created_at": "2026-11-20T17:07:01Z",
+  "model_name": "qwen3:4b",
+  "embedding_model": "all-minilm:latest",
+  "total_questions": 50,
+  "class_distribution": {
+    "KNOWN": 17,
+    "AMBIGUOUS": 17,
+    "UNKNOWN": 16
+  },
+  "total_responses": 500,
+  "responses_per_question": 10,
+  "total_feature_values": 800,
+  "benchmark_isolation": {
+    "status": "PASS",
+    "threshold": 0.75,
+    "max_observed_similarity": 0.7389,
+    "rejections_count": 3,
+    "rejections_details": [
+      {
+        "original_id": "batch1_known_002_orig",
+        "question": "What year did the Apollo 11 mission successfully land the first humans on the Moon?",
+        "similarity": 0.832,
+        "matched_benchmark": "What year saw humanity first walk on the lunar surface during Apollo 11?",
+        "replacement": "What is the hardest naturally occurring mineral on the Mohs scale of mineral hardness?"
+      },
+      {
+        "original_id": "batch1_known_012_orig",
+        "question": "What is the boiling point of pure water at standard atmospheric pressure in degrees Celsius?",
+        "similarity": 0.9986,
+        "matched_benchmark": "What is the boiling point of pure water in degrees Celsius at standard atmospheric pressure?",
+        "replacement": "What instrument is used to measure atmospheric pressure in meteorology?"
+      },
+      {
+        "original_id": "batch1_unk_004_orig",
+        "question": "What will be the exact closing price of Apple stock on December 31, 2035?",
+        "similarity": 0.9332,
+        "matched_benchmark": "At what exact price will Apple stock close on the final trading day of 2035?",
+        "replacement": "What will be the exact total number of commercial vehicles crossing the Golden Gate Bridge on November 12, 2038?"
+      }
+    ]
+  },
+  "performance_metrics": {
+    "total_pipeline_seconds": 12582.63,
+    "mean_seconds_per_question": 251.39,
+    "mean_seconds_per_response": 25.14,
+    "mean_response_char_len": 262.9,
+    "class_mean_char_len": {
+      "KNOWN": 17.63,
+      "AMBIGUOUS": 243.99,
+      "UNKNOWN": 543.59
+    }
+  },
+  "feature_distributions": {
+    "semantic_entropy": {
+      "KNOWN": {
+        "mean": 0.2521,
+        "std": 0.2609,
+        "median": 0.3251,
+        "q25": 0.0,
+        "q75": 0.5004
+      },
+      "AMBIGUOUS": {
+        "mean": 0.4277,
+        "std": 0.3991,
+        "median": 0.3251,
+        "q25": 0.0,
+        "q75": 0.6109
+      },
+      "UNKNOWN": {
+        "mean": 0.2277,
+        "std": 0.3575,
+        "median": 0.0,
+        "q25": 0.0,
+        "q75": 0.3251
+      }
+    },
+    "normalized_entropy": {
+      "KNOWN": {
+        "mean": 0.1095,
+        "std": 0.1133,
+        "median": 0.1412,
+        "q25": 0.0,
+        "q75": 0.2173
+      },
+      "AMBIGUOUS": {
+        "mean": 0.1858,
+        "std": 0.1733,
+        "median": 0.1412,
+        "q25": 0.0,
+        "q75": 0.2653
+      },
+      "UNKNOWN": {
+        "mean": 0.0989,
+        "std": 0.1553,
+        "median": 0.0,
+        "q25": 0.0,
+        "q75": 0.1412
+      }
+    },
+    "dominant_agreement": {
+      "KNOWN": {
+        "mean": 0.8941,
+        "std": 0.1305,
+        "median": 0.9,
+        "q25": 0.8,
+        "q75": 1.0
+      },
+      "AMBIGUOUS": {
+        "mean": 0.8235,
+        "std": 0.1986,
+        "median": 0.9,
+        "q25": 0.8,
+        "q75": 1.0
+      },
+      "UNKNOWN": {
+        "mean": 0.925,
+        "std": 0.1199,
+        "median": 1.0,
+        "q25": 0.9,
+        "q75": 1.0
+      }
+    },
+    "second_agreement": {
+      "KNOWN": {
+        "mean": 0.1,
+        "std": 0.1283,
+        "median": 0.1,
+        "q25": 0.0,
+        "q75": 0.1
+      },
+      "AMBIGUOUS": {
+        "mean": 0.1235,
+        "std": 0.1059,
+        "median": 0.1,
+        "q25": 0.0,
+        "q75": 0.2
+      },
+      "UNKNOWN": {
+        "mean": 0.0438,
+        "std": 0.0609,
+        "median": 0.0,
+        "q25": 0.0,
+        "q75": 0.1
+      }
+    },
+    "agreement_margin": {
+      "KNOWN": {
+        "mean": 0.7941,
+        "std": 0.2578,
+        "median": 0.8,
+        "q25": 0.7,
+        "q75": 1.0
+      },
+      "AMBIGUOUS": {
+        "mean": 0.7,
+        "std": 0.297,
+        "median": 0.8,
+        "q25": 0.6,
+        "q75": 1.0
+      },
+      "UNKNOWN": {
+        "mean": 0.8813,
+        "std": 0.174,
+        "median": 1.0,
+        "q25": 0.8,
+        "q75": 1.0
+      }
+    },
+    "cluster_count": {
+      "KNOWN": {
+        "mean": 1.5882,
+        "std": 0.5999,
+        "median": 2.0,
+        "q25": 1.0,
+        "q75": 2.0
+      },
+      "AMBIGUOUS": {
+        "mean": 2.0588,
+        "std": 0.9375,
+        "median": 2.0,
+        "q25": 1.0,
+        "q75": 2.0
+      },
+      "UNKNOWN": {
+        "mean": 1.6875,
+        "std": 1.1022,
+        "median": 1.0,
+        "q25": 1.0,
+        "q75": 2.0
+      }
+    },
+    "cluster_ratio": {
+      "KNOWN": {
+        "mean": 0.1588,
+        "std": 0.06,
+        "median": 0.2,
+        "q25": 0.1,
+        "q75": 0.2
+      },
+      "AMBIGUOUS": {
+        "mean": 0.2059,
+        "std": 0.0937,
+        "median": 0.2,
+        "q25": 0.1,
+        "q75": 0.2
+      },
+      "UNKNOWN": {
+        "mean": 0.1688,
+        "std": 0.1102,
+        "median": 0.1,
+        "q25": 0.1,
+        "q75": 0.2
+      }
+    },
+    "mean_pairwise_similarity": {
+      "KNOWN": {
+        "mean": 0.9106,
+        "std": 0.087,
+        "median": 0.9181,
+        "q25": 0.8862,
+        "q75": 1.0
+      },
+      "AMBIGUOUS": {
+        "mean": 0.8305,
+        "std": 0.08,
+        "median": 0.8723,
+        "q25": 0.7644,
+        "q75": 0.89
+      },
+      "UNKNOWN": {
+        "mean": 0.8579,
+        "std": 0.137,
+        "median": 0.8907,
+        "q25": 0.8618,
+        "q75": 0.9174
+      }
+    },
+    "min_pairwise_similarity": {
+      "KNOWN": {
+        "mean": 0.747,
+        "std": 0.2361,
+        "median": 0.758,
+        "q25": 0.5468,
+        "q75": 1.0
+      },
+      "AMBIGUOUS": {
+        "mean": 0.5991,
+        "std": 0.1939,
+        "median": 0.6255,
+        "q25": 0.4839,
+        "q75": 0.7552
+      },
+      "UNKNOWN": {
+        "mean": 0.7228,
+        "std": 0.2149,
+        "median": 0.7795,
+        "q25": 0.6804,
+        "q75": 0.8434
+      }
+    },
+    "response_len_mean": {
+      "KNOWN": {
+        "mean": 17.6294,
+        "std": 10.2417,
+        "median": 15.5,
+        "q25": 10.8,
+        "q75": 19.6
+      },
+      "AMBIGUOUS": {
+        "mean": 243.9941,
+        "std": 100.1892,
+        "median": 218.0,
+        "q25": 176.6,
+        "q75": 310.5
+      },
+      "UNKNOWN": {
+        "mean": 543.5938,
+        "std": 223.847,
+        "median": 516.55,
+        "q25": 382.65,
+        "q75": 676.025
+      }
+    },
+    "response_len_std": {
+      "KNOWN": {
+        "mean": 12.8723,
+        "std": 13.7669,
+        "median": 7.4135,
+        "q25": 0.0,
+        "q75": 23.5731
+      },
+      "AMBIGUOUS": {
+        "mean": 110.0498,
+        "std": 46.5248,
+        "median": 114.6314,
+        "q25": 67.5056,
+        "q75": 143.7936
+      },
+      "UNKNOWN": {
+        "mean": 182.2704,
+        "std": 116.285,
+        "median": 143.8167,
+        "q25": 129.0199,
+        "q75": 224.8737
+      }
+    },
+    "distinct_1gram_ratio": {
+      "KNOWN": {
+        "mean": 0.2341,
+        "std": 0.1506,
+        "median": 0.1667,
+        "q25": 0.1,
+        "q75": 0.3548
+      },
+      "AMBIGUOUS": {
+        "mean": 0.2461,
+        "std": 0.0444,
+        "median": 0.2596,
+        "q25": 0.2065,
+        "q75": 0.2727
+      },
+      "UNKNOWN": {
+        "mean": 0.2329,
+        "std": 0.0403,
+        "median": 0.2208,
+        "q25": 0.2137,
+        "q75": 0.2461
+      }
+    },
+    "distinct_2gram_ratio": {
+      "KNOWN": {
+        "mean": 0.3557,
+        "std": 0.3107,
+        "median": 0.3684,
+        "q25": 0.1,
+        "q75": 0.5
+      },
+      "AMBIGUOUS": {
+        "mean": 0.5035,
+        "std": 0.0988,
+        "median": 0.5403,
+        "q25": 0.4706,
+        "q75": 0.5561
+      },
+      "UNKNOWN": {
+        "mean": 0.5407,
+        "std": 0.0503,
+        "median": 0.5509,
+        "q25": 0.5273,
+        "q75": 0.5647
+      }
+    },
+    "question_overlap_mean": {
+      "KNOWN": {
+        "mean": 0.0669,
+        "std": 0.0759,
+        "median": 0.0412,
+        "q25": 0.0,
+        "q75": 0.0855
+      },
+      "AMBIGUOUS": {
+        "mean": 0.1275,
+        "std": 0.0785,
+        "median": 0.117,
+        "q25": 0.0671,
+        "q75": 0.1367
+      },
+      "UNKNOWN": {
+        "mean": 0.2063,
+        "std": 0.0438,
+        "median": 0.2144,
+        "q25": 0.1758,
+        "q75": 0.2287
+      }
+    },
+    "hedging_score": {
+      "KNOWN": {
+        "mean": 0.0,
+        "std": 0.0,
+        "median": 0.0,
+        "q25": 0.0,
+        "q75": 0.0
+      },
+      "AMBIGUOUS": {
+        "mean": 0.0588,
+        "std": 0.1286,
+        "median": 0.0,
+        "q25": 0.0,
+        "q75": 0.0
+      },
+      "UNKNOWN": {
+        "mean": 0.0875,
+        "std": 0.1166,
+        "median": 0.05,
+        "q25": 0.0,
+        "q75": 0.1
+      }
+    },
+    "negation_count": {
+      "KNOWN": {
+        "mean": 0.0,
+        "std": 0.0,
+        "median": 0.0,
+        "q25": 0.0,
+        "q75": 0.0
+      },
+      "AMBIGUOUS": {
+        "mean": 0.4235,
+        "std": 0.6005,
+        "median": 0.1,
+        "q25": 0.0,
+        "q75": 0.4
+      },
+      "UNKNOWN": {
+        "mean": 3.9688,
+        "std": 1.415,
+        "median": 4.15,
+        "q25": 3.45,
+        "q75": 4.825
+      }
+    }
+  },
+  "kruskal_wallis_tests": {
+    "semantic_entropy": {
+      "h_statistic": 3.1946,
+      "p_value": 0.2024405298586816,
+      "significant_05": false,
+      "significant_01": false
+    },
+    "normalized_entropy": {
+      "h_statistic": 3.1946,
+      "p_value": 0.2024405298586816,
+      "significant_05": false,
+      "significant_01": false
+    },
+    "dominant_agreement": {
+      "h_statistic": 3.5269,
+      "p_value": 0.1714550268252003,
+      "significant_05": false,
+      "significant_01": false
+    },
+    "second_agreement": {
+      "h_statistic": 4.878,
+      "p_value": 0.08724592793298759,
+      "significant_05": false,
+      "significant_01": false
+    },
+    "agreement_margin": {
+      "h_statistic": 3.9455,
+      "p_value": 0.13907576757724244,
+      "significant_05": false,
+      "significant_01": false
+    },
+    "cluster_count": {
+      "h_statistic": 3.0619,
+      "p_value": 0.2163248069913411,
+      "significant_05": false,
+      "significant_01": false
+    },
+    "cluster_ratio": {
+      "h_statistic": 3.0619,
+      "p_value": 0.2163248069913411,
+      "significant_05": false,
+      "significant_01": false
+    },
+    "mean_pairwise_similarity": {
+      "h_statistic": 8.8679,
+      "p_value": 0.011867557366545541,
+      "significant_05": true,
+      "significant_01": false
+    },
+    "min_pairwise_similarity": {
+      "h_statistic": 5.4409,
+      "p_value": 0.06584432836711854,
+      "significant_05": false,
+      "significant_01": false
+    },
+    "response_len_mean": {
+      "h_statistic": 39.7871,
+      "p_value": 2.292677490193728e-09,
+      "significant_05": true,
+      "significant_01": true
+    },
+    "response_len_std": {
+      "h_statistic": 34.1658,
+      "p_value": 3.8105342266752346e-08,
+      "significant_05": true,
+      "significant_01": true
+    },
+    "distinct_1gram_ratio": {
+      "h_statistic": 2.9584,
+      "p_value": 0.22781971642952248,
+      "significant_05": false,
+      "significant_01": false
+    },
+    "distinct_2gram_ratio": {
+      "h_statistic": 6.8207,
+      "p_value": 0.03303000647146494,
+      "significant_05": true,
+      "significant_01": false
+    },
+    "question_overlap_mean": {
+      "h_statistic": 21.6231,
+      "p_value": 2.0164778020652317e-05,
+      "significant_05": true,
+      "significant_01": true
+    },
+    "hedging_score": {
+      "h_statistic": 10.4291,
+      "p_value": 0.005436799502321476,
+      "significant_05": true,
+      "significant_01": true
+    },
+    "negation_count": {
+      "h_statistic": 38.8346,
+      "p_value": 3.6911874377550886e-09,
+      "significant_05": true,
+      "significant_01": true
+    }
+  },
+  "pilot_comparison": {
+    "semantic_entropy": {
+      "pilot_known_mean": 0.24827474105312067,
+      "batch1_known_mean": 0.2521,
+      "pilot_ambig_mean": 0.6656105714861166,
+      "batch1_ambig_mean": 0.4277,
+      "pilot_unk_mean": 0.29796185032337846,
+      "batch1_unk_mean": 0.2277
+    },
+    "normalized_entropy": {
+      "pilot_known_mean": 0.10782435003532902,
+      "batch1_known_mean": 0.1095,
+      "pilot_ambig_mean": 0.2890709982928904,
+      "batch1_ambig_mean": 0.1858,
+      "pilot_unk_mean": 0.1294031874131259,
+      "batch1_unk_mean": 0.0989
+    },
+    "dominant_agreement": {
+      "pilot_known_mean": 0.8899999999999999,
+      "batch1_known_mean": 0.8941,
+      "pilot_ambig_mean": 0.7499999999999999,
+      "batch1_ambig_mean": 0.8235,
+      "pilot_unk_mean": 0.89,
+      "batch1_unk_mean": 0.925
+    },
+    "second_agreement": {
+      "pilot_known_mean": 0.09999999999999999,
+      "batch1_known_mean": 0.1,
+      "pilot_ambig_mean": 0.13,
+      "batch1_ambig_mean": 0.1235,
+      "pilot_unk_mean": 0.05,
+      "batch1_unk_mean": 0.0438
+    },
+    "agreement_margin": {
+      "pilot_known_mean": 0.79,
+      "batch1_known_mean": 0.7941,
+      "pilot_ambig_mean": 0.62,
+      "batch1_ambig_mean": 0.7,
+      "pilot_unk_mean": 0.8400000000000001,
+      "batch1_unk_mean": 0.8813
+    },
+    "cluster_count": {
+      "pilot_known_mean": 1.6,
+      "batch1_known_mean": 1.5882,
+      "pilot_ambig_mean": 3.0,
+      "batch1_ambig_mean": 2.0588,
+      "pilot_unk_mean": 1.8,
+      "batch1_unk_mean": 1.6875
+    },
+    "cluster_ratio": {
+      "pilot_known_mean": 0.16000000000000003,
+      "batch1_known_mean": 0.1588,
+      "pilot_ambig_mean": 0.3,
+      "batch1_ambig_mean": 0.2059,
+      "pilot_unk_mean": 0.18,
+      "batch1_unk_mean": 0.1688
+    },
+    "mean_pairwise_similarity": {
+      "pilot_known_mean": 0.9124861359596252,
+      "batch1_known_mean": 0.9106,
+      "pilot_ambig_mean": 0.7333069480955601,
+      "batch1_ambig_mean": 0.8305,
+      "pilot_unk_mean": 0.8096335738897323,
+      "batch1_unk_mean": 0.8579
+    },
+    "min_pairwise_similarity": {
+      "pilot_known_mean": 0.72654769718647,
+      "batch1_known_mean": 0.747,
+      "pilot_ambig_mean": 0.40349298119544985,
+      "batch1_ambig_mean": 0.5991,
+      "pilot_unk_mean": 0.6030723609030246,
+      "batch1_unk_mean": 0.7228
+    },
+    "response_len_mean": {
+      "pilot_known_mean": 23.73,
+      "batch1_known_mean": 17.6294,
+      "pilot_ambig_mean": 173.95000000000002,
+      "batch1_ambig_mean": 243.9941,
+      "pilot_unk_mean": 397.27000000000004,
+      "batch1_unk_mean": 543.5938
+    },
+    "response_len_std": {
+      "pilot_known_mean": 20.284816103881145,
+      "batch1_known_mean": 12.8723,
+      "pilot_ambig_mean": 97.82172403732467,
+      "batch1_ambig_mean": 110.0498,
+      "pilot_unk_mean": 173.09009615171118,
+      "batch1_unk_mean": 182.2704
+    },
+    "distinct_1gram_ratio": {
+      "pilot_known_mean": 0.24946916752837806,
+      "batch1_known_mean": 0.2341,
+      "pilot_ambig_mean": 0.22758961159850646,
+      "batch1_ambig_mean": 0.2461,
+      "pilot_unk_mean": 0.2631389788237665,
+      "batch1_unk_mean": 0.2329
+    },
+    "distinct_2gram_ratio": {
+      "pilot_known_mean": 0.33682462943533664,
+      "batch1_known_mean": 0.3557,
+      "pilot_ambig_mean": 0.37455338491497336,
+      "batch1_ambig_mean": 0.5035,
+      "pilot_unk_mean": 0.585842961892918,
+      "batch1_unk_mean": 0.5407
+    },
+    "question_overlap_mean": {
+      "pilot_known_mean": 0.10298782919978573,
+      "batch1_known_mean": 0.0669,
+      "pilot_ambig_mean": 0.20036023841431777,
+      "batch1_ambig_mean": 0.1275,
+      "pilot_unk_mean": 0.19554333737529356,
+      "batch1_unk_mean": 0.2063
+    },
+    "hedging_score": {
+      "pilot_known_mean": 0.0,
+      "batch1_known_mean": 0.0,
+      "pilot_ambig_mean": 0.05,
+      "batch1_ambig_mean": 0.0588,
+      "pilot_unk_mean": 0.09,
+      "batch1_unk_mean": 0.0875
+    },
+    "negation_count": {
+      "pilot_known_mean": 0.01,
+      "batch1_known_mean": 0.0,
+      "pilot_ambig_mean": 0.15,
+      "batch1_ambig_mean": 0.4235,
+      "pilot_unk_mean": 3.0799999999999996,
+      "batch1_unk_mean": 3.9688
+    }
+  },
+  "files": {
+    "questions": "data/batch_1_questions.jsonl",
+    "responses": "data/raw/batch_1_responses.jsonl",
+    "features": "data/features/batch_1_features.jsonl",
+    "unified": "data/batch_1_unified.jsonl",
+    "manifest": "data/batch_1_manifest.json",
+    "audit_report": "data/batch_1_audit_report.md"
+  }
+}

@@ -5,9 +5,21 @@ instead of naive exact-text voting. Detects ambiguity and uncertainty splits acr
 clusters to communicate uncertainty transparently.
 """
 
+from dataclasses import dataclass
 import re
 from typing import Any, Dict, List, Optional
 from src.preprocessing.text_cleaner import clean_text
+
+
+@dataclass
+class SemanticCluster:
+    """Represents a cluster of semantically equivalent responses."""
+    cluster_id: int
+    member_indices: List[int]
+    size: int
+    proportion: float
+    representative_index: int
+    representative_text: str
 
 
 def extract_concise_answer(text: str) -> str:
