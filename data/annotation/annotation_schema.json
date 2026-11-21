@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Blinded Human Annotation Record Schema",
+  "description": "Validation schema for individual human annotator entries in the LLM Uncertainty Classification Benchmark (Milestone 7).",
+  "type": "object",
+  "properties": {
+    "blinded_id": {
+      "type": "string",
+      "pattern": "^ANN_[A-Z]_[0-9]{3}$",
+      "description": "Blinded pseudo-random question identifier isolating annotator from gold labels and question metadata."
+    },
+    "question": {
+      "type": "string",
+      "minLength": 5,
+      "description": "The exact natural language query presented to the annotator."
+    },
+    "assigned_label": {
+      "type": "string",
+      "enum": ["KNOWN", "AMBIGUOUS", "UNKNOWN"],
+      "description": "The epistemic uncertainty label assigned by the annotator under the annotation rubric."
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["HIGH", "MEDIUM", "LOW"],
+      "description": "The annotator's subjective certainty in their label assignment."
+    },
+    "rationale": {
+      "type": "string",
+      "description": "Concise justification for the assigned label, citing epistemic criteria from the rubric."
+    },
+    "requires_adjudication": {
+      "type": "boolean",
+      "description": "Flag indicating if the annotator found the item borderline or ambiguous between rubric classes."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional notes on phrasing, domain specificity, or potential interpretations."
+    }
+  },
+  "required": [
+    "blinded_id",
+    "question",
+    "assigned_label",
+    "confidence",
+    "rationale",
+    "requires_adjudication"
+  ],
+  "additionalProperties": false
+}

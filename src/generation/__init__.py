@@ -1,21 +1,5 @@
-from .ollama_generator import (
-    GenerationResult,
-    OllamaError,
-    OllamaConnectionError,
-    OllamaModelNotFoundError,
-    check_ollama_server,
-    verify_runtime_context,
-    generate_response,
-    generate_multiple_responses,
-)
+"""Generation package providing client communication and response generation."""
+from src.generation.ollama_client import OllamaClient
+from src.generation.generator import ResponseGenerator
 
-__all__ = [
-    "GenerationResult",
-    "OllamaError",
-    "OllamaConnectionError",
-    "OllamaModelNotFoundError",
-    "check_ollama_server",
-    "verify_runtime_context",
-    "generate_response",
-    "generate_multiple_responses",
-]
+__all__ = ["OllamaClient", "ResponseGenerator"]

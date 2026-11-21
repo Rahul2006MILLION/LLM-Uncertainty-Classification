@@ -1,0 +1,4212 @@
+{
+  "manifest_version": "1.1",
+  "created_date": "2026-11-18",
+  "benchmark_source": "data/benchmarks/uncertainty_benchmark_300_candidate_v1.1.jsonl",
+  "total_questions": 300,
+  "annotator_a_random_seed": 42,
+  "annotator_b_random_seed": 137,
+  "mapping_annotator_a": {
+    "ANN_A_001": {
+      "original_id": "draft_ambig_subj_007",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_invention",
+      "question": "What is the most important invention in human history?"
+    },
+    "ANN_A_002": {
+      "original_id": "draft_unk_fut_005",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_worldcup_2062",
+      "question": "Which national men's team will win the FIFA World Cup tournament in 2062?"
+    },
+    "ANN_A_003": {
+      "original_id": "draft_known_fact_038",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_longest_river",
+      "question": "According to Guinness World Records and Britannica, what is traditionally considered the longest river in the world?"
+    },
+    "ANN_A_004": {
+      "original_id": "draft_known_def_040",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_api",
+      "question": "In software engineering, what is an Application Programming Interface (API)?"
+    },
+    "ANN_A_005": {
+      "original_id": "draft_known_fact_033",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_continents_count",
+      "question": "Under the standard English-language seven-continent model, how many continents are recognized?"
+    },
+    "ANN_A_006": {
+      "original_id": "draft_unk_fut_016",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_superbowl_2045",
+      "question": "What will the scoreboard read at the conclusion of NFL Super Bowl 79?"
+    },
+    "ANN_A_007": {
+      "original_id": "draft_ambig_poly_053",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_bridge_game",
+      "question": "What is Bridge?"
+    },
+    "ANN_A_008": {
+      "original_id": "draft_ambig_subj_021",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_car",
+      "question": "What is the best automobile to buy?"
+    },
+    "ANN_A_009": {
+      "original_id": "draft_known_fact_020",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_avogadro",
+      "question": "What is the exact value of the Avogadro constant defined by the 2019 SI redefinition?"
+    },
+    "ANN_A_010": {
+      "original_id": "draft_unk_priv_026",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_shakespeares_notes",
+      "question": "What notes were written in the original lost draft of Shakespeare's Hamlet?"
+    },
+    "ANN_A_011": {
+      "original_id": "draft_known_fact_025",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_planck_constant",
+      "question": "Under the current International System of Units, what is the exact value of Planck's constant?"
+    },
+    "ANN_A_012": {
+      "original_id": "draft_unk_false_026",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_third_sex_human_chromosomes",
+      "question": "Which letter denotes the third typical human sex chromosome in standard cytogenetics?"
+    },
+    "ANN_A_013": {
+      "original_id": "draft_ambig_subj_004",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_country",
+      "question": "Which nation is the best place to live in the world?"
+    },
+    "ANN_A_014": {
+      "original_id": "draft_unk_priv_021",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_first_words_neanderthal",
+      "question": "What was the very first word ever vocalized by a Neanderthal individual?"
+    },
+    "ANN_A_015": {
+      "original_id": "draft_unk_priv_006",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_thoughts",
+      "question": "Which number is currently in my mind as I type this prompt?"
+    },
+    "ANN_A_016": {
+      "original_id": "draft_unk_false_028",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_eighth_planet_named_pluto",
+      "question": "How fast does Pluto orbit as the eighth major planet in our solar system?"
+    },
+    "ANN_A_017": {
+      "original_id": "draft_unk_false_022",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_california_border_atlantic",
+      "question": "Which Atlantic maritime port city is located within the state of California?"
+    },
+    "ANN_A_018": {
+      "original_id": "draft_known_fact_039",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_deepest_trench",
+      "question": "What is the deepest known oceanic trench on Earth?"
+    },
+    "ANN_A_019": {
+      "original_id": "draft_ambig_poly_019",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_bank_definition",
+      "question": "What is a bank?"
+    },
+    "ANN_A_020": {
+      "original_id": "draft_ambig_poly_034",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_amazon_depth",
+      "question": "What is the depth measurement of the Amazon?"
+    },
+    "ANN_A_021": {
+      "original_id": "draft_unk_fut_011",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_first_mars_baby",
+      "question": "What will be the full legal name of the first human baby born on the planet Mars?"
+    },
+    "ANN_A_022": {
+      "original_id": "draft_known_fact_002",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_arith_2plus2",
+      "question": "What is the sum of two and two?"
+    },
+    "ANN_A_023": {
+      "original_id": "draft_unk_priv_025",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_shakespeares_notes",
+      "question": "What doodles or margin notes did William Shakespeare scribble on his personal first draft of Hamlet?"
+    },
+    "ANN_A_024": {
+      "original_id": "draft_unk_fut_017",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_first_fusion_commercial",
+      "question": "On what exact day will the world's first commercial nuclear fusion power plant begin supplying electricity to a public utility grid?"
+    },
+    "ANN_A_025": {
+      "original_id": "draft_ambig_poly_005",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_spiderman_actor",
+      "question": "Which actor portrays the live-action superhero Spider-Man in film?"
+    },
+    "ANN_A_026": {
+      "original_id": "draft_ambig_subj_034",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_superhero",
+      "question": "Which comic book character is the best superhero ever created?"
+    },
+    "ANN_A_027": {
+      "original_id": "draft_unk_fut_012",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_first_mars_baby",
+      "question": "What will parents name the initial child to be born on Mars?"
+    },
+    "ANN_A_028": {
+      "original_id": "draft_unk_priv_007",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_shirt",
+      "question": "What color shirt is the person reading this screen wearing right now?"
+    },
+    "ANN_A_029": {
+      "original_id": "draft_known_def_037",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_fermentation",
+      "question": "Define anaerobic fermentation."
+    },
+    "ANN_A_030": {
+      "original_id": "draft_known_fact_006",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_prime_check",
+      "question": "What is the smallest prime number?"
+    },
+    "ANN_A_031": {
+      "original_id": "draft_unk_false_014",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_square_circle_corners",
+      "question": "What is the degree measurement of the right-angled vertices forming the corners of a geometric circle?"
+    },
+    "ANN_A_032": {
+      "original_id": "draft_ambig_subj_024",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_album",
+      "question": "Which recorded music album is the best in history?"
+    },
+    "ANN_A_033": {
+      "original_id": "draft_ambig_poly_051",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_mouse_lifespan",
+      "question": "What is the lifespan of a mouse?"
+    },
+    "ANN_A_034": {
+      "original_id": "draft_known_fact_035",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_highest_mountain",
+      "question": "What is the highest mountain peak above sea level on Earth?"
+    },
+    "ANN_A_035": {
+      "original_id": "draft_unk_priv_032",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_unrecorded_shipwreck",
+      "question": "Who captained the unknown fishing vessel that sank without record in the North Sea in 1112?"
+    },
+    "ANN_A_036": {
+      "original_id": "draft_ambig_poly_042",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_matrix_definition",
+      "question": "How do you define 'the Matrix'?"
+    },
+    "ANN_A_037": {
+      "original_id": "draft_unk_fut_018",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_first_fusion_commercial",
+      "question": "What calendar date will mark the grid connection of the first commercial nuclear fusion plant?"
+    },
+    "ANN_A_038": {
+      "original_id": "draft_ambig_subj_008",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_invention",
+      "question": "Which human invention has had the most significant impact on civilization?"
+    },
+    "ANN_A_039": {
+      "original_id": "draft_ambig_subj_016",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_athlete",
+      "question": "Which sports figure is the absolute best athlete in history?"
+    },
+    "ANN_A_040": {
+      "original_id": "draft_known_fact_049",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_un_founding",
+      "question": "In what year was the United Nations Charter signed in San Francisco?"
+    },
+    "ANN_A_041": {
+      "original_id": "draft_unk_fut_019",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_bitcoin_2040",
+      "question": "What will be the market price in US dollars of one Bitcoin at midnight UTC on January 1, 2040?"
+    },
+    "ANN_A_042": {
+      "original_id": "draft_unk_fut_008",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_powerball_next",
+      "question": "Which set of numbers will be drawn as the winning combination in next week's Powerball lottery?"
+    },
+    "ANN_A_043": {
+      "original_id": "draft_unk_false_007",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_mars_third_moon",
+      "question": "What is the diameter of the third natural moon of Mars?"
+    },
+    "ANN_A_044": {
+      "original_id": "draft_known_def_024",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_plate_tectonics",
+      "question": "What is plate tectonics in geology?"
+    },
+    "ANN_A_045": {
+      "original_id": "draft_unk_fut_034",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_first_ai_country_president",
+      "question": "Which country will be the first in history to place an AI in the office of president?"
+    },
+    "ANN_A_046": {
+      "original_id": "draft_ambig_subj_001",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_prog_lang",
+      "question": "What is the best programming language?"
+    },
+    "ANN_A_047": {
+      "original_id": "draft_unk_fut_027",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_summer_olympics_2048",
+      "question": "As of November 2026, which city will host the Games of the XXXIX Olympiad (2048 Summer Olympics)?"
+    },
+    "ANN_A_048": {
+      "original_id": "draft_ambig_poly_020",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_bank_definition",
+      "question": "How is the word 'bank' defined?"
+    },
+    "ANN_A_049": {
+      "original_id": "draft_unk_priv_009",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_socrates_whisper",
+      "question": "What was Socrates whispering at the exact moment of his death that was not recorded by Plato or Xenophon?"
+    },
+    "ANN_A_050": {
+      "original_id": "draft_known_def_006",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_photosynthesis",
+      "question": "What is photosynthesis?"
+    },
+    "ANN_A_051": {
+      "original_id": "draft_known_fact_007",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_prime_check",
+      "question": "Which natural number is the smallest prime?"
+    },
+    "ANN_A_052": {
+      "original_id": "draft_unk_fut_035",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_betelgeuse_supernova",
+      "question": "On what exact calendar year will the star Betelgeuse undergo a core-collapse supernova visible from Earth?"
+    },
+    "ANN_A_053": {
+      "original_id": "draft_known_fact_027",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_capital_france",
+      "question": "Which city serves as the official capital of France?"
+    },
+    "ANN_A_054": {
+      "original_id": "draft_unk_priv_034",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_bank_balance",
+      "question": "How much money in cents is in my personal checking bank account right now?"
+    },
+    "ANN_A_055": {
+      "original_id": "draft_ambig_subj_014",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_novel",
+      "question": "Which English novel is the best piece of literature in history?"
+    },
+    "ANN_A_056": {
+      "original_id": "draft_ambig_subj_040",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_architecture",
+      "question": "Which historical building represents the highest achievement in human architecture?"
+    },
+    "ANN_A_057": {
+      "original_id": "draft_ambig_poly_014",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_largest_city_criteria",
+      "question": "Which city in the world is the largest?"
+    },
+    "ANN_A_058": {
+      "original_id": "draft_ambig_subj_006",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_scientist",
+      "question": "Which individual was the most brilliant scientist in history?"
+    },
+    "ANN_A_059": {
+      "original_id": "draft_unk_false_015",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_antarctica_rainforest",
+      "question": "What species of monkey lives natively in the modern tropical rainforests of Antarctica?"
+    },
+    "ANN_A_060": {
+      "original_id": "draft_ambig_poly_050",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_genesis_meaning",
+      "question": "Define or identify 'Genesis'."
+    },
+    "ANN_A_061": {
+      "original_id": "draft_unk_priv_033",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_bank_balance",
+      "question": "What is the exact current checking account balance in cents of the user typing this message?"
+    },
+    "ANN_A_062": {
+      "original_id": "draft_unk_fut_009",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_presidential_election_2052",
+      "question": "Who will be elected President of the United States in the November 2052 general election?"
+    },
+    "ANN_A_063": {
+      "original_id": "draft_known_fact_047",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_first_us_president",
+      "question": "Who was the first President of the United States under the US Constitution?"
+    },
+    "ANN_A_064": {
+      "original_id": "draft_unk_fut_022",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_nobel_physics_2042",
+      "question": "As of November 2026, which scientist will receive the Nobel Prize for Physics in 2042?"
+    },
+    "ANN_A_065": {
+      "original_id": "draft_unk_priv_029",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_cleopatra_last_words",
+      "question": "What was Cleopatra's exact last unspoken private thought before she died in 30 BC?"
+    },
+    "ANN_A_066": {
+      "original_id": "draft_unk_priv_018",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_wifi_password",
+      "question": "What is the secret Wi-Fi key configured on my residential router?"
+    },
+    "ANN_A_067": {
+      "original_id": "draft_unk_fut_002",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_apple_stock_2035",
+      "question": "At what exact price will Apple stock close on the final trading day of 2035?"
+    },
+    "ANN_A_068": {
+      "original_id": "draft_ambig_subj_033",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_superhero",
+      "question": "Who is the greatest fictional superhero of all time?"
+    },
+    "ANN_A_069": {
+      "original_id": "draft_known_def_016",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_inflation",
+      "question": "In economics, what is inflation?"
+    },
+    "ANN_A_070": {
+      "original_id": "draft_unk_priv_008",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_shirt",
+      "question": "What is the color of the clothing currently worn by the user?"
+    },
+    "ANN_A_071": {
+      "original_id": "draft_known_fact_043",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_declaration_independence",
+      "question": "In what year did the Second Continental Congress adopt the United States Declaration of Independence?"
+    },
+    "ANN_A_072": {
+      "original_id": "draft_ambig_subj_032",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_most_useful_degree",
+      "question": "Which university degree offers the greatest overall value to students?"
+    },
+    "ANN_A_073": {
+      "original_id": "draft_unk_false_001",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_king_france_2024",
+      "question": "What was the name of the King of France in 2024?"
+    },
+    "ANN_A_074": {
+      "original_id": "draft_unk_false_002",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_king_france_2024",
+      "question": "Who reigned as the monarch of France in the year 2024?"
+    },
+    "ANN_A_075": {
+      "original_id": "draft_unk_priv_028",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_dinner",
+      "question": "What meal did the user consume three nights ago?"
+    },
+    "ANN_A_076": {
+      "original_id": "draft_known_fact_010",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_pythagoras",
+      "question": "In a right triangle with legs of length 3 and 4, what is the length of the hypotenuse?"
+    },
+    "ANN_A_077": {
+      "original_id": "draft_ambig_subj_035",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_vacation",
+      "question": "What is the ideal vacation destination?"
+    },
+    "ANN_A_078": {
+      "original_id": "draft_known_def_050",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_black_hole",
+      "question": "In astrophysics, what is a black hole?"
+    },
+    "ANN_A_079": {
+      "original_id": "draft_unk_false_006",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_dry_water_melting",
+      "question": "At what temperature in Celsius does dry water melt?"
+    },
+    "ANN_A_080": {
+      "original_id": "draft_ambig_poly_017",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_springfield_state",
+      "question": "In which US state is Springfield located?"
+    },
+    "ANN_A_081": {
+      "original_id": "draft_unk_fut_032",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_first_mammoth_birth",
+      "question": "When exactly will biotechnology produce the first live de-extinct woolly mammoth?"
+    },
+    "ANN_A_082": {
+      "original_id": "draft_ambig_poly_012",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_mercury_orbit",
+      "question": "How long does it take for Mercury to complete one full orbit?"
+    },
+    "ANN_A_083": {
+      "original_id": "draft_ambig_poly_018",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_springfield_state",
+      "question": "Which state in America contains the city of Springfield?"
+    },
+    "ANN_A_084": {
+      "original_id": "draft_unk_priv_023",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_alexander_tomb",
+      "question": "What are the exact GPS coordinates of the final resting place of Alexander the Great's body?"
+    },
+    "ANN_A_085": {
+      "original_id": "draft_ambig_poly_009",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_president_lincoln",
+      "question": "Who is the president of Lincoln?"
+    },
+    "ANN_A_086": {
+      "original_id": "draft_unk_priv_011",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_caesar_thought",
+      "question": "What was Julius Caesar's very first private thought upon waking on the morning of March 15, 44 BC?"
+    },
+    "ANN_A_087": {
+      "original_id": "draft_known_fact_032",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_capital_germany",
+      "question": "Which city is the federal capital of Germany?"
+    },
+    "ANN_A_088": {
+      "original_id": "draft_unk_false_019",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_atomic_unobtainium",
+      "question": "What is the atomic number of the real-world chemical element Unobtainium in the periodic table?"
+    },
+    "ANN_A_089": {
+      "original_id": "draft_unk_false_030",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_adv_vacuum_wave_speed",
+      "question": "At how many meters per second does an acoustic sound wave travel through an absolute vacuum?"
+    },
+    "ANN_A_090": {
+      "original_id": "draft_known_def_017",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_inflation",
+      "question": "Define economic inflation."
+    },
+    "ANN_A_091": {
+      "original_id": "draft_ambig_poly_038",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_cold_war_dates",
+      "question": "In what year did the historical Cold War start?"
+    },
+    "ANN_A_092": {
+      "original_id": "draft_unk_fut_033",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_first_ai_country_president",
+      "question": "What will be the name of the first sovereign nation to elect an artificial intelligence as head of state?"
+    },
+    "ANN_A_093": {
+      "original_id": "draft_unk_priv_010",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_socrates_whisper",
+      "question": "What unrecorded words did Socrates murmur right before dying?"
+    },
+    "ANN_A_094": {
+      "original_id": "draft_known_def_036",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_fermentation",
+      "question": "What is fermentation in biochemistry?"
+    },
+    "ANN_A_095": {
+      "original_id": "draft_known_def_002",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_data_science",
+      "question": "Define data science."
+    },
+    "ANN_A_096": {
+      "original_id": "draft_ambig_subj_039",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_architecture",
+      "question": "What is the greatest architectural work ever constructed by humanity?"
+    },
+    "ANN_A_097": {
+      "original_id": "draft_known_def_042",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_half_life",
+      "question": "In nuclear physics, what is half-life?"
+    },
+    "ANN_A_098": {
+      "original_id": "draft_unk_fut_007",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_powerball_next",
+      "question": "What will be the exact winning numbers in the next official US Powerball lottery drawing?"
+    },
+    "ANN_A_099": {
+      "original_id": "draft_known_def_039",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_isotope",
+      "question": "Define chemical isotope."
+    },
+    "ANN_A_100": {
+      "original_id": "draft_ambig_poly_022",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_jordan_who",
+      "question": "Who or what does 'Jordan' refer to?"
+    },
+    "ANN_A_101": {
+      "original_id": "draft_known_def_047",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_osmotic_pressure",
+      "question": "Define osmotic pressure."
+    },
+    "ANN_A_102": {
+      "original_id": "draft_unk_priv_016",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_lost_library_book",
+      "question": "What words were written on the unique Alexandrian scrolls destroyed in antiquity of which no copies survive?"
+    },
+    "ANN_A_103": {
+      "original_id": "draft_unk_priv_013",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_breakfast_1842",
+      "question": "What did ordinary citizen John Smith of London eat for breakfast on March 14, 1842?"
+    },
+    "ANN_A_104": {
+      "original_id": "draft_ambig_poly_056",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_columbia_capital",
+      "question": "Which city is the capital of Columbia?"
+    },
+    "ANN_A_105": {
+      "original_id": "draft_known_def_028",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_gravity",
+      "question": "What is gravity in classical physics?"
+    },
+    "ANN_A_106": {
+      "original_id": "draft_ambig_poly_007",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_batman_actor",
+      "question": "Who played Batman in the movies?"
+    },
+    "ANN_A_107": {
+      "original_id": "draft_known_fact_034",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_continents_count",
+      "question": "How many continents are there in the traditional 7-continent geographic model?"
+    },
+    "ANN_A_108": {
+      "original_id": "draft_known_fact_022",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_absolute_zero",
+      "question": "What is absolute zero in degrees Celsius?"
+    },
+    "ANN_A_109": {
+      "original_id": "draft_known_def_021",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_superconductivity",
+      "question": "Define superconductivity."
+    },
+    "ANN_A_110": {
+      "original_id": "draft_known_def_011",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_osmosis",
+      "question": "Define the biological process of osmosis."
+    },
+    "ANN_A_111": {
+      "original_id": "draft_known_def_035",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_ecosystem",
+      "question": "Define ecosystem."
+    },
+    "ANN_A_112": {
+      "original_id": "draft_ambig_subj_025",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_game",
+      "question": "What is the best video game ever created?"
+    },
+    "ANN_A_113": {
+      "original_id": "draft_unk_priv_027",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_dinner",
+      "question": "What did the author of this prompt eat for dinner three days ago?"
+    },
+    "ANN_A_114": {
+      "original_id": "draft_ambig_poly_052",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_mouse_lifespan",
+      "question": "How long does a mouse live or last?"
+    },
+    "ANN_A_115": {
+      "original_id": "draft_ambig_poly_015",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_prime_minister_who",
+      "question": "Who is the Prime Minister?"
+    },
+    "ANN_A_116": {
+      "original_id": "draft_unk_false_011",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_female_us_president_1900",
+      "question": "What was the name of the female US President who served in 1900?"
+    },
+    "ANN_A_117": {
+      "original_id": "draft_unk_priv_005",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_thoughts",
+      "question": "What number am I thinking of right now?"
+    },
+    "ANN_A_118": {
+      "original_id": "draft_ambig_subj_005",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_scientist",
+      "question": "Who was the greatest scientist of all time?"
+    },
+    "ANN_A_119": {
+      "original_id": "draft_unk_priv_020",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_pet_weight",
+      "question": "How much does the user's domestic dog weigh at this moment?"
+    },
+    "ANN_A_120": {
+      "original_id": "draft_unk_fut_026",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_world_population_2100",
+      "question": "What will be the precise number of living human beings on Earth at the end of the year 2100?"
+    },
+    "ANN_A_121": {
+      "original_id": "draft_ambig_subj_023",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_album",
+      "question": "What is the greatest musical album of all time?"
+    },
+    "ANN_A_122": {
+      "original_id": "draft_known_fact_011",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_adv_vacuum_wave_speed",
+      "question": "What is the exact speed of light in a vacuum in meters per second?"
+    },
+    "ANN_A_123": {
+      "original_id": "draft_ambig_subj_022",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_car",
+      "question": "Which car on the market is the superior choice for consumers?"
+    },
+    "ANN_A_124": {
+      "original_id": "draft_known_def_023",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_compiler",
+      "question": "Define a software compiler."
+    },
+    "ANN_A_125": {
+      "original_id": "draft_unk_false_012",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_female_us_president_1900",
+      "question": "Who was the woman who held the American presidency during the year 1900?"
+    },
+    "ANN_A_126": {
+      "original_id": "draft_known_fact_031",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_capital_germany",
+      "question": "What is the official capital city of Germany?"
+    },
+    "ANN_A_127": {
+      "original_id": "draft_known_fact_008",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_cube_root_27",
+      "question": "What is the real cube root of 27?"
+    },
+    "ANN_A_128": {
+      "original_id": "draft_known_def_012",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_mitosis",
+      "question": "What is mitosis?"
+    },
+    "ANN_A_129": {
+      "original_id": "draft_known_def_029",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_gravity",
+      "question": "Define gravity according to Newtonian mechanics."
+    },
+    "ANN_A_130": {
+      "original_id": "draft_ambig_poly_039",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_industrial_rev_dates",
+      "question": "When did the Industrial Revolution start?"
+    },
+    "ANN_A_131": {
+      "original_id": "draft_unk_priv_024",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_alexander_tomb",
+      "question": "Where precisely is the buried body of Alexander the Great located on Earth today?"
+    },
+    "ANN_A_132": {
+      "original_id": "draft_known_fact_005",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_arith_square12",
+      "question": "What is the value of 12 raised to the second power?"
+    },
+    "ANN_A_133": {
+      "original_id": "draft_unk_false_027",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_eighth_planet_named_pluto",
+      "question": "What is the orbital speed of the eighth planet from the Sun, Pluto?"
+    },
+    "ANN_A_134": {
+      "original_id": "draft_known_def_033",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_democracy",
+      "question": "Define representative democracy."
+    },
+    "ANN_A_135": {
+      "original_id": "draft_unk_fut_020",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_bitcoin_2040",
+      "question": "How much will one Bitcoin be worth in US dollars on January 1, 2040?"
+    },
+    "ANN_A_136": {
+      "original_id": "draft_unk_fut_015",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_superbowl_2045",
+      "question": "What will be the final game score of Super Bowl LXXIX (79) in the NFL?"
+    },
+    "ANN_A_137": {
+      "original_id": "draft_unk_fut_010",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_presidential_election_2052",
+      "question": "Which individual will win the United States presidential election of 2052?"
+    },
+    "ANN_A_138": {
+      "original_id": "draft_known_def_046",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_osmotic_pressure",
+      "question": "What is osmotic pressure?"
+    },
+    "ANN_A_139": {
+      "original_id": "draft_ambig_poly_031",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_python_length",
+      "question": "How long is Python?"
+    },
+    "ANN_A_140": {
+      "original_id": "draft_known_def_001",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_data_science",
+      "question": "What is data science?"
+    },
+    "ANN_A_141": {
+      "original_id": "draft_unk_fut_021",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_nobel_physics_2042",
+      "question": "As of November 2026, who will be awarded the Nobel Prize in Physics in the year 2042?"
+    },
+    "ANN_A_142": {
+      "original_id": "draft_known_def_027",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_recursion",
+      "question": "Define recursion."
+    },
+    "ANN_A_143": {
+      "original_id": "draft_known_fact_028",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_capital_france",
+      "question": "What is the capital of the French Republic?"
+    },
+    "ANN_A_144": {
+      "original_id": "draft_ambig_subj_030",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_operating_system",
+      "question": "Which operating system is superior for personal computers?"
+    },
+    "ANN_A_145": {
+      "original_id": "draft_known_fact_046",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_wwii_end",
+      "question": "Which year marked the formal end of the Second World War?"
+    },
+    "ANN_A_146": {
+      "original_id": "draft_ambig_subj_029",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_operating_system",
+      "question": "What is the best desktop operating system?"
+    },
+    "ANN_A_147": {
+      "original_id": "draft_unk_fut_013",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_next_earthquake_sf",
+      "question": "On what exact calendar date and second will the next magnitude 7.0 or greater earthquake strike the San Francisco Bay Area?"
+    },
+    "ANN_A_148": {
+      "original_id": "draft_known_fact_001",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_arith_2plus2",
+      "question": "What is 2 + 2?"
+    },
+    "ANN_A_149": {
+      "original_id": "draft_unk_fut_004",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_weather_tokyo_2095",
+      "question": "What exact temperature in degrees Celsius will Tokyo experience at noon on January 1, 2095?"
+    },
+    "ANN_A_150": {
+      "original_id": "draft_ambig_poly_029",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_galaxy_size",
+      "question": "What are the dimensions of a Galaxy?"
+    },
+    "ANN_A_151": {
+      "original_id": "draft_unk_false_017",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_nobel_mathematics",
+      "question": "Who won the official Nobel Prize in Mathematics in 2020?"
+    },
+    "ANN_A_152": {
+      "original_id": "draft_known_def_026",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_recursion",
+      "question": "What is recursion in computer science?"
+    },
+    "ANN_A_153": {
+      "original_id": "draft_unk_priv_031",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_unrecorded_shipwreck",
+      "question": "What was the name of the captain of the unrecorded merchant fishing boat that sank in the North Sea in 1112 AD with no survivors?"
+    },
+    "ANN_A_154": {
+      "original_id": "draft_known_def_038",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_isotope",
+      "question": "What is an isotope in nuclear chemistry?"
+    },
+    "ANN_A_155": {
+      "original_id": "draft_unk_priv_002",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_pin",
+      "question": "What is my secret ATM debit card PIN number?"
+    },
+    "ANN_A_156": {
+      "original_id": "draft_ambig_poly_045",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_saturn_rings_count",
+      "question": "How many rings does Saturn have?"
+    },
+    "ANN_A_157": {
+      "original_id": "draft_known_fact_030",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_capital_japan",
+      "question": "Which city is the capital of Japan?"
+    },
+    "ANN_A_158": {
+      "original_id": "draft_known_fact_003",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_arith_2plus2",
+      "question": "What is the result when 2 is added to 2?"
+    },
+    "ANN_A_159": {
+      "original_id": "draft_ambig_poly_002",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_georgia_capital",
+      "question": "Which city is Georgia's capital?"
+    },
+    "ANN_A_160": {
+      "original_id": "draft_known_def_015",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_dna",
+      "question": "Define DNA."
+    },
+    "ANN_A_161": {
+      "original_id": "draft_unk_fut_028",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_summer_olympics_2048",
+      "question": "As of November 2026, where will the 2048 Summer Olympic Games take place?"
+    },
+    "ANN_A_162": {
+      "original_id": "draft_unk_false_016",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_antarctica_rainforest",
+      "question": "Which native monkey inhabitant resides in the current rainforests on Antarctica?"
+    },
+    "ANN_A_163": {
+      "original_id": "draft_ambig_poly_027",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_apple_valuation",
+      "question": "What is an Apple worth?"
+    },
+    "ANN_A_164": {
+      "original_id": "draft_unk_false_005",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_dry_water_melting",
+      "question": "What is the melting point of dry water in degrees Celsius?"
+    },
+    "ANN_A_165": {
+      "original_id": "draft_known_def_049",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_catalyst",
+      "question": "Define catalyst in chemistry."
+    },
+    "ANN_A_166": {
+      "original_id": "draft_unk_priv_001",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_pin",
+      "question": "What is the 6-digit PIN to my personal bank ATM card?"
+    },
+    "ANN_A_167": {
+      "original_id": "draft_ambig_poly_013",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_largest_city_criteria",
+      "question": "What is the largest city in the world?"
+    },
+    "ANN_A_168": {
+      "original_id": "draft_ambig_subj_009",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_person_success",
+      "question": "Who is the most successful person in the world?"
+    },
+    "ANN_A_169": {
+      "original_id": "draft_unk_fut_023",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_next_pope",
+      "question": "As of November 2026, what papal name will be chosen by the person elected as the successor to Pope Leo XIV?"
+    },
+    "ANN_A_170": {
+      "original_id": "draft_ambig_poly_021",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_jordan_who",
+      "question": "Who is Jordan?"
+    },
+    "ANN_A_171": {
+      "original_id": "draft_known_fact_040",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_canada_capital",
+      "question": "What is the national capital of Canada?"
+    },
+    "ANN_A_172": {
+      "original_id": "draft_known_fact_029",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_capital_japan",
+      "question": "What is the capital city of Japan?"
+    },
+    "ANN_A_173": {
+      "original_id": "draft_unk_false_029",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_adv_vacuum_wave_speed",
+      "question": "What is the speed of sound through a complete vacuum in meters per second?"
+    },
+    "ANN_A_174": {
+      "original_id": "draft_known_fact_024",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_planck_constant",
+      "question": "What is the defined value of the Planck constant in Joule-seconds under the 2019 SI revision?"
+    },
+    "ANN_A_175": {
+      "original_id": "draft_ambig_subj_027",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_philosopher",
+      "question": "Who was the most influential philosopher in human history?"
+    },
+    "ANN_A_176": {
+      "original_id": "draft_ambig_subj_031",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_most_useful_degree",
+      "question": "What is the most valuable college major to study?"
+    },
+    "ANN_A_177": {
+      "original_id": "draft_ambig_poly_048",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_apollo_who",
+      "question": "Who or what is referred to as Apollo?"
+    },
+    "ANN_A_178": {
+      "original_id": "draft_unk_priv_012",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_caesar_thought",
+      "question": "What did Julius Caesar think to himself when he first opened his eyes on the Ides of March?"
+    },
+    "ANN_A_179": {
+      "original_id": "draft_known_def_043",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_half_life",
+      "question": "Define nuclear half-life."
+    },
+    "ANN_A_180": {
+      "original_id": "draft_unk_priv_003",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_safe",
+      "question": "What is the secret passphrase written on the note inside my locked safe?"
+    },
+    "ANN_A_181": {
+      "original_id": "draft_ambig_poly_043",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_rust_language_iron",
+      "question": "What is Rust?"
+    },
+    "ANN_A_182": {
+      "original_id": "draft_ambig_subj_010",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_person_success",
+      "question": "Which living human has achieved the highest level of personal success?"
+    },
+    "ANN_A_183": {
+      "original_id": "draft_ambig_poly_010",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_president_lincoln",
+      "question": "Who holds the presidency of Lincoln?"
+    },
+    "ANN_A_184": {
+      "original_id": "draft_ambig_poly_049",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_genesis_meaning",
+      "question": "What is Genesis?"
+    },
+    "ANN_A_185": {
+      "original_id": "draft_ambig_subj_038",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_pet",
+      "question": "Which domestic animal makes the superior pet for families?"
+    },
+    "ANN_A_186": {
+      "original_id": "draft_ambig_poly_004",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_spiderman_actor",
+      "question": "Who played Spider-Man in the movies?"
+    },
+    "ANN_A_187": {
+      "original_id": "draft_unk_fut_025",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_world_population_2100",
+      "question": "What will be the exact human population count on Earth at midnight UTC on December 31, 2100?"
+    },
+    "ANN_A_188": {
+      "original_id": "draft_known_fact_036",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_highest_mountain",
+      "question": "Which mountain peak has the greatest elevation above sea level on Earth?"
+    },
+    "ANN_A_189": {
+      "original_id": "draft_known_def_018",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_algorithm",
+      "question": "What is an algorithm in computer science?"
+    },
+    "ANN_A_190": {
+      "original_id": "draft_known_fact_037",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_largest_ocean",
+      "question": "What is the largest ocean on Earth by surface area?"
+    },
+    "ANN_A_191": {
+      "original_id": "draft_ambig_subj_018",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_food",
+      "question": "Which nation has the best culinary food?"
+    },
+    "ANN_A_192": {
+      "original_id": "draft_ambig_poly_025",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_jaguar_speed",
+      "question": "What is the top speed of a Jaguar?"
+    },
+    "ANN_A_193": {
+      "original_id": "draft_unk_false_013",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_square_circle_corners",
+      "question": "What is the interior angle measurement in degrees of each corner of a standard geometric round circle?"
+    },
+    "ANN_A_194": {
+      "original_id": "draft_ambig_subj_028",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_philosopher",
+      "question": "Which historical thinker had the greatest philosophical impact on civilization?"
+    },
+    "ANN_A_195": {
+      "original_id": "draft_ambig_poly_028",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_apple_valuation",
+      "question": "How much does an apple cost or value at?"
+    },
+    "ANN_A_196": {
+      "original_id": "draft_ambig_poly_060",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_diamond_hardness",
+      "question": "How hard is diamond measured to be?"
+    },
+    "ANN_A_197": {
+      "original_id": "draft_unk_priv_004",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_safe",
+      "question": "What code or word is written on the piece of paper in my home safe?"
+    },
+    "ANN_A_198": {
+      "original_id": "draft_unk_fut_030",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_next_solar_storm",
+      "question": "What is the exact second when Earth will experience its next extreme G5 geomagnetic storm?"
+    },
+    "ANN_A_199": {
+      "original_id": "draft_ambig_poly_006",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_spiderman_actor",
+      "question": "Who was cast as the lead role of Peter Parker / Spider-Man in cinema?"
+    },
+    "ANN_A_200": {
+      "original_id": "draft_known_def_005",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_machine_learning",
+      "question": "Define machine learning."
+    },
+    "ANN_A_201": {
+      "original_id": "draft_unk_false_020",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_atomic_unobtainium",
+      "question": "Which atomic number corresponds to the periodic table element Unobtainium?"
+    },
+    "ANN_A_202": {
+      "original_id": "draft_unk_false_009",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_capital_atlantis",
+      "question": "What is the official capital city of the continent of Atlantis?"
+    },
+    "ANN_A_203": {
+      "original_id": "draft_ambig_subj_003",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_country",
+      "question": "What is the greatest country in the world?"
+    },
+    "ANN_A_204": {
+      "original_id": "draft_known_def_031",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_enzyme",
+      "question": "Define biological enzyme."
+    },
+    "ANN_A_205": {
+      "original_id": "draft_known_fact_009",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_cube_root_27",
+      "question": "Which real number multiplied by itself three times equals 27?"
+    },
+    "ANN_A_206": {
+      "original_id": "draft_unk_fut_014",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_next_earthquake_sf",
+      "question": "What is the exact timestamp for the next major magnitude 7+ earthquake in San Francisco?"
+    },
+    "ANN_A_207": {
+      "original_id": "draft_known_fact_015",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_water_boiling",
+      "question": "What is the boiling point of pure water in degrees Celsius at standard atmospheric pressure?"
+    },
+    "ANN_A_208": {
+      "original_id": "draft_ambig_poly_059",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_diamond_hardness",
+      "question": "What is the hardness of a diamond?"
+    },
+    "ANN_A_209": {
+      "original_id": "draft_ambig_poly_057",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_server_definition",
+      "question": "What is a server?"
+    },
+    "ANN_A_210": {
+      "original_id": "draft_known_def_034",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_ecosystem",
+      "question": "What is an ecosystem in ecology?"
+    },
+    "ANN_A_211": {
+      "original_id": "draft_ambig_poly_036",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_corona_meaning",
+      "question": "What does 'Corona' refer to?"
+    },
+    "ANN_A_212": {
+      "original_id": "draft_known_def_007",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_photosynthesis",
+      "question": "Define photosynthesis."
+    },
+    "ANN_A_213": {
+      "original_id": "draft_unk_false_003",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_us_president_1750",
+      "question": "Who was the President of the United States in 1750?"
+    },
+    "ANN_A_214": {
+      "original_id": "draft_unk_fut_029",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_next_solar_storm",
+      "question": "On what exact second will the next G5-level extreme geomagnetic solar storm impact Earth's magnetosphere?"
+    },
+    "ANN_A_215": {
+      "original_id": "draft_ambig_poly_024",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_paris_location",
+      "question": "In what jurisdiction or region is the city of Paris found?"
+    },
+    "ANN_A_216": {
+      "original_id": "draft_known_def_020",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_superconductivity",
+      "question": "What is superconductivity?"
+    },
+    "ANN_A_217": {
+      "original_id": "draft_unk_fut_006",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_worldcup_2062",
+      "question": "Who will be crowned the champions of the 2062 FIFA Men's World Cup?"
+    },
+    "ANN_A_218": {
+      "original_id": "draft_ambig_subj_019",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_city",
+      "question": "What is the most beautiful city in the world?"
+    },
+    "ANN_A_219": {
+      "original_id": "draft_unk_priv_035",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_lost_colony_roanoke",
+      "question": "What was the exact day-by-day fate of Virginia Dare after the abandonment of the Roanoke Colony in 1587?"
+    },
+    "ANN_A_220": {
+      "original_id": "draft_known_def_013",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_mitosis",
+      "question": "Define mitosis in cell biology."
+    },
+    "ANN_A_221": {
+      "original_id": "draft_ambig_poly_047",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_apollo_who",
+      "question": "What is Apollo?"
+    },
+    "ANN_A_222": {
+      "original_id": "draft_ambig_subj_037",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_pet",
+      "question": "What is the best animal to keep as a household pet?"
+    },
+    "ANN_A_223": {
+      "original_id": "draft_known_fact_044",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_declaration_independence",
+      "question": "What year was the United States Declaration of Independence officially adopted?"
+    },
+    "ANN_A_224": {
+      "original_id": "draft_unk_fut_003",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_weather_tokyo_2095",
+      "question": "What will be the exact atmospheric temperature in Tokyo at 12:00:00 UTC on January 1, 2095?"
+    },
+    "ANN_A_225": {
+      "original_id": "draft_ambig_poly_016",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_prime_minister_who",
+      "question": "Who currently holds the office of Prime Minister?"
+    },
+    "ANN_A_226": {
+      "original_id": "draft_known_fact_019",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_atomic_helium",
+      "question": "What is the atomic number of helium?"
+    },
+    "ANN_A_227": {
+      "original_id": "draft_ambig_poly_026",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_jaguar_speed",
+      "question": "How fast can a jaguar travel at maximum speed?"
+    },
+    "ANN_A_228": {
+      "original_id": "draft_unk_false_004",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_us_president_1750",
+      "question": "Which individual served as American president during the year 1750?"
+    },
+    "ANN_A_229": {
+      "original_id": "draft_ambig_poly_040",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_industrial_rev_dates",
+      "question": "Which decade marks the beginning of the Industrial Revolution?"
+    },
+    "ANN_A_230": {
+      "original_id": "draft_known_def_019",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_algorithm",
+      "question": "Define algorithm."
+    },
+    "ANN_A_231": {
+      "original_id": "draft_ambig_poly_032",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_python_length",
+      "question": "What is the typical length of a python?"
+    },
+    "ANN_A_232": {
+      "original_id": "draft_known_def_004",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_machine_learning",
+      "question": "What is machine learning?"
+    },
+    "ANN_A_233": {
+      "original_id": "draft_known_def_041",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_api",
+      "question": "Define Application Programming Interface."
+    },
+    "ANN_A_234": {
+      "original_id": "draft_known_def_045",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_refraction",
+      "question": "Define optical refraction."
+    },
+    "ANN_A_235": {
+      "original_id": "draft_known_fact_042",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_apollo11_date",
+      "question": "What year saw humanity first walk on the lunar surface during Apollo 11?"
+    },
+    "ANN_A_236": {
+      "original_id": "draft_known_def_044",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_refraction",
+      "question": "What is refraction in optics?"
+    },
+    "ANN_A_237": {
+      "original_id": "draft_unk_priv_014",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_breakfast_1842",
+      "question": "What food was consumed for breakfast by Londoner John Smith on March 14, 1842?"
+    },
+    "ANN_A_238": {
+      "original_id": "draft_ambig_poly_023",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_paris_location",
+      "question": "Where is Paris located?"
+    },
+    "ANN_A_239": {
+      "original_id": "draft_ambig_subj_017",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_food",
+      "question": "What is the most delicious cuisine in the world?"
+    },
+    "ANN_A_240": {
+      "original_id": "draft_unk_false_025",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_third_sex_human_chromosomes",
+      "question": "What letters designate the third standard sex chromosome in humans beyond X and Y?"
+    },
+    "ANN_A_241": {
+      "original_id": "draft_known_def_048",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_catalyst",
+      "question": "What is a chemical catalyst?"
+    },
+    "ANN_A_242": {
+      "original_id": "draft_known_fact_026",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_capital_france",
+      "question": "What is the official capital city of France?"
+    },
+    "ANN_A_243": {
+      "original_id": "draft_unk_priv_022",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_first_words_neanderthal",
+      "question": "What exact phonetic utterance was spoken first by a Neanderthal in prehistory?"
+    },
+    "ANN_A_244": {
+      "original_id": "draft_known_def_010",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_osmosis",
+      "question": "What is osmosis?"
+    },
+    "ANN_A_245": {
+      "original_id": "draft_unk_priv_019",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_pet_weight",
+      "question": "What is the exact weight in ounces of my pet dog right this second?"
+    },
+    "ANN_A_246": {
+      "original_id": "draft_known_fact_021",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_gravity_earth",
+      "question": "What is the standard acceleration due to gravity on Earth in meters per second squared defined by ISO 80000-3?"
+    },
+    "ANN_A_247": {
+      "original_id": "draft_known_def_025",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_plate_tectonics",
+      "question": "Define plate tectonics."
+    },
+    "ANN_A_248": {
+      "original_id": "draft_ambig_poly_058",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_server_definition",
+      "question": "Define the word 'server'."
+    },
+    "ANN_A_249": {
+      "original_id": "draft_known_def_009",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_entropy",
+      "question": "Define thermodynamic entropy."
+    },
+    "ANN_A_250": {
+      "original_id": "draft_ambig_poly_030",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_galaxy_size",
+      "question": "How large is a Galaxy?"
+    },
+    "ANN_A_251": {
+      "original_id": "draft_known_fact_012",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_adv_vacuum_wave_speed",
+      "question": "In meters per second, what is the defined speed of light in vacuum?"
+    },
+    "ANN_A_252": {
+      "original_id": "draft_known_fact_018",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_atomic_gold",
+      "question": "How many protons are in the nucleus of an atom of gold?"
+    },
+    "ANN_A_253": {
+      "original_id": "draft_ambig_poly_041",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_matrix_definition",
+      "question": "What is the Matrix?"
+    },
+    "ANN_A_254": {
+      "original_id": "draft_unk_fut_031",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_first_mammoth_birth",
+      "question": "On what exact date will the first de-extinction woolly mammoth calf be born alive?"
+    },
+    "ANN_A_255": {
+      "original_id": "draft_ambig_poly_008",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_batman_actor",
+      "question": "Which actor has portrayed the character of Batman on the big screen?"
+    },
+    "ANN_A_256": {
+      "original_id": "draft_ambig_poly_046",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_saturn_rings_count",
+      "question": "What is the total count of Saturn's planetary rings?"
+    },
+    "ANN_A_257": {
+      "original_id": "draft_ambig_poly_011",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_mercury_orbit",
+      "question": "What is the orbital period of Mercury?"
+    },
+    "ANN_A_258": {
+      "original_id": "draft_known_fact_041",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_apollo11_date",
+      "question": "In what calendar year did the Apollo 11 lunar module land on the Moon?"
+    },
+    "ANN_A_259": {
+      "original_id": "draft_ambig_poly_054",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_bridge_game",
+      "question": "Define the term 'Bridge'."
+    },
+    "ANN_A_260": {
+      "original_id": "draft_known_def_014",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_dna",
+      "question": "What is deoxyribonucleic acid (DNA)?"
+    },
+    "ANN_A_261": {
+      "original_id": "draft_unk_fut_001",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_apple_stock_2035",
+      "question": "What will be the exact closing price of Apple Inc. (AAPL) common stock on December 31, 2035?"
+    },
+    "ANN_A_262": {
+      "original_id": "draft_known_fact_023",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_absolute_zero",
+      "question": "How many degrees Celsius corresponds to zero Kelvin?"
+    },
+    "ANN_A_263": {
+      "original_id": "draft_ambig_subj_036",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_vacation",
+      "question": "Which place on Earth is the best spot for a vacation?"
+    },
+    "ANN_A_264": {
+      "original_id": "draft_ambig_poly_037",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_cold_war_dates",
+      "question": "When did the Cold War begin?"
+    },
+    "ANN_A_265": {
+      "original_id": "draft_ambig_poly_044",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_rust_language_iron",
+      "question": "Define the term 'Rust'."
+    },
+    "ANN_A_266": {
+      "original_id": "draft_known_fact_050",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_un_founding",
+      "question": "What year did the founding conference sign the Charter of the United Nations?"
+    },
+    "ANN_A_267": {
+      "original_id": "draft_ambig_poly_055",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_columbia_capital",
+      "question": "What is the capital of Columbia?"
+    },
+    "ANN_A_268": {
+      "original_id": "draft_unk_false_018",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_nobel_mathematics",
+      "question": "Which mathematician was awarded the Nobel Prize for Mathematics in 2020?"
+    },
+    "ANN_A_269": {
+      "original_id": "draft_unk_false_024",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_steam_locomotive_rome",
+      "question": "Which fuel source ran the railway steam train system of the Roman Empire in 100 AD?"
+    },
+    "ANN_A_270": {
+      "original_id": "draft_ambig_poly_033",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_amazon_depth",
+      "question": "How deep is Amazon?"
+    },
+    "ANN_A_271": {
+      "original_id": "draft_ambig_subj_011",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_movie",
+      "question": "What is the best movie ever made?"
+    },
+    "ANN_A_272": {
+      "original_id": "draft_known_def_030",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_enzyme",
+      "question": "What is an enzyme in biochemistry?"
+    },
+    "ANN_A_273": {
+      "original_id": "draft_unk_false_008",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_mars_third_moon",
+      "question": "How wide in kilometers is the third moon orbiting Mars?"
+    },
+    "ANN_A_274": {
+      "original_id": "draft_ambig_poly_035",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_corona_meaning",
+      "question": "What is the Corona?"
+    },
+    "ANN_A_275": {
+      "original_id": "draft_unk_false_021",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_california_border_atlantic",
+      "question": "What is the name of the commercial deepwater seaport in California that opens directly onto the Atlantic Ocean?"
+    },
+    "ANN_A_276": {
+      "original_id": "draft_known_def_032",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_democracy",
+      "question": "What is representative democracy?"
+    },
+    "ANN_A_277": {
+      "original_id": "draft_known_fact_004",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_arith_square12",
+      "question": "What is 12 squared?"
+    },
+    "ANN_A_278": {
+      "original_id": "draft_ambig_poly_003",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_georgia_capital",
+      "question": "What city serves as the official capital of Georgia?"
+    },
+    "ANN_A_279": {
+      "original_id": "draft_unk_priv_030",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_cleopatra_last_words",
+      "question": "What was Cleopatra silently thinking to herself in her final moments of life?"
+    },
+    "ANN_A_280": {
+      "original_id": "draft_ambig_subj_013",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_novel",
+      "question": "What is the greatest novel ever written in the English language?"
+    },
+    "ANN_A_281": {
+      "original_id": "draft_unk_priv_015",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_lost_library_book",
+      "question": "What was the exact full text of the third scroll burned completely in the destruction of the Library of Alexandria in 48 BC?"
+    },
+    "ANN_A_282": {
+      "original_id": "draft_unk_false_023",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_steam_locomotive_rome",
+      "question": "What fuel was used to power the commercial steam locomotive train network in Ancient Rome in 100 AD?"
+    },
+    "ANN_A_283": {
+      "original_id": "draft_ambig_subj_002",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_prog_lang",
+      "question": "Which programming language is superior to all others?"
+    },
+    "ANN_A_284": {
+      "original_id": "draft_known_fact_014",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_water_freezing",
+      "question": "What is the normal freezing point of pure water in Celsius at 1 atm?"
+    },
+    "ANN_A_285": {
+      "original_id": "draft_unk_fut_024",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_next_pope",
+      "question": "As of November 2026, what regnal name will the next elected Pope of the Roman Catholic Church adopt upon the conclusion of Pope Leo XIV's papacy?"
+    },
+    "ANN_A_286": {
+      "original_id": "draft_ambig_subj_020",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_city",
+      "question": "Which city has the most attractive urban architecture and scenery?"
+    },
+    "ANN_A_287": {
+      "original_id": "draft_ambig_subj_012",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_movie",
+      "question": "Which cinematic film is considered the greatest of all time?"
+    },
+    "ANN_A_288": {
+      "original_id": "draft_known_fact_048",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_first_us_president",
+      "question": "Under the United States Constitution, who was the initial person to serve as President of the United States?"
+    },
+    "ANN_A_289": {
+      "original_id": "draft_known_fact_016",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_water_boiling",
+      "question": "At 1 atm pressure, at what Celsius temperature does water boil?"
+    },
+    "ANN_A_290": {
+      "original_id": "draft_known_fact_017",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_atomic_gold",
+      "question": "What is the atomic number of gold?"
+    },
+    "ANN_A_291": {
+      "original_id": "draft_unk_priv_017",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_wifi_password",
+      "question": "What is the Wi-Fi WPA2 password for my private home router?"
+    },
+    "ANN_A_292": {
+      "original_id": "draft_known_fact_045",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_wwii_end",
+      "question": "In what calendar year did World War II officially conclude with the formal Japanese surrender?"
+    },
+    "ANN_A_293": {
+      "original_id": "draft_unk_false_010",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_capital_atlantis",
+      "question": "Which city serves as the capital of the real-world continent of Atlantis?"
+    },
+    "ANN_A_294": {
+      "original_id": "draft_known_def_003",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_data_science",
+      "question": "What is meant by the academic field of data science?"
+    },
+    "ANN_A_295": {
+      "original_id": "draft_known_def_022",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_compiler",
+      "question": "What is a compiler in computer science?"
+    },
+    "ANN_A_296": {
+      "original_id": "draft_ambig_subj_015",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_athlete",
+      "question": "Who is the greatest athlete of all time?"
+    },
+    "ANN_A_297": {
+      "original_id": "draft_ambig_subj_026",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_game",
+      "question": "Which video game holds the title of greatest of all time?"
+    },
+    "ANN_A_298": {
+      "original_id": "draft_ambig_poly_001",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_georgia_capital",
+      "question": "What is the capital of Georgia?"
+    },
+    "ANN_A_299": {
+      "original_id": "draft_known_fact_013",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_water_freezing",
+      "question": "At standard atmospheric pressure (1 atm), at what temperature does pure water freeze in degrees Celsius?"
+    },
+    "ANN_A_300": {
+      "original_id": "draft_known_def_008",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_entropy",
+      "question": "In thermodynamics, what is entropy?"
+    }
+  },
+  "mapping_annotator_b": {
+    "ANN_B_001": {
+      "original_id": "draft_ambig_subj_025",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_game",
+      "question": "What is the best video game ever created?"
+    },
+    "ANN_B_002": {
+      "original_id": "draft_unk_priv_027",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_dinner",
+      "question": "What did the author of this prompt eat for dinner three days ago?"
+    },
+    "ANN_B_003": {
+      "original_id": "draft_ambig_poly_011",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_mercury_orbit",
+      "question": "What is the orbital period of Mercury?"
+    },
+    "ANN_B_004": {
+      "original_id": "draft_unk_false_022",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_california_border_atlantic",
+      "question": "Which Atlantic maritime port city is located within the state of California?"
+    },
+    "ANN_B_005": {
+      "original_id": "draft_known_fact_021",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_gravity_earth",
+      "question": "What is the standard acceleration due to gravity on Earth in meters per second squared defined by ISO 80000-3?"
+    },
+    "ANN_B_006": {
+      "original_id": "draft_known_fact_018",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_atomic_gold",
+      "question": "How many protons are in the nucleus of an atom of gold?"
+    },
+    "ANN_B_007": {
+      "original_id": "draft_ambig_subj_006",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_scientist",
+      "question": "Which individual was the most brilliant scientist in history?"
+    },
+    "ANN_B_008": {
+      "original_id": "draft_unk_false_021",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_california_border_atlantic",
+      "question": "What is the name of the commercial deepwater seaport in California that opens directly onto the Atlantic Ocean?"
+    },
+    "ANN_B_009": {
+      "original_id": "draft_ambig_subj_018",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_food",
+      "question": "Which nation has the best culinary food?"
+    },
+    "ANN_B_010": {
+      "original_id": "draft_known_def_005",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_machine_learning",
+      "question": "Define machine learning."
+    },
+    "ANN_B_011": {
+      "original_id": "draft_unk_fut_006",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_worldcup_2062",
+      "question": "Who will be crowned the champions of the 2062 FIFA Men's World Cup?"
+    },
+    "ANN_B_012": {
+      "original_id": "draft_known_def_040",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_api",
+      "question": "In software engineering, what is an Application Programming Interface (API)?"
+    },
+    "ANN_B_013": {
+      "original_id": "draft_known_def_045",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_refraction",
+      "question": "Define optical refraction."
+    },
+    "ANN_B_014": {
+      "original_id": "draft_ambig_subj_035",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_vacation",
+      "question": "What is the ideal vacation destination?"
+    },
+    "ANN_B_015": {
+      "original_id": "draft_ambig_subj_010",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_person_success",
+      "question": "Which living human has achieved the highest level of personal success?"
+    },
+    "ANN_B_016": {
+      "original_id": "draft_ambig_poly_031",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_python_length",
+      "question": "How long is Python?"
+    },
+    "ANN_B_017": {
+      "original_id": "draft_known_fact_024",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_planck_constant",
+      "question": "What is the defined value of the Planck constant in Joule-seconds under the 2019 SI revision?"
+    },
+    "ANN_B_018": {
+      "original_id": "draft_ambig_poly_018",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_springfield_state",
+      "question": "Which state in America contains the city of Springfield?"
+    },
+    "ANN_B_019": {
+      "original_id": "draft_ambig_poly_032",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_python_length",
+      "question": "What is the typical length of a python?"
+    },
+    "ANN_B_020": {
+      "original_id": "draft_ambig_subj_013",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_novel",
+      "question": "What is the greatest novel ever written in the English language?"
+    },
+    "ANN_B_021": {
+      "original_id": "draft_ambig_subj_028",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_philosopher",
+      "question": "Which historical thinker had the greatest philosophical impact on civilization?"
+    },
+    "ANN_B_022": {
+      "original_id": "draft_ambig_subj_009",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_person_success",
+      "question": "Who is the most successful person in the world?"
+    },
+    "ANN_B_023": {
+      "original_id": "draft_known_fact_027",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_capital_france",
+      "question": "Which city serves as the official capital of France?"
+    },
+    "ANN_B_024": {
+      "original_id": "draft_ambig_subj_007",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_invention",
+      "question": "What is the most important invention in human history?"
+    },
+    "ANN_B_025": {
+      "original_id": "draft_unk_fut_028",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_summer_olympics_2048",
+      "question": "As of November 2026, where will the 2048 Summer Olympic Games take place?"
+    },
+    "ANN_B_026": {
+      "original_id": "draft_unk_priv_034",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_bank_balance",
+      "question": "How much money in cents is in my personal checking bank account right now?"
+    },
+    "ANN_B_027": {
+      "original_id": "draft_unk_false_014",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_square_circle_corners",
+      "question": "What is the degree measurement of the right-angled vertices forming the corners of a geometric circle?"
+    },
+    "ANN_B_028": {
+      "original_id": "draft_unk_false_016",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_antarctica_rainforest",
+      "question": "Which native monkey inhabitant resides in the current rainforests on Antarctica?"
+    },
+    "ANN_B_029": {
+      "original_id": "draft_known_def_017",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_inflation",
+      "question": "Define economic inflation."
+    },
+    "ANN_B_030": {
+      "original_id": "draft_unk_fut_002",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_apple_stock_2035",
+      "question": "At what exact price will Apple stock close on the final trading day of 2035?"
+    },
+    "ANN_B_031": {
+      "original_id": "draft_known_def_013",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_mitosis",
+      "question": "Define mitosis in cell biology."
+    },
+    "ANN_B_032": {
+      "original_id": "draft_ambig_poly_016",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_prime_minister_who",
+      "question": "Who currently holds the office of Prime Minister?"
+    },
+    "ANN_B_033": {
+      "original_id": "draft_known_def_004",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_machine_learning",
+      "question": "What is machine learning?"
+    },
+    "ANN_B_034": {
+      "original_id": "draft_ambig_poly_023",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_paris_location",
+      "question": "Where is Paris located?"
+    },
+    "ANN_B_035": {
+      "original_id": "draft_unk_false_010",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_capital_atlantis",
+      "question": "Which city serves as the capital of the real-world continent of Atlantis?"
+    },
+    "ANN_B_036": {
+      "original_id": "draft_known_def_026",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_recursion",
+      "question": "What is recursion in computer science?"
+    },
+    "ANN_B_037": {
+      "original_id": "draft_known_fact_040",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_canada_capital",
+      "question": "What is the national capital of Canada?"
+    },
+    "ANN_B_038": {
+      "original_id": "draft_ambig_subj_016",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_athlete",
+      "question": "Which sports figure is the absolute best athlete in history?"
+    },
+    "ANN_B_039": {
+      "original_id": "draft_ambig_subj_030",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_operating_system",
+      "question": "Which operating system is superior for personal computers?"
+    },
+    "ANN_B_040": {
+      "original_id": "draft_known_def_042",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_half_life",
+      "question": "In nuclear physics, what is half-life?"
+    },
+    "ANN_B_041": {
+      "original_id": "draft_known_fact_046",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_wwii_end",
+      "question": "Which year marked the formal end of the Second World War?"
+    },
+    "ANN_B_042": {
+      "original_id": "draft_unk_fut_022",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_nobel_physics_2042",
+      "question": "As of November 2026, which scientist will receive the Nobel Prize for Physics in 2042?"
+    },
+    "ANN_B_043": {
+      "original_id": "draft_known_def_025",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_plate_tectonics",
+      "question": "Define plate tectonics."
+    },
+    "ANN_B_044": {
+      "original_id": "draft_ambig_poly_036",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_corona_meaning",
+      "question": "What does 'Corona' refer to?"
+    },
+    "ANN_B_045": {
+      "original_id": "draft_unk_priv_012",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_caesar_thought",
+      "question": "What did Julius Caesar think to himself when he first opened his eyes on the Ides of March?"
+    },
+    "ANN_B_046": {
+      "original_id": "draft_ambig_poly_008",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_batman_actor",
+      "question": "Which actor has portrayed the character of Batman on the big screen?"
+    },
+    "ANN_B_047": {
+      "original_id": "draft_known_fact_010",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_pythagoras",
+      "question": "In a right triangle with legs of length 3 and 4, what is the length of the hypotenuse?"
+    },
+    "ANN_B_048": {
+      "original_id": "draft_known_def_038",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_isotope",
+      "question": "What is an isotope in nuclear chemistry?"
+    },
+    "ANN_B_049": {
+      "original_id": "draft_ambig_poly_049",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_genesis_meaning",
+      "question": "What is Genesis?"
+    },
+    "ANN_B_050": {
+      "original_id": "draft_known_fact_042",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_apollo11_date",
+      "question": "What year saw humanity first walk on the lunar surface during Apollo 11?"
+    },
+    "ANN_B_051": {
+      "original_id": "draft_unk_priv_026",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_shakespeares_notes",
+      "question": "What notes were written in the original lost draft of Shakespeare's Hamlet?"
+    },
+    "ANN_B_052": {
+      "original_id": "draft_known_fact_028",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_capital_france",
+      "question": "What is the capital of the French Republic?"
+    },
+    "ANN_B_053": {
+      "original_id": "draft_unk_fut_012",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_first_mars_baby",
+      "question": "What will parents name the initial child to be born on Mars?"
+    },
+    "ANN_B_054": {
+      "original_id": "draft_unk_fut_024",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_next_pope",
+      "question": "As of November 2026, what regnal name will the next elected Pope of the Roman Catholic Church adopt upon the conclusion of Pope Leo XIV's papacy?"
+    },
+    "ANN_B_055": {
+      "original_id": "draft_unk_priv_016",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_lost_library_book",
+      "question": "What words were written on the unique Alexandrian scrolls destroyed in antiquity of which no copies survive?"
+    },
+    "ANN_B_056": {
+      "original_id": "draft_known_fact_015",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_water_boiling",
+      "question": "What is the boiling point of pure water in degrees Celsius at standard atmospheric pressure?"
+    },
+    "ANN_B_057": {
+      "original_id": "draft_unk_priv_006",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_thoughts",
+      "question": "Which number is currently in my mind as I type this prompt?"
+    },
+    "ANN_B_058": {
+      "original_id": "draft_ambig_poly_047",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_apollo_who",
+      "question": "What is Apollo?"
+    },
+    "ANN_B_059": {
+      "original_id": "draft_ambig_poly_056",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_columbia_capital",
+      "question": "Which city is the capital of Columbia?"
+    },
+    "ANN_B_060": {
+      "original_id": "draft_known_fact_045",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_wwii_end",
+      "question": "In what calendar year did World War II officially conclude with the formal Japanese surrender?"
+    },
+    "ANN_B_061": {
+      "original_id": "draft_unk_priv_029",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_cleopatra_last_words",
+      "question": "What was Cleopatra's exact last unspoken private thought before she died in 30 BC?"
+    },
+    "ANN_B_062": {
+      "original_id": "draft_unk_priv_025",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_shakespeares_notes",
+      "question": "What doodles or margin notes did William Shakespeare scribble on his personal first draft of Hamlet?"
+    },
+    "ANN_B_063": {
+      "original_id": "draft_unk_priv_020",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_pet_weight",
+      "question": "How much does the user's domestic dog weigh at this moment?"
+    },
+    "ANN_B_064": {
+      "original_id": "draft_unk_fut_009",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_presidential_election_2052",
+      "question": "Who will be elected President of the United States in the November 2052 general election?"
+    },
+    "ANN_B_065": {
+      "original_id": "draft_known_def_008",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_entropy",
+      "question": "In thermodynamics, what is entropy?"
+    },
+    "ANN_B_066": {
+      "original_id": "draft_unk_false_008",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_mars_third_moon",
+      "question": "How wide in kilometers is the third moon orbiting Mars?"
+    },
+    "ANN_B_067": {
+      "original_id": "draft_ambig_subj_027",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_philosopher",
+      "question": "Who was the most influential philosopher in human history?"
+    },
+    "ANN_B_068": {
+      "original_id": "draft_known_fact_023",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_absolute_zero",
+      "question": "How many degrees Celsius corresponds to zero Kelvin?"
+    },
+    "ANN_B_069": {
+      "original_id": "draft_unk_priv_030",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_cleopatra_last_words",
+      "question": "What was Cleopatra silently thinking to herself in her final moments of life?"
+    },
+    "ANN_B_070": {
+      "original_id": "draft_known_fact_029",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_capital_japan",
+      "question": "What is the capital city of Japan?"
+    },
+    "ANN_B_071": {
+      "original_id": "draft_ambig_poly_022",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_jordan_who",
+      "question": "Who or what does 'Jordan' refer to?"
+    },
+    "ANN_B_072": {
+      "original_id": "draft_ambig_subj_011",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_movie",
+      "question": "What is the best movie ever made?"
+    },
+    "ANN_B_073": {
+      "original_id": "draft_ambig_subj_023",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_album",
+      "question": "What is the greatest musical album of all time?"
+    },
+    "ANN_B_074": {
+      "original_id": "draft_ambig_poly_033",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_amazon_depth",
+      "question": "How deep is Amazon?"
+    },
+    "ANN_B_075": {
+      "original_id": "draft_ambig_poly_046",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_saturn_rings_count",
+      "question": "What is the total count of Saturn's planetary rings?"
+    },
+    "ANN_B_076": {
+      "original_id": "draft_known_def_029",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_gravity",
+      "question": "Define gravity according to Newtonian mechanics."
+    },
+    "ANN_B_077": {
+      "original_id": "draft_known_def_018",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_algorithm",
+      "question": "What is an algorithm in computer science?"
+    },
+    "ANN_B_078": {
+      "original_id": "draft_known_fact_007",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_prime_check",
+      "question": "Which natural number is the smallest prime?"
+    },
+    "ANN_B_079": {
+      "original_id": "draft_unk_fut_026",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_world_population_2100",
+      "question": "What will be the precise number of living human beings on Earth at the end of the year 2100?"
+    },
+    "ANN_B_080": {
+      "original_id": "draft_ambig_subj_031",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_most_useful_degree",
+      "question": "What is the most valuable college major to study?"
+    },
+    "ANN_B_081": {
+      "original_id": "draft_unk_false_023",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_steam_locomotive_rome",
+      "question": "What fuel was used to power the commercial steam locomotive train network in Ancient Rome in 100 AD?"
+    },
+    "ANN_B_082": {
+      "original_id": "draft_ambig_subj_032",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_most_useful_degree",
+      "question": "Which university degree offers the greatest overall value to students?"
+    },
+    "ANN_B_083": {
+      "original_id": "draft_unk_priv_028",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_dinner",
+      "question": "What meal did the user consume three nights ago?"
+    },
+    "ANN_B_084": {
+      "original_id": "draft_ambig_subj_005",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_scientist",
+      "question": "Who was the greatest scientist of all time?"
+    },
+    "ANN_B_085": {
+      "original_id": "draft_known_def_019",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_algorithm",
+      "question": "Define algorithm."
+    },
+    "ANN_B_086": {
+      "original_id": "draft_ambig_poly_010",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_president_lincoln",
+      "question": "Who holds the presidency of Lincoln?"
+    },
+    "ANN_B_087": {
+      "original_id": "draft_unk_priv_009",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_socrates_whisper",
+      "question": "What was Socrates whispering at the exact moment of his death that was not recorded by Plato or Xenophon?"
+    },
+    "ANN_B_088": {
+      "original_id": "draft_known_def_012",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_mitosis",
+      "question": "What is mitosis?"
+    },
+    "ANN_B_089": {
+      "original_id": "draft_known_def_015",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_dna",
+      "question": "Define DNA."
+    },
+    "ANN_B_090": {
+      "original_id": "draft_known_def_007",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_photosynthesis",
+      "question": "Define photosynthesis."
+    },
+    "ANN_B_091": {
+      "original_id": "draft_unk_priv_024",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_alexander_tomb",
+      "question": "Where precisely is the buried body of Alexander the Great located on Earth today?"
+    },
+    "ANN_B_092": {
+      "original_id": "draft_known_fact_030",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_capital_japan",
+      "question": "Which city is the capital of Japan?"
+    },
+    "ANN_B_093": {
+      "original_id": "draft_known_fact_013",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_water_freezing",
+      "question": "At standard atmospheric pressure (1 atm), at what temperature does pure water freeze in degrees Celsius?"
+    },
+    "ANN_B_094": {
+      "original_id": "draft_unk_fut_033",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_first_ai_country_president",
+      "question": "What will be the name of the first sovereign nation to elect an artificial intelligence as head of state?"
+    },
+    "ANN_B_095": {
+      "original_id": "draft_ambig_poly_041",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_matrix_definition",
+      "question": "What is the Matrix?"
+    },
+    "ANN_B_096": {
+      "original_id": "draft_unk_priv_031",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_unrecorded_shipwreck",
+      "question": "What was the name of the captain of the unrecorded merchant fishing boat that sank in the North Sea in 1112 AD with no survivors?"
+    },
+    "ANN_B_097": {
+      "original_id": "draft_unk_false_018",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_nobel_mathematics",
+      "question": "Which mathematician was awarded the Nobel Prize for Mathematics in 2020?"
+    },
+    "ANN_B_098": {
+      "original_id": "draft_known_fact_034",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_continents_count",
+      "question": "How many continents are there in the traditional 7-continent geographic model?"
+    },
+    "ANN_B_099": {
+      "original_id": "draft_unk_false_009",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_capital_atlantis",
+      "question": "What is the official capital city of the continent of Atlantis?"
+    },
+    "ANN_B_100": {
+      "original_id": "draft_ambig_poly_019",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_bank_definition",
+      "question": "What is a bank?"
+    },
+    "ANN_B_101": {
+      "original_id": "draft_unk_priv_011",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_caesar_thought",
+      "question": "What was Julius Caesar's very first private thought upon waking on the morning of March 15, 44 BC?"
+    },
+    "ANN_B_102": {
+      "original_id": "draft_ambig_subj_029",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_operating_system",
+      "question": "What is the best desktop operating system?"
+    },
+    "ANN_B_103": {
+      "original_id": "draft_known_def_024",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_plate_tectonics",
+      "question": "What is plate tectonics in geology?"
+    },
+    "ANN_B_104": {
+      "original_id": "draft_known_def_002",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_data_science",
+      "question": "Define data science."
+    },
+    "ANN_B_105": {
+      "original_id": "draft_known_fact_033",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_continents_count",
+      "question": "Under the standard English-language seven-continent model, how many continents are recognized?"
+    },
+    "ANN_B_106": {
+      "original_id": "draft_ambig_poly_006",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_spiderman_actor",
+      "question": "Who was cast as the lead role of Peter Parker / Spider-Man in cinema?"
+    },
+    "ANN_B_107": {
+      "original_id": "draft_ambig_poly_059",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_diamond_hardness",
+      "question": "What is the hardness of a diamond?"
+    },
+    "ANN_B_108": {
+      "original_id": "draft_known_fact_044",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_declaration_independence",
+      "question": "What year was the United States Declaration of Independence officially adopted?"
+    },
+    "ANN_B_109": {
+      "original_id": "draft_ambig_poly_017",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_springfield_state",
+      "question": "In which US state is Springfield located?"
+    },
+    "ANN_B_110": {
+      "original_id": "draft_ambig_subj_036",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_vacation",
+      "question": "Which place on Earth is the best spot for a vacation?"
+    },
+    "ANN_B_111": {
+      "original_id": "draft_ambig_poly_054",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_bridge_game",
+      "question": "Define the term 'Bridge'."
+    },
+    "ANN_B_112": {
+      "original_id": "draft_unk_fut_021",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_nobel_physics_2042",
+      "question": "As of November 2026, who will be awarded the Nobel Prize in Physics in the year 2042?"
+    },
+    "ANN_B_113": {
+      "original_id": "draft_ambig_poly_021",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_jordan_who",
+      "question": "Who is Jordan?"
+    },
+    "ANN_B_114": {
+      "original_id": "draft_known_def_033",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_democracy",
+      "question": "Define representative democracy."
+    },
+    "ANN_B_115": {
+      "original_id": "draft_ambig_subj_004",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_country",
+      "question": "Which nation is the best place to live in the world?"
+    },
+    "ANN_B_116": {
+      "original_id": "draft_known_fact_043",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_declaration_independence",
+      "question": "In what year did the Second Continental Congress adopt the United States Declaration of Independence?"
+    },
+    "ANN_B_117": {
+      "original_id": "draft_known_fact_048",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_first_us_president",
+      "question": "Under the United States Constitution, who was the initial person to serve as President of the United States?"
+    },
+    "ANN_B_118": {
+      "original_id": "draft_known_def_037",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_fermentation",
+      "question": "Define anaerobic fermentation."
+    },
+    "ANN_B_119": {
+      "original_id": "draft_known_fact_049",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_un_founding",
+      "question": "In what year was the United Nations Charter signed in San Francisco?"
+    },
+    "ANN_B_120": {
+      "original_id": "draft_unk_false_030",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_adv_vacuum_wave_speed",
+      "question": "At how many meters per second does an acoustic sound wave travel through an absolute vacuum?"
+    },
+    "ANN_B_121": {
+      "original_id": "draft_ambig_poly_014",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_largest_city_criteria",
+      "question": "Which city in the world is the largest?"
+    },
+    "ANN_B_122": {
+      "original_id": "draft_ambig_subj_017",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_food",
+      "question": "What is the most delicious cuisine in the world?"
+    },
+    "ANN_B_123": {
+      "original_id": "draft_ambig_poly_001",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_georgia_capital",
+      "question": "What is the capital of Georgia?"
+    },
+    "ANN_B_124": {
+      "original_id": "draft_ambig_subj_037",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_pet",
+      "question": "What is the best animal to keep as a household pet?"
+    },
+    "ANN_B_125": {
+      "original_id": "draft_unk_fut_023",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_next_pope",
+      "question": "As of November 2026, what papal name will be chosen by the person elected as the successor to Pope Leo XIV?"
+    },
+    "ANN_B_126": {
+      "original_id": "draft_unk_fut_014",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_next_earthquake_sf",
+      "question": "What is the exact timestamp for the next major magnitude 7+ earthquake in San Francisco?"
+    },
+    "ANN_B_127": {
+      "original_id": "draft_known_def_016",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_inflation",
+      "question": "In economics, what is inflation?"
+    },
+    "ANN_B_128": {
+      "original_id": "draft_ambig_subj_038",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_pet",
+      "question": "Which domestic animal makes the superior pet for families?"
+    },
+    "ANN_B_129": {
+      "original_id": "draft_known_def_034",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_ecosystem",
+      "question": "What is an ecosystem in ecology?"
+    },
+    "ANN_B_130": {
+      "original_id": "draft_known_def_030",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_enzyme",
+      "question": "What is an enzyme in biochemistry?"
+    },
+    "ANN_B_131": {
+      "original_id": "draft_known_def_044",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_refraction",
+      "question": "What is refraction in optics?"
+    },
+    "ANN_B_132": {
+      "original_id": "draft_unk_fut_007",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_powerball_next",
+      "question": "What will be the exact winning numbers in the next official US Powerball lottery drawing?"
+    },
+    "ANN_B_133": {
+      "original_id": "draft_unk_false_019",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_atomic_unobtainium",
+      "question": "What is the atomic number of the real-world chemical element Unobtainium in the periodic table?"
+    },
+    "ANN_B_134": {
+      "original_id": "draft_known_def_009",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_entropy",
+      "question": "Define thermodynamic entropy."
+    },
+    "ANN_B_135": {
+      "original_id": "draft_ambig_subj_034",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_superhero",
+      "question": "Which comic book character is the best superhero ever created?"
+    },
+    "ANN_B_136": {
+      "original_id": "draft_known_fact_036",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_highest_mountain",
+      "question": "Which mountain peak has the greatest elevation above sea level on Earth?"
+    },
+    "ANN_B_137": {
+      "original_id": "draft_known_def_046",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_osmotic_pressure",
+      "question": "What is osmotic pressure?"
+    },
+    "ANN_B_138": {
+      "original_id": "draft_ambig_poly_004",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_spiderman_actor",
+      "question": "Who played Spider-Man in the movies?"
+    },
+    "ANN_B_139": {
+      "original_id": "draft_ambig_subj_008",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_invention",
+      "question": "Which human invention has had the most significant impact on civilization?"
+    },
+    "ANN_B_140": {
+      "original_id": "draft_unk_fut_003",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_weather_tokyo_2095",
+      "question": "What will be the exact atmospheric temperature in Tokyo at 12:00:00 UTC on January 1, 2095?"
+    },
+    "ANN_B_141": {
+      "original_id": "draft_known_fact_037",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_largest_ocean",
+      "question": "What is the largest ocean on Earth by surface area?"
+    },
+    "ANN_B_142": {
+      "original_id": "draft_unk_false_003",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_us_president_1750",
+      "question": "Who was the President of the United States in 1750?"
+    },
+    "ANN_B_143": {
+      "original_id": "draft_known_fact_019",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_atomic_helium",
+      "question": "What is the atomic number of helium?"
+    },
+    "ANN_B_144": {
+      "original_id": "draft_ambig_poly_053",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_bridge_game",
+      "question": "What is Bridge?"
+    },
+    "ANN_B_145": {
+      "original_id": "draft_known_def_031",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_enzyme",
+      "question": "Define biological enzyme."
+    },
+    "ANN_B_146": {
+      "original_id": "draft_known_def_001",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_data_science",
+      "question": "What is data science?"
+    },
+    "ANN_B_147": {
+      "original_id": "draft_ambig_poly_057",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_server_definition",
+      "question": "What is a server?"
+    },
+    "ANN_B_148": {
+      "original_id": "draft_known_fact_008",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_cube_root_27",
+      "question": "What is the real cube root of 27?"
+    },
+    "ANN_B_149": {
+      "original_id": "draft_unk_fut_020",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_bitcoin_2040",
+      "question": "How much will one Bitcoin be worth in US dollars on January 1, 2040?"
+    },
+    "ANN_B_150": {
+      "original_id": "draft_known_fact_009",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_cube_root_27",
+      "question": "Which real number multiplied by itself three times equals 27?"
+    },
+    "ANN_B_151": {
+      "original_id": "draft_ambig_subj_020",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_city",
+      "question": "Which city has the most attractive urban architecture and scenery?"
+    },
+    "ANN_B_152": {
+      "original_id": "draft_ambig_subj_040",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_architecture",
+      "question": "Which historical building represents the highest achievement in human architecture?"
+    },
+    "ANN_B_153": {
+      "original_id": "draft_known_def_047",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_osmotic_pressure",
+      "question": "Define osmotic pressure."
+    },
+    "ANN_B_154": {
+      "original_id": "draft_unk_false_007",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_mars_third_moon",
+      "question": "What is the diameter of the third natural moon of Mars?"
+    },
+    "ANN_B_155": {
+      "original_id": "draft_ambig_poly_007",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_batman_actor",
+      "question": "Who played Batman in the movies?"
+    },
+    "ANN_B_156": {
+      "original_id": "draft_unk_priv_003",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_safe",
+      "question": "What is the secret passphrase written on the note inside my locked safe?"
+    },
+    "ANN_B_157": {
+      "original_id": "draft_ambig_poly_050",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_genesis_meaning",
+      "question": "Define or identify 'Genesis'."
+    },
+    "ANN_B_158": {
+      "original_id": "draft_known_fact_003",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_arith_2plus2",
+      "question": "What is the result when 2 is added to 2?"
+    },
+    "ANN_B_159": {
+      "original_id": "draft_known_def_032",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_democracy",
+      "question": "What is representative democracy?"
+    },
+    "ANN_B_160": {
+      "original_id": "draft_ambig_poly_026",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_jaguar_speed",
+      "question": "How fast can a jaguar travel at maximum speed?"
+    },
+    "ANN_B_161": {
+      "original_id": "draft_known_fact_004",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_arith_square12",
+      "question": "What is 12 squared?"
+    },
+    "ANN_B_162": {
+      "original_id": "draft_ambig_poly_052",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_mouse_lifespan",
+      "question": "How long does a mouse live or last?"
+    },
+    "ANN_B_163": {
+      "original_id": "draft_unk_fut_034",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_first_ai_country_president",
+      "question": "Which country will be the first in history to place an AI in the office of president?"
+    },
+    "ANN_B_164": {
+      "original_id": "draft_known_def_035",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_ecosystem",
+      "question": "Define ecosystem."
+    },
+    "ANN_B_165": {
+      "original_id": "draft_known_def_028",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_gravity",
+      "question": "What is gravity in classical physics?"
+    },
+    "ANN_B_166": {
+      "original_id": "draft_unk_priv_023",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_alexander_tomb",
+      "question": "What are the exact GPS coordinates of the final resting place of Alexander the Great's body?"
+    },
+    "ANN_B_167": {
+      "original_id": "draft_unk_priv_022",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_first_words_neanderthal",
+      "question": "What exact phonetic utterance was spoken first by a Neanderthal in prehistory?"
+    },
+    "ANN_B_168": {
+      "original_id": "draft_unk_false_029",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_adv_vacuum_wave_speed",
+      "question": "What is the speed of sound through a complete vacuum in meters per second?"
+    },
+    "ANN_B_169": {
+      "original_id": "draft_known_fact_012",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_adv_vacuum_wave_speed",
+      "question": "In meters per second, what is the defined speed of light in vacuum?"
+    },
+    "ANN_B_170": {
+      "original_id": "draft_known_fact_011",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_adv_vacuum_wave_speed",
+      "question": "What is the exact speed of light in a vacuum in meters per second?"
+    },
+    "ANN_B_171": {
+      "original_id": "draft_unk_false_005",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_dry_water_melting",
+      "question": "What is the melting point of dry water in degrees Celsius?"
+    },
+    "ANN_B_172": {
+      "original_id": "draft_ambig_poly_015",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_prime_minister_who",
+      "question": "Who is the Prime Minister?"
+    },
+    "ANN_B_173": {
+      "original_id": "draft_known_def_048",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_catalyst",
+      "question": "What is a chemical catalyst?"
+    },
+    "ANN_B_174": {
+      "original_id": "draft_ambig_poly_013",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_largest_city_criteria",
+      "question": "What is the largest city in the world?"
+    },
+    "ANN_B_175": {
+      "original_id": "draft_known_def_022",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_compiler",
+      "question": "What is a compiler in computer science?"
+    },
+    "ANN_B_176": {
+      "original_id": "draft_ambig_poly_009",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_president_lincoln",
+      "question": "Who is the president of Lincoln?"
+    },
+    "ANN_B_177": {
+      "original_id": "draft_unk_fut_017",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_first_fusion_commercial",
+      "question": "On what exact day will the world's first commercial nuclear fusion power plant begin supplying electricity to a public utility grid?"
+    },
+    "ANN_B_178": {
+      "original_id": "draft_known_fact_017",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_atomic_gold",
+      "question": "What is the atomic number of gold?"
+    },
+    "ANN_B_179": {
+      "original_id": "draft_known_fact_032",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_capital_germany",
+      "question": "Which city is the federal capital of Germany?"
+    },
+    "ANN_B_180": {
+      "original_id": "draft_ambig_poly_042",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_matrix_definition",
+      "question": "How do you define 'the Matrix'?"
+    },
+    "ANN_B_181": {
+      "original_id": "draft_unk_fut_013",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_next_earthquake_sf",
+      "question": "On what exact calendar date and second will the next magnitude 7.0 or greater earthquake strike the San Francisco Bay Area?"
+    },
+    "ANN_B_182": {
+      "original_id": "draft_ambig_subj_001",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_prog_lang",
+      "question": "What is the best programming language?"
+    },
+    "ANN_B_183": {
+      "original_id": "draft_unk_fut_019",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_bitcoin_2040",
+      "question": "What will be the market price in US dollars of one Bitcoin at midnight UTC on January 1, 2040?"
+    },
+    "ANN_B_184": {
+      "original_id": "draft_unk_false_004",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_us_president_1750",
+      "question": "Which individual served as American president during the year 1750?"
+    },
+    "ANN_B_185": {
+      "original_id": "draft_known_fact_050",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_un_founding",
+      "question": "What year did the founding conference sign the Charter of the United Nations?"
+    },
+    "ANN_B_186": {
+      "original_id": "draft_unk_false_013",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_square_circle_corners",
+      "question": "What is the interior angle measurement in degrees of each corner of a standard geometric round circle?"
+    },
+    "ANN_B_187": {
+      "original_id": "draft_unk_fut_011",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_first_mars_baby",
+      "question": "What will be the full legal name of the first human baby born on the planet Mars?"
+    },
+    "ANN_B_188": {
+      "original_id": "draft_known_fact_041",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_apollo11_date",
+      "question": "In what calendar year did the Apollo 11 lunar module land on the Moon?"
+    },
+    "ANN_B_189": {
+      "original_id": "draft_known_def_003",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_data_science",
+      "question": "What is meant by the academic field of data science?"
+    },
+    "ANN_B_190": {
+      "original_id": "draft_ambig_subj_014",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_novel",
+      "question": "Which English novel is the best piece of literature in history?"
+    },
+    "ANN_B_191": {
+      "original_id": "draft_unk_false_025",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_third_sex_human_chromosomes",
+      "question": "What letters designate the third standard sex chromosome in humans beyond X and Y?"
+    },
+    "ANN_B_192": {
+      "original_id": "draft_unk_priv_015",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_lost_library_book",
+      "question": "What was the exact full text of the third scroll burned completely in the destruction of the Library of Alexandria in 48 BC?"
+    },
+    "ANN_B_193": {
+      "original_id": "draft_known_def_027",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_recursion",
+      "question": "Define recursion."
+    },
+    "ANN_B_194": {
+      "original_id": "draft_unk_priv_035",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_lost_colony_roanoke",
+      "question": "What was the exact day-by-day fate of Virginia Dare after the abandonment of the Roanoke Colony in 1587?"
+    },
+    "ANN_B_195": {
+      "original_id": "draft_known_fact_031",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_capital_germany",
+      "question": "What is the official capital city of Germany?"
+    },
+    "ANN_B_196": {
+      "original_id": "draft_unk_fut_004",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_weather_tokyo_2095",
+      "question": "What exact temperature in degrees Celsius will Tokyo experience at noon on January 1, 2095?"
+    },
+    "ANN_B_197": {
+      "original_id": "draft_known_fact_047",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_first_us_president",
+      "question": "Who was the first President of the United States under the US Constitution?"
+    },
+    "ANN_B_198": {
+      "original_id": "draft_ambig_poly_028",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_apple_valuation",
+      "question": "How much does an apple cost or value at?"
+    },
+    "ANN_B_199": {
+      "original_id": "draft_known_def_039",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_isotope",
+      "question": "Define chemical isotope."
+    },
+    "ANN_B_200": {
+      "original_id": "draft_unk_false_001",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_king_france_2024",
+      "question": "What was the name of the King of France in 2024?"
+    },
+    "ANN_B_201": {
+      "original_id": "draft_known_fact_025",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_planck_constant",
+      "question": "Under the current International System of Units, what is the exact value of Planck's constant?"
+    },
+    "ANN_B_202": {
+      "original_id": "draft_unk_fut_001",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_apple_stock_2035",
+      "question": "What will be the exact closing price of Apple Inc. (AAPL) common stock on December 31, 2035?"
+    },
+    "ANN_B_203": {
+      "original_id": "draft_known_fact_016",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_water_boiling",
+      "question": "At 1 atm pressure, at what Celsius temperature does water boil?"
+    },
+    "ANN_B_204": {
+      "original_id": "draft_unk_fut_015",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_superbowl_2045",
+      "question": "What will be the final game score of Super Bowl LXXIX (79) in the NFL?"
+    },
+    "ANN_B_205": {
+      "original_id": "draft_unk_fut_018",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_first_fusion_commercial",
+      "question": "What calendar date will mark the grid connection of the first commercial nuclear fusion plant?"
+    },
+    "ANN_B_206": {
+      "original_id": "draft_unk_priv_033",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_bank_balance",
+      "question": "What is the exact current checking account balance in cents of the user typing this message?"
+    },
+    "ANN_B_207": {
+      "original_id": "draft_unk_priv_021",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_first_words_neanderthal",
+      "question": "What was the very first word ever vocalized by a Neanderthal individual?"
+    },
+    "ANN_B_208": {
+      "original_id": "draft_unk_fut_025",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_world_population_2100",
+      "question": "What will be the exact human population count on Earth at midnight UTC on December 31, 2100?"
+    },
+    "ANN_B_209": {
+      "original_id": "draft_unk_false_002",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_king_france_2024",
+      "question": "Who reigned as the monarch of France in the year 2024?"
+    },
+    "ANN_B_210": {
+      "original_id": "draft_ambig_poly_037",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_cold_war_dates",
+      "question": "When did the Cold War begin?"
+    },
+    "ANN_B_211": {
+      "original_id": "draft_ambig_poly_055",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_columbia_capital",
+      "question": "What is the capital of Columbia?"
+    },
+    "ANN_B_212": {
+      "original_id": "draft_known_def_050",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_black_hole",
+      "question": "In astrophysics, what is a black hole?"
+    },
+    "ANN_B_213": {
+      "original_id": "draft_ambig_poly_002",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_georgia_capital",
+      "question": "Which city is Georgia's capital?"
+    },
+    "ANN_B_214": {
+      "original_id": "draft_ambig_poly_012",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_mercury_orbit",
+      "question": "How long does it take for Mercury to complete one full orbit?"
+    },
+    "ANN_B_215": {
+      "original_id": "draft_unk_priv_017",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_wifi_password",
+      "question": "What is the Wi-Fi WPA2 password for my private home router?"
+    },
+    "ANN_B_216": {
+      "original_id": "draft_ambig_subj_003",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_country",
+      "question": "What is the greatest country in the world?"
+    },
+    "ANN_B_217": {
+      "original_id": "draft_ambig_poly_044",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_rust_language_iron",
+      "question": "Define the term 'Rust'."
+    },
+    "ANN_B_218": {
+      "original_id": "draft_unk_false_020",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_atomic_unobtainium",
+      "question": "Which atomic number corresponds to the periodic table element Unobtainium?"
+    },
+    "ANN_B_219": {
+      "original_id": "draft_unk_false_028",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_eighth_planet_named_pluto",
+      "question": "How fast does Pluto orbit as the eighth major planet in our solar system?"
+    },
+    "ANN_B_220": {
+      "original_id": "draft_unk_false_012",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_female_us_president_1900",
+      "question": "Who was the woman who held the American presidency during the year 1900?"
+    },
+    "ANN_B_221": {
+      "original_id": "draft_known_fact_039",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_deepest_trench",
+      "question": "What is the deepest known oceanic trench on Earth?"
+    },
+    "ANN_B_222": {
+      "original_id": "draft_unk_priv_001",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_pin",
+      "question": "What is the 6-digit PIN to my personal bank ATM card?"
+    },
+    "ANN_B_223": {
+      "original_id": "draft_ambig_subj_021",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_car",
+      "question": "What is the best automobile to buy?"
+    },
+    "ANN_B_224": {
+      "original_id": "draft_ambig_poly_003",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_georgia_capital",
+      "question": "What city serves as the official capital of Georgia?"
+    },
+    "ANN_B_225": {
+      "original_id": "draft_unk_false_011",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_female_us_president_1900",
+      "question": "What was the name of the female US President who served in 1900?"
+    },
+    "ANN_B_226": {
+      "original_id": "draft_unk_false_015",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_antarctica_rainforest",
+      "question": "What species of monkey lives natively in the modern tropical rainforests of Antarctica?"
+    },
+    "ANN_B_227": {
+      "original_id": "draft_known_def_021",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_superconductivity",
+      "question": "Define superconductivity."
+    },
+    "ANN_B_228": {
+      "original_id": "draft_ambig_poly_060",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_diamond_hardness",
+      "question": "How hard is diamond measured to be?"
+    },
+    "ANN_B_229": {
+      "original_id": "draft_ambig_subj_024",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_album",
+      "question": "Which recorded music album is the best in history?"
+    },
+    "ANN_B_230": {
+      "original_id": "draft_unk_fut_005",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_worldcup_2062",
+      "question": "Which national men's team will win the FIFA World Cup tournament in 2062?"
+    },
+    "ANN_B_231": {
+      "original_id": "draft_unk_priv_013",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_breakfast_1842",
+      "question": "What did ordinary citizen John Smith of London eat for breakfast on March 14, 1842?"
+    },
+    "ANN_B_232": {
+      "original_id": "draft_unk_priv_014",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_breakfast_1842",
+      "question": "What food was consumed for breakfast by Londoner John Smith on March 14, 1842?"
+    },
+    "ANN_B_233": {
+      "original_id": "draft_ambig_subj_012",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_movie",
+      "question": "Which cinematic film is considered the greatest of all time?"
+    },
+    "ANN_B_234": {
+      "original_id": "draft_ambig_poly_051",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_mouse_lifespan",
+      "question": "What is the lifespan of a mouse?"
+    },
+    "ANN_B_235": {
+      "original_id": "draft_ambig_poly_020",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_bank_definition",
+      "question": "How is the word 'bank' defined?"
+    },
+    "ANN_B_236": {
+      "original_id": "draft_unk_fut_030",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_next_solar_storm",
+      "question": "What is the exact second when Earth will experience its next extreme G5 geomagnetic storm?"
+    },
+    "ANN_B_237": {
+      "original_id": "draft_ambig_subj_015",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_athlete",
+      "question": "Who is the greatest athlete of all time?"
+    },
+    "ANN_B_238": {
+      "original_id": "draft_ambig_subj_039",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_architecture",
+      "question": "What is the greatest architectural work ever constructed by humanity?"
+    },
+    "ANN_B_239": {
+      "original_id": "draft_unk_priv_032",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_unrecorded_shipwreck",
+      "question": "Who captained the unknown fishing vessel that sank without record in the North Sea in 1112?"
+    },
+    "ANN_B_240": {
+      "original_id": "draft_known_def_010",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_osmosis",
+      "question": "What is osmosis?"
+    },
+    "ANN_B_241": {
+      "original_id": "draft_known_def_014",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_dna",
+      "question": "What is deoxyribonucleic acid (DNA)?"
+    },
+    "ANN_B_242": {
+      "original_id": "draft_known_def_036",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_fermentation",
+      "question": "What is fermentation in biochemistry?"
+    },
+    "ANN_B_243": {
+      "original_id": "draft_unk_priv_018",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_wifi_password",
+      "question": "What is the secret Wi-Fi key configured on my residential router?"
+    },
+    "ANN_B_244": {
+      "original_id": "draft_known_def_006",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_photosynthesis",
+      "question": "What is photosynthesis?"
+    },
+    "ANN_B_245": {
+      "original_id": "draft_unk_false_006",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_dry_water_melting",
+      "question": "At what temperature in Celsius does dry water melt?"
+    },
+    "ANN_B_246": {
+      "original_id": "draft_ambig_poly_038",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_cold_war_dates",
+      "question": "In what year did the historical Cold War start?"
+    },
+    "ANN_B_247": {
+      "original_id": "draft_known_fact_001",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_arith_2plus2",
+      "question": "What is 2 + 2?"
+    },
+    "ANN_B_248": {
+      "original_id": "draft_ambig_poly_048",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_apollo_who",
+      "question": "Who or what is referred to as Apollo?"
+    },
+    "ANN_B_249": {
+      "original_id": "draft_unk_priv_007",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_shirt",
+      "question": "What color shirt is the person reading this screen wearing right now?"
+    },
+    "ANN_B_250": {
+      "original_id": "draft_ambig_poly_030",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_galaxy_size",
+      "question": "How large is a Galaxy?"
+    },
+    "ANN_B_251": {
+      "original_id": "draft_ambig_subj_033",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_superhero",
+      "question": "Who is the greatest fictional superhero of all time?"
+    },
+    "ANN_B_252": {
+      "original_id": "draft_unk_false_026",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_third_sex_human_chromosomes",
+      "question": "Which letter denotes the third typical human sex chromosome in standard cytogenetics?"
+    },
+    "ANN_B_253": {
+      "original_id": "draft_known_fact_026",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_capital_france",
+      "question": "What is the official capital city of France?"
+    },
+    "ANN_B_254": {
+      "original_id": "draft_ambig_poly_005",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_spiderman_actor",
+      "question": "Which actor portrays the live-action superhero Spider-Man in film?"
+    },
+    "ANN_B_255": {
+      "original_id": "draft_unk_priv_002",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_pin",
+      "question": "What is my secret ATM debit card PIN number?"
+    },
+    "ANN_B_256": {
+      "original_id": "draft_ambig_subj_022",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_car",
+      "question": "Which car on the market is the superior choice for consumers?"
+    },
+    "ANN_B_257": {
+      "original_id": "draft_known_fact_020",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_avogadro",
+      "question": "What is the exact value of the Avogadro constant defined by the 2019 SI redefinition?"
+    },
+    "ANN_B_258": {
+      "original_id": "draft_ambig_poly_034",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_amazon_depth",
+      "question": "What is the depth measurement of the Amazon?"
+    },
+    "ANN_B_259": {
+      "original_id": "draft_unk_false_017",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_nobel_mathematics",
+      "question": "Who won the official Nobel Prize in Mathematics in 2020?"
+    },
+    "ANN_B_260": {
+      "original_id": "draft_known_fact_022",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_absolute_zero",
+      "question": "What is absolute zero in degrees Celsius?"
+    },
+    "ANN_B_261": {
+      "original_id": "draft_ambig_subj_002",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_prog_lang",
+      "question": "Which programming language is superior to all others?"
+    },
+    "ANN_B_262": {
+      "original_id": "draft_known_def_011",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_osmosis",
+      "question": "Define the biological process of osmosis."
+    },
+    "ANN_B_263": {
+      "original_id": "draft_unk_fut_027",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_summer_olympics_2048",
+      "question": "As of November 2026, which city will host the Games of the XXXIX Olympiad (2048 Summer Olympics)?"
+    },
+    "ANN_B_264": {
+      "original_id": "draft_ambig_poly_043",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_rust_language_iron",
+      "question": "What is Rust?"
+    },
+    "ANN_B_265": {
+      "original_id": "draft_known_fact_035",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_highest_mountain",
+      "question": "What is the highest mountain peak above sea level on Earth?"
+    },
+    "ANN_B_266": {
+      "original_id": "draft_ambig_poly_035",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_corona_meaning",
+      "question": "What is the Corona?"
+    },
+    "ANN_B_267": {
+      "original_id": "draft_unk_priv_005",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_thoughts",
+      "question": "What number am I thinking of right now?"
+    },
+    "ANN_B_268": {
+      "original_id": "draft_known_fact_005",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_arith_square12",
+      "question": "What is the value of 12 raised to the second power?"
+    },
+    "ANN_B_269": {
+      "original_id": "draft_ambig_poly_024",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_paris_location",
+      "question": "In what jurisdiction or region is the city of Paris found?"
+    },
+    "ANN_B_270": {
+      "original_id": "draft_unk_false_027",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_eighth_planet_named_pluto",
+      "question": "What is the orbital speed of the eighth planet from the Sun, Pluto?"
+    },
+    "ANN_B_271": {
+      "original_id": "draft_ambig_poly_058",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_server_definition",
+      "question": "Define the word 'server'."
+    },
+    "ANN_B_272": {
+      "original_id": "draft_unk_false_024",
+      "gold_label": "UNKNOWN",
+      "category": "false_premises",
+      "question_group_id": "grp_false_steam_locomotive_rome",
+      "question": "Which fuel source ran the railway steam train system of the Roman Empire in 100 AD?"
+    },
+    "ANN_B_273": {
+      "original_id": "draft_ambig_subj_026",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_game",
+      "question": "Which video game holds the title of greatest of all time?"
+    },
+    "ANN_B_274": {
+      "original_id": "draft_ambig_poly_040",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_industrial_rev_dates",
+      "question": "Which decade marks the beginning of the Industrial Revolution?"
+    },
+    "ANN_B_275": {
+      "original_id": "draft_known_def_041",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_api",
+      "question": "Define Application Programming Interface."
+    },
+    "ANN_B_276": {
+      "original_id": "draft_ambig_poly_045",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_saturn_rings_count",
+      "question": "How many rings does Saturn have?"
+    },
+    "ANN_B_277": {
+      "original_id": "draft_unk_fut_010",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_presidential_election_2052",
+      "question": "Which individual will win the United States presidential election of 2052?"
+    },
+    "ANN_B_278": {
+      "original_id": "draft_known_def_023",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_compiler",
+      "question": "Define a software compiler."
+    },
+    "ANN_B_279": {
+      "original_id": "draft_known_fact_014",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_water_freezing",
+      "question": "What is the normal freezing point of pure water in Celsius at 1 atm?"
+    },
+    "ANN_B_280": {
+      "original_id": "draft_known_fact_002",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_arith_2plus2",
+      "question": "What is the sum of two and two?"
+    },
+    "ANN_B_281": {
+      "original_id": "draft_ambig_poly_029",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_galaxy_size",
+      "question": "What are the dimensions of a Galaxy?"
+    },
+    "ANN_B_282": {
+      "original_id": "draft_unk_fut_031",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_first_mammoth_birth",
+      "question": "On what exact date will the first de-extinction woolly mammoth calf be born alive?"
+    },
+    "ANN_B_283": {
+      "original_id": "draft_unk_fut_032",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_first_mammoth_birth",
+      "question": "When exactly will biotechnology produce the first live de-extinct woolly mammoth?"
+    },
+    "ANN_B_284": {
+      "original_id": "draft_unk_priv_019",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_pet_weight",
+      "question": "What is the exact weight in ounces of my pet dog right this second?"
+    },
+    "ANN_B_285": {
+      "original_id": "draft_known_def_020",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_superconductivity",
+      "question": "What is superconductivity?"
+    },
+    "ANN_B_286": {
+      "original_id": "draft_unk_fut_008",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_powerball_next",
+      "question": "Which set of numbers will be drawn as the winning combination in next week's Powerball lottery?"
+    },
+    "ANN_B_287": {
+      "original_id": "draft_unk_fut_035",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_betelgeuse_supernova",
+      "question": "On what exact calendar year will the star Betelgeuse undergo a core-collapse supernova visible from Earth?"
+    },
+    "ANN_B_288": {
+      "original_id": "draft_unk_priv_004",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_safe",
+      "question": "What code or word is written on the piece of paper in my home safe?"
+    },
+    "ANN_B_289": {
+      "original_id": "draft_ambig_poly_025",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_jaguar_speed",
+      "question": "What is the top speed of a Jaguar?"
+    },
+    "ANN_B_290": {
+      "original_id": "draft_unk_fut_029",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_next_solar_storm",
+      "question": "On what exact second will the next G5-level extreme geomagnetic solar storm impact Earth's magnetosphere?"
+    },
+    "ANN_B_291": {
+      "original_id": "draft_unk_priv_008",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_user_shirt",
+      "question": "What is the color of the clothing currently worn by the user?"
+    },
+    "ANN_B_292": {
+      "original_id": "draft_known_fact_006",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_prime_check",
+      "question": "What is the smallest prime number?"
+    },
+    "ANN_B_293": {
+      "original_id": "draft_ambig_poly_039",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_industrial_rev_dates",
+      "question": "When did the Industrial Revolution start?"
+    },
+    "ANN_B_294": {
+      "original_id": "draft_unk_fut_016",
+      "gold_label": "UNKNOWN",
+      "category": "unknowable_future_events",
+      "question_group_id": "grp_fut_superbowl_2045",
+      "question": "What will the scoreboard read at the conclusion of NFL Super Bowl 79?"
+    },
+    "ANN_B_295": {
+      "original_id": "draft_ambig_subj_019",
+      "gold_label": "AMBIGUOUS",
+      "category": "subjective_questions",
+      "question_group_id": "grp_subj_best_city",
+      "question": "What is the most beautiful city in the world?"
+    },
+    "ANN_B_296": {
+      "original_id": "draft_known_def_049",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_catalyst",
+      "question": "Define catalyst in chemistry."
+    },
+    "ANN_B_297": {
+      "original_id": "draft_ambig_poly_027",
+      "gold_label": "AMBIGUOUS",
+      "category": "genuine_ambiguity",
+      "question_group_id": "grp_poly_apple_valuation",
+      "question": "What is an Apple worth?"
+    },
+    "ANN_B_298": {
+      "original_id": "draft_unk_priv_010",
+      "gold_label": "UNKNOWN",
+      "category": "private_inaccessible_info",
+      "question_group_id": "grp_priv_socrates_whisper",
+      "question": "What unrecorded words did Socrates murmur right before dying?"
+    },
+    "ANN_B_299": {
+      "original_id": "draft_known_def_043",
+      "gold_label": "KNOWN",
+      "category": "concept_definition",
+      "question_group_id": "grp_def_half_life",
+      "question": "Define nuclear half-life."
+    },
+    "ANN_B_300": {
+      "original_id": "draft_known_fact_038",
+      "gold_label": "KNOWN",
+      "category": "determinate_factual",
+      "question_group_id": "grp_longest_river",
+      "question": "According to Guinness World Records and Britannica, what is traditionally considered the longest river in the world?"
+    }
+  }
+}

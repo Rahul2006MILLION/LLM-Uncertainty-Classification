@@ -1,73 +1,58 @@
-"""Unit tests for UncertaintyClassifier logic, state reporting, and persistence."""
+"""Unit tests for UncertaintyClassifier, training, serialization, and untrained status."""
 
+import os
 import tempfile
-import unittest
-from pathlib import Path
+import pytest
+import numpy as np
+from src.classification.classifier import UncertaintyClassifier, LABEL_TO_ID, ID_TO_LABEL
+from src.features.feature_extractor import FEATURE_NAMES
 
-from src.classification.dataset import DatasetExample
-from src.classification.classifier import UncertaintyClassifier
 
+class TestUncertaintyClassifier:
+    """Tests model training, serialization, inference, and honest untrained reporting."""
 
-class TestUncertaintyClassifier(unittest.TestCase):
-    def test_untrained_classifier_reports_not_trained(self):
+    def test_untrained_status(self):
+        """Untrained classifier must report 'CLASSIFIER NOT TRAINED' honestly."""
         clf = UncertaintyClassifier()
-        self.assertFalse(clf.is_trained)
+        pred = clf.predict({"semantic_entropy": 0.5})
+        assert pred["status"] == "CLASSIFIER NOT TRAINED"
+        assert pred["predicted_label"] is None
+        assert pred["confidence"] == 0.0
 
-        result = clf.predict({"majority_cluster_agreement": 0.9})
-        self.assertEqual(result["prediction"], "CLASSIFIER NOT TRAINED")
-        self.assertIn("uncalibrated", result["confidence"])
-        self.assertFalse(result["is_trained"])
+    def test_training_and_inference_xgboost(self):
+        """Train classifier with synthetic fixtures for testing infrastructure."""
+        clf = UncertaintyClassifier(model_type="xgboost", random_state=42)
+        n_samples = 30
+        n_feats = len(FEATURE_NAMES)
+        np.random.seed(42)
+        X = np.random.randn(n_samples, n_feats).astype(np.float32)
+        y = np.random.choice([0, 1, 2], size=n_samples)
 
-    def test_train_and_predict_random_forest_baseline(self):
-        clf = UncertaintyClassifier(model_type="random_forest", random_state=42)
+        metadata = clf.train(X, y, feature_names=FEATURE_NAMES)
+        assert clf.is_trained
+        assert metadata["n_samples"] == n_samples
 
-        # Create balanced synthetic examples for training
-        examples = []
-        for i in range(15):
-            examples.append(DatasetExample(
-                question=f"Q_known_{i}",
-                label="KNOWN",
-                features={"majority_cluster_agreement": 1.0, "raw_semantic_entropy": 0.0},
-            ))
-            examples.append(DatasetExample(
-                question=f"Q_amb_{i}",
-                label="AMBIGUOUS",
-                features={"majority_cluster_agreement": 0.5, "raw_semantic_entropy": 0.69},
-            ))
-            examples.append(DatasetExample(
-                question=f"Q_unk_{i}",
-                label="UNKNOWN",
-                features={"majority_cluster_agreement": 0.2, "raw_semantic_entropy": 1.6},
-            ))
+        sample_feat = {fn: float(np.random.rand()) for fn in FEATURE_NAMES}
+        pred = clf.predict(sample_feat)
+        assert pred["status"] == "PREDICTED"
+        assert pred["predicted_label"] in ["KNOWN", "AMBIGUOUS", "UNKNOWN"]
+        assert 0.0 <= pred["confidence"] <= 1.0
 
-        report = clf.fit(train_examples=examples)
-        self.assertTrue(clf.is_trained)
+    def test_save_and_load_roundtrip(self):
+        """Trained classifier can be serialized to disk and reloaded with identical predictions."""
+        clf = UncertaintyClassifier(model_type="hist_gb", random_state=42)
+        X = np.random.randn(20, len(FEATURE_NAMES)).astype(np.float32)
+        y = np.random.choice([0, 1, 2], size=20)
+        clf.train(X, y, feature_names=FEATURE_NAMES)
 
-        # Test predict
-        pred_known = clf.predict({"majority_cluster_agreement": 1.0, "raw_semantic_entropy": 0.0})
-        self.assertTrue(pred_known["is_trained"])
-        self.assertIn(pred_known["prediction"], ["KNOWN", "AMBIGUOUS", "UNKNOWN"])
-        self.assertIn("KNOWN", pred_known["probabilities"])
+        sample_feat = {fn: 0.5 for fn in FEATURE_NAMES}
+        orig_pred = clf.predict(sample_feat)
 
-    def test_save_and_load(self):
-        clf = UncertaintyClassifier(model_type="random_forest", random_state=42)
-        examples = [
-            DatasetExample(question="Q1", label="KNOWN", features={"majority_cluster_agreement": 1.0}),
-            DatasetExample(question="Q2", label="AMBIGUOUS", features={"majority_cluster_agreement": 0.5}),
-            DatasetExample(question="Q3", label="UNKNOWN", features={"majority_cluster_agreement": 0.2}),
-        ]
-        clf.fit(examples)
-
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            save_path = Path(tmp_dir) / "test_model.joblib"
+        with tempfile.TemporaryDirectory() as tmpdir:
+            save_path = os.path.join(tmpdir, "test_clf.joblib")
             clf.save(save_path)
-            self.assertTrue(save_path.exists())
-
             loaded_clf = UncertaintyClassifier.load(save_path)
-            self.assertTrue(loaded_clf.is_trained)
-            res = loaded_clf.predict({"majority_cluster_agreement": 1.0})
-            self.assertTrue(res["is_trained"])
 
-
-if __name__ == "__main__":
-    unittest.main()
+            loaded_pred = loaded_clf.predict(sample_feat)
+            assert loaded_pred["predicted_label"] == orig_pred["predicted_label"]
+            assert loaded_pred["confidence"] == pytest.approx(orig_pred["confidence"], abs=1e-5)

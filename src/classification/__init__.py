@@ -1,35 +1,24 @@
-from .dataset import (
-    VALID_LABELS,
-    LABEL_DEFINITIONS,
-    FEATURE_COLUMNS,
-    DatasetExample,
-    DatasetValidationError,
-    validate_examples,
-    check_split_leakage,
-    compute_class_distribution,
-    split_dataset,
-    load_dataset_from_json,
-    save_dataset_to_json,
-)
-from .classifier import (
-    UncertaintyClassifier,
-    LABEL_TO_INT,
-    INT_TO_LABEL,
-)
+"""Classification package for routing and uncertainty categorization."""
+from src.classification.router import AdaptiveRouter, RoutingDecision
+from src.classification.classifier import UncertaintyClassifier, LABEL_TO_ID, ID_TO_LABEL
+from src.classification.inaccessibility_assessor import InaccessibilityAssessor, InaccessibilityAssessment
+from src.classification.ambiguity_assessor import CriterionAmbiguityAssessor, AmbiguityAssessment
+from src.classification.fast_path_assessor import FastPathAnswerabilityAssessor, FastPathAssessment
+from src.classification.clarity_assessor import QuestionClarityAssessor, ClarityAssessment
 
 __all__ = [
-    "VALID_LABELS",
-    "LABEL_DEFINITIONS",
-    "FEATURE_COLUMNS",
-    "DatasetExample",
-    "DatasetValidationError",
-    "validate_examples",
-    "check_split_leakage",
-    "compute_class_distribution",
-    "split_dataset",
-    "load_dataset_from_json",
-    "save_dataset_to_json",
+    "AdaptiveRouter",
+    "RoutingDecision",
     "UncertaintyClassifier",
-    "LABEL_TO_INT",
-    "INT_TO_LABEL",
+    "LABEL_TO_ID",
+    "ID_TO_LABEL",
+    "InaccessibilityAssessor",
+    "InaccessibilityAssessment",
+    "CriterionAmbiguityAssessor",
+    "AmbiguityAssessment",
+    "FastPathAnswerabilityAssessor",
+    "FastPathAssessment",
+    "QuestionClarityAssessor",
+    "ClarityAssessment",
 ]
+
