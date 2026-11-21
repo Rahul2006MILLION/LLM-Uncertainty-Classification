@@ -51,9 +51,24 @@ class ExperimentRecord(BaseModel):
     elapsed_seconds: float
     classifier_status: str
     predicted_label: Optional[str] = None
-    confidence: Optional[float] = None
+    confidence: Optional[float] = Field(
+        default=None,
+        description="Policy routing or classifier confidence score; represents decision certainty, NOT ground-truth factual verification."
+    )
     features: Dict[str, float] = Field(default_factory=dict)
     responses: List[Dict[str, Any]] = Field(default_factory=list)
     clusters: Dict[str, Any] = Field(default_factory=dict)
     model: str
     embedding_model: str
+    original_question: Optional[str] = None
+    clarified_question: Optional[str] = None
+    is_clarified: bool = False
+    clarification_rounds: int = 0
+    clarification_history: List[Dict[str, Any]] = Field(default_factory=list)
+    clarification_decision: Optional[str] = None
+    interaction_status: Optional[str] = Field(
+        default=None,
+        description="Outcome of HITL clarification interaction (NOT_REQUIRED, PENDING, RESOLVED, USER_DECLINED, MAX_ROUNDS_REACHED)",
+    )
+    ambiguity_type: Optional[str] = None
+    clarification_reason: Optional[str] = None

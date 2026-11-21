@@ -1,0 +1,27 @@
+{
+  "dataset_name": "Uncertainty_Classification_Development_Corpus_1050",
+  "total_samples": 1050,
+  "class_distribution": {
+    "KNOWN": 350,
+    "AMBIGUOUS": 350,
+    "UNKNOWN": 350
+  },
+  "source_distribution": {
+    "AmbigNQ": 550,
+    "SelfAware": 500
+  },
+  "isolation_standard": "all-minilm cosine similarity < 0.75 against 300-question gold benchmark",
+  "rejection_statistics": {
+    "benchmark_exact_match": 0,
+    "benchmark_semantic_similarity_ge_075": 2,
+    "corpus_exact_duplicate": 0,
+    "philosophical_scientific_debate": 18,
+    "trick_counting_zero_none": 7,
+    "empty_or_too_short": 4
+  },
+  "files": {
+    "questions": "data/datasets/development_questions.jsonl",
+    "responses_target": "data/datasets/development_responses.jsonl",
+    "features_target": "data/features/development_features.jsonl"
+  }
+}

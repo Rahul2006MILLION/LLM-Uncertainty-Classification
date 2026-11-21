@@ -25,6 +25,8 @@ from src.classification.classifier import UncertaintyClassifier
 from src.classification.ambiguity_assessor import CriterionAmbiguityAssessor
 from src.classification.inaccessibility_assessor import InaccessibilityAssessor
 from src.classification.fast_path_assessor import FastPathAnswerabilityAssessor
+from src.classification.hitl_engine import HITLEngine, ClarificationDecision, ClarificationState, ConversationState, AmbiguityType
+from src.classification.hitl_prompts import format_clarification_prompt
 from data.schema import ExperimentRecord
 
 logging.basicConfig(level=logging.WARNING, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -58,10 +60,19 @@ def run_pipeline(
     classifier: Optional[Any] = None,
     router: Optional[Any] = None,
     embedder: Optional[Any] = None,
+    interactive_hitl: bool = False,
+    hitl_engine: Optional[Any] = None,
+    conversation_state: Optional[ConversationState] = None,
+    clarification_callback: Optional[Any] = None,
 ) -> ExperimentRecord:
     """Execute the end-to-end adaptive QA pipeline on a given question."""
     start_total_t = time.time()
     cfg = config or load_config()
+
+    if conversation_state is None:
+        conversation_state = ConversationState(original_question=question, current_question=question)
+    if interactive_hitl and hitl_engine is None:
+        hitl_engine = HITLEngine()
 
     ollama_cfg = cfg.get("ollama", {})
     host = ollama_cfg.get("host", "http://localhost:11434")
@@ -125,6 +136,38 @@ def run_pipeline(
     # 3. Step 2: Route question
     decision = router.route(question, initial_text)
 
+    # Gate 1: Early Clarification Gate (Polysemy & Missing Criteria)
+    if interactive_hitl and hitl_engine is not None and conversation_state.can_clarify():
+        early_dec = hitl_engine.evaluate_early(
+            question=question,
+            initial_response=initial_text,
+            router_triggers=decision.triggers,
+            conversation_state=conversation_state,
+        )
+        if early_dec.decision == ClarificationState.CLARIFICATION_REQUIRED:
+            user_input = None
+            if clarification_callback:
+                user_input = clarification_callback(early_dec, conversation_state)
+            if user_input:
+                conversation_state, clarified_q, success = hitl_engine.apply_clarification(
+                    conversation_state, user_input, early_dec
+                )
+                if success:
+                    logger.info("Gate 1 clarification applied: '%s' -> '%s'", question, clarified_q)
+                    return run_pipeline(
+                        question=clarified_q,
+                        config=config,
+                        force_multi_response=force_multi_response,
+                        generator=generator,
+                        classifier=classifier,
+                        router=router,
+                        embedder=embedder,
+                        interactive_hitl=interactive_hitl,
+                        hitl_engine=hitl_engine,
+                        conversation_state=conversation_state,
+                        clarification_callback=clarification_callback,
+                    )
+
     # 4. Path Branching
     if decision.path == "FAST_PATH":
         # Explicit fast-path answerability assessment
@@ -152,6 +195,34 @@ def run_pipeline(
             pred_conf = fast_assessment.confidence
             clf_status = fast_assessment.status
 
+            # Fast path epistemic and interaction outcome determination
+            if conversation_state.round_count >= conversation_state.max_rounds:
+                fast_decision = "UNRESOLVED"
+                fast_interaction = "MAX_ROUNDS_REACHED"
+                fast_ambig = conversation_state.detected_ambiguity_type or "UNDERSPECIFIED_CONTEXT"
+                fast_reason = "Maximum clarification rounds reached without ambiguity resolution."
+            elif conversation_state.user_declined:
+                fast_decision = "UNRESOLVED"
+                fast_interaction = "USER_DECLINED"
+                fast_ambig = conversation_state.detected_ambiguity_type or "UNDERSPECIFIED_CONTEXT"
+                fast_reason = "Clarification declined or skipped by user; ambiguity remains unresolved."
+            elif conversation_state.is_clarified:
+                if pred_label == "UNKNOWN":
+                    fast_decision = "ABSTAIN"
+                    fast_interaction = "RESOLVED"
+                    fast_ambig = conversation_state.detected_ambiguity_type
+                    fast_reason = fast_assessment.reason or "Epistemic refusal or unanswerable query on clarified fast path."
+                else:
+                    fast_decision = "ANSWERABLE"
+                    fast_interaction = "RESOLVED"
+                    fast_ambig = conversation_state.detected_ambiguity_type
+                    fast_reason = "Ambiguity successfully resolved through human clarification."
+            else:
+                fast_decision = "ABSTAIN" if pred_label == "UNKNOWN" else "ANSWERABLE"
+                fast_interaction = "NOT_REQUIRED"
+                fast_ambig = None
+                fast_reason = fast_assessment.reason if pred_label == "UNKNOWN" else None
+
             rec = ExperimentRecord(
                 timestamp=datetime.datetime.now().isoformat(),
                 question=question,
@@ -174,6 +245,15 @@ def run_pipeline(
                 clusters={"labels": [0], "cluster_counts": [1], "dominant_rep_idx": 0, "second_rep_idx": None},
                 model=gen_model,
                 embedding_model=emb_model,
+                original_question=conversation_state.original_question,
+                clarified_question=conversation_state.current_question if conversation_state.is_clarified else None,
+                is_clarified=conversation_state.is_clarified,
+                clarification_rounds=conversation_state.round_count,
+                clarification_history=conversation_state.history,
+                clarification_decision=fast_decision,
+                interaction_status=fast_interaction,
+                ambiguity_type=fast_ambig,
+                clarification_reason=fast_reason,
             )
             return rec
 
@@ -249,6 +329,129 @@ def run_pipeline(
         pred_conf = inacc_check.confidence
         clf_status = f"ASSESSED_INACCESSIBLE_RULE_HEURISTIC ({inacc_check.evidence[0]})"
 
+    # Gate 2: Post-Consistency Clarification Gate (Cluster Polysemy & Unstated Criteria)
+    post_dec = None
+    if interactive_hitl and hitl_engine is not None and conversation_state.can_clarify():
+        post_dec = hitl_engine.evaluate_post_consistency(
+            question=question,
+            responses=response_texts,
+            features=features,
+            cluster_result=cluster_res,
+            classifier_label=pred_label,
+            inaccessibility_assessment=inacc_check,
+            ambiguity_assessment=ambig_check,
+            conversation_state=conversation_state,
+        )
+        if post_dec.decision == ClarificationState.CLARIFICATION_REQUIRED:
+            user_input = None
+            if clarification_callback:
+                user_input = clarification_callback(post_dec, conversation_state)
+            if user_input:
+                conversation_state, clarified_q, success = hitl_engine.apply_clarification(
+                    conversation_state, user_input, post_dec
+                )
+                if success:
+                    logger.info("Gate 2 clarification applied: '%s' -> '%s'", question, clarified_q)
+                    return run_pipeline(
+                        question=clarified_q,
+                        config=config,
+                        force_multi_response=force_multi_response,
+                        generator=generator,
+                        classifier=classifier,
+                        router=router,
+                        embedder=embedder,
+                        interactive_hitl=interactive_hitl,
+                        hitl_engine=hitl_engine,
+                        conversation_state=conversation_state,
+                        clarification_callback=clarification_callback,
+                    )
+
+    # 11. Final Decision & Synthesis Formatting
+    if post_dec and post_dec.decision == ClarificationState.MODEL_DISAGREEMENT:
+        sec_text = response_texts[sec_rep_idx] if (sec_rep_idx is not None and sec_rep_idx < len(response_texts)) else "Alternative claim"
+        final_answer = (
+            f"Conflicting factual claims detected across model generations (model disagreement / unreliability):\n"
+            f"  • Claim 1 ({p1:.0%} consensus): {dom_text}\n"
+            f"  • Claim 2 ({p2:.0%} consensus): {sec_text}"
+        )
+
+    # Determine epistemic decision, interaction status, and ambiguity provenance
+    if conversation_state.round_count >= conversation_state.max_rounds:
+        rec_interaction_status = "MAX_ROUNDS_REACHED"
+        rec_decision = "UNRESOLVED"
+        rec_ambig_type = conversation_state.detected_ambiguity_type or (post_dec.ambiguity_type.value if (post_dec and post_dec.ambiguity_type != AmbiguityType.NONE) else "UNDERSPECIFIED_CONTEXT")
+        rec_reason = "Maximum clarification rounds reached without ambiguity resolution."
+    elif conversation_state.user_declined:
+        rec_interaction_status = "USER_DECLINED"
+        rec_decision = "UNRESOLVED"
+        rec_ambig_type = conversation_state.detected_ambiguity_type or (post_dec.ambiguity_type.value if (post_dec and post_dec.ambiguity_type != AmbiguityType.NONE) else "UNDERSPECIFIED_CONTEXT")
+        rec_reason = "Clarification declined or skipped by user; ambiguity remains unresolved."
+    elif conversation_state.is_clarified:
+        # Clarified query evaluated through post-consistency analysis
+        if post_dec and post_dec.decision == ClarificationState.ANSWERABLE:
+            rec_decision = "ANSWERABLE"
+            rec_interaction_status = "RESOLVED"
+            rec_ambig_type = conversation_state.detected_ambiguity_type
+            rec_reason = "Ambiguity successfully resolved through human clarification."
+        elif post_dec and post_dec.decision == ClarificationState.MODEL_DISAGREEMENT:
+            rec_decision = "MODEL_DISAGREEMENT"
+            rec_interaction_status = "RESOLVED"
+            rec_ambig_type = conversation_state.detected_ambiguity_type or post_dec.ambiguity_type.value
+            rec_reason = post_dec.reason or "Response divergence reflects factual inconsistency on clarified query."
+        elif post_dec and post_dec.decision == ClarificationState.ABSTAIN:
+            rec_decision = "ABSTAIN"
+            rec_interaction_status = "RESOLVED"
+            rec_ambig_type = conversation_state.detected_ambiguity_type or post_dec.ambiguity_type.value
+            rec_reason = post_dec.reason or "Clarified query identified as epistemically unanswerable or inaccessible."
+        elif post_dec and post_dec.decision == ClarificationState.CLARIFICATION_REQUIRED:
+            if conversation_state.can_clarify():
+                rec_decision = "CLARIFICATION_REQUIRED"
+                rec_interaction_status = "PENDING"
+            else:
+                rec_decision = "UNRESOLVED"
+                rec_interaction_status = "MAX_ROUNDS_REACHED"
+            rec_ambig_type = conversation_state.detected_ambiguity_type or post_dec.ambiguity_type.value
+            rec_reason = post_dec.reason or "Ambiguity persists following clarification attempt."
+        elif post_dec and post_dec.decision == ClarificationState.UNRESOLVED:
+            rec_decision = "UNRESOLVED"
+            rec_interaction_status = "MAX_ROUNDS_REACHED" if conversation_state.round_count >= conversation_state.max_rounds else "USER_DECLINED"
+            rec_ambig_type = conversation_state.detected_ambiguity_type or post_dec.ambiguity_type.value
+            rec_reason = post_dec.reason or "Clarification ended without ambiguity resolution."
+        else:
+            rec_decision = "ANSWERABLE"
+            rec_interaction_status = "RESOLVED"
+            rec_ambig_type = conversation_state.detected_ambiguity_type
+            rec_reason = "Ambiguity successfully resolved through human clarification."
+    elif post_dec and post_dec.decision == ClarificationState.MODEL_DISAGREEMENT:
+        rec_interaction_status = "NOT_REQUIRED"
+        rec_decision = "MODEL_DISAGREEMENT"
+        rec_ambig_type = post_dec.ambiguity_type.value if post_dec.ambiguity_type != AmbiguityType.NONE else "MODEL_DISAGREEMENT"
+        rec_reason = post_dec.reason
+    elif post_dec and post_dec.decision == ClarificationState.ABSTAIN:
+        rec_interaction_status = "NOT_REQUIRED"
+        rec_decision = "ABSTAIN"
+        rec_ambig_type = post_dec.ambiguity_type.value if post_dec.ambiguity_type != AmbiguityType.NONE else None
+        rec_reason = post_dec.reason
+    elif post_dec and post_dec.decision == ClarificationState.CLARIFICATION_REQUIRED:
+        if conversation_state.can_clarify():
+            rec_decision = "CLARIFICATION_REQUIRED"
+            rec_interaction_status = "PENDING"
+        else:
+            rec_decision = "UNRESOLVED"
+            rec_interaction_status = "MAX_ROUNDS_REACHED"
+        rec_ambig_type = post_dec.ambiguity_type.value if post_dec.ambiguity_type != AmbiguityType.NONE else None
+        rec_reason = post_dec.reason
+    elif post_dec and post_dec.decision == ClarificationState.UNRESOLVED:
+        rec_interaction_status = "NOT_REQUIRED"
+        rec_decision = "UNRESOLVED"
+        rec_ambig_type = post_dec.ambiguity_type.value if post_dec.ambiguity_type != AmbiguityType.NONE else None
+        rec_reason = post_dec.reason
+    else:
+        rec_interaction_status = "NOT_REQUIRED"
+        rec_decision = "ANSWERABLE"
+        rec_ambig_type = post_dec.ambiguity_type.value if (post_dec and post_dec.ambiguity_type != AmbiguityType.NONE) else None
+        rec_reason = post_dec.reason if post_dec else None
+
     elapsed_total = time.time() - start_total_t
 
     # Serialize experiment record
@@ -279,6 +482,15 @@ def run_pipeline(
         },
         model=gen_model,
         embedding_model=emb_model,
+        original_question=conversation_state.original_question,
+        clarified_question=conversation_state.current_question if conversation_state.is_clarified else None,
+        is_clarified=conversation_state.is_clarified,
+        clarification_rounds=conversation_state.round_count,
+        clarification_history=conversation_state.history,
+        clarification_decision=rec_decision,
+        interaction_status=rec_interaction_status,
+        ambiguity_type=rec_ambig_type,
+        clarification_reason=rec_reason,
     )
     return rec
 
@@ -289,6 +501,9 @@ def main():
     parser.add_argument("-q", "--query", type=str, default=None, help="Question text")
     parser.add_argument("--config", type=str, default="configs/default.yaml", help="Path to config file")
     parser.add_argument("--force-multi", action="store_true", help="Force multi-response analysis (bypass fast path)")
+    parser.add_argument("--interactive-hitl", dest="interactive_hitl", action="store_true", help="Enable Human-in-the-Loop clarification for ambiguous queries")
+    parser.add_argument("--no-hitl", dest="interactive_hitl", action="store_false", help="Disable Human-in-the-Loop clarification")
+    parser.set_defaults(interactive_hitl=True)
     parser.add_argument("--json", action="store_true", help="Output raw JSON record to stdout")
     args = parser.parse_args()
 
@@ -310,8 +525,30 @@ def main():
 
     config = load_config(args.config)
 
+    def terminal_clarification_callback(decision: ClarificationDecision, state: ConversationState) -> Optional[str]:
+        prompt_text = format_clarification_prompt(
+            question=decision.clarification_prompt or "Please provide additional context for this question:",
+            why_it_matters=decision.why_it_matters,
+            options=decision.options,
+            round_num=state.round_count + 1,
+            max_rounds=state.max_rounds,
+        )
+        print(prompt_text)
+        try:
+            val = input("> ").strip()
+            return val if val else "skip"
+        except (KeyboardInterrupt, EOFError):
+            print("\nClarification skipped by user.")
+            return "skip"
+
     try:
-        record = run_pipeline(question=question, config=config, force_multi_response=args.force_multi)
+        record = run_pipeline(
+            question=question,
+            config=config,
+            force_multi_response=args.force_multi,
+            interactive_hitl=args.interactive_hitl,
+            clarification_callback=terminal_clarification_callback if args.interactive_hitl else None,
+        )
     except Exception as e:
         print(f"\n[PIPELINE ERROR]: {e}")
         sys.exit(1)
@@ -344,6 +581,14 @@ def main():
     ]
     if record.predicted_label:
         lines.append(f"PREDICTED CLASS:   {record.predicted_label} (conf: {record.confidence:.2f})")
+    if record.is_clarified:
+        lines.append(f"ORIGINAL QUERY:    {record.original_question}")
+        lines.append(f"CLARIFIED QUERY:   {record.clarified_question}")
+        lines.append(f"CLARIFICATION RDS: {record.clarification_rounds}")
+    elif record.clarification_decision:
+        lines.append(f"HITL DECISION:     {record.clarification_decision}")
+    if record.ambiguity_type:
+        lines.append(f"AMBIGUITY TYPE:    {record.ambiguity_type}")
     lines.append(f"SAVED RECORD:      {out_filename}")
     lines.append("")
     lines.append("FINAL ANSWER:")

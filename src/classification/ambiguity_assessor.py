@@ -63,6 +63,11 @@ class CriterionAmbiguityAssessor:
         has_objective_constraint = any(
             re.search(pat, q_clean) for pat in cls.OBJECTIVE_CRITERIA_CONSTRAINTS
         )
+        # Explicit user-provided context block or defined use-case/budget constraint satisfies criteria
+        if re.search(r"\[context:\s*[^\]]+\]", question, flags=re.IGNORECASE):
+            has_objective_constraint = True
+        elif re.search(r"\b(for\s+(programming|gaming|data science|machine learning|college|work|business|general use|office|editing|travel)|budget|under\s+\d+|inr|\$|usd|eur)\b", q_clean):
+            has_objective_constraint = True
 
         # Signal 1: Question asks for subjective superlative without objective constraint
         has_superlative = any(re.search(pat, q_clean) for pat in cls.CRITERION_SUPERLATIVES)
