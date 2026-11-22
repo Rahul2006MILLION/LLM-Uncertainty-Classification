@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Epistemic — LLM Uncertainty Lab</title>
+  <meta name="description" content="Classify LLM answers as KNOWN, AMBIGUOUS or UNKNOWN using multi-response consistency and feature-based machine learning." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <div class="cursor" aria-hidden="true"><div class="cursor-ring"></div><div class="cursor-dot"></div></div>
+
+  <header class="nav" data-reveal>
+    <a class="brand" href="#top" aria-label="Epistemic home">
+      <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><rect x="2" y="2" width="4" height="4"/><rect x="8" y="2" width="4" height="4" opacity=".6"/><rect x="14" y="2" width="4" height="4" opacity=".3"/><rect x="2" y="8" width="4" height="4" opacity=".6"/><rect x="8" y="8" width="4" height="4"/><rect x="2" y="14" width="4" height="4" opacity=".3"/><rect x="14" y="14" width="4" height="4"/></svg>
+      Epistemic
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#analyze">Analyze</a>
+      <a href="#taxonomy">Taxonomy</a>
+      <a href="#method">Method</a>
+    </nav>
+    <div class="nav-right">
+      <span class="status" id="status" role="status" title="Backend status">
+        <i class="status-dot"></i><span class="status-text">Checking backend…</span>
+      </span>
+      <a class="btn btn-yellow btn-sm magnetic" href="#analyze">Ask a question</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO / INPUT -->
+    <section class="hero" id="analyze">
+      <p class="eyebrow" data-reveal>Multi-response consistency · Semantic entropy · XGBoost</p>
+      <h1 class="headline" aria-label="Know what AI knows. Understand what it doesn't.">
+        <span class="line"><span class="word">Know</span> <span class="word">what</span> <span class="word">AI</span> <span class="word">knows.</span></span>
+        <span class="line"><em class="word">Understand</em> <em class="word">what</em> <em class="word">it</em> <em class="word">doesn’t.</em></span>
+      </h1>
+      <p class="lede" data-reveal>
+        Analyze AI uncertainty through multiple responses, semantic consistency, and intelligent classification.
+        Discover when an AI is confident, when a question has multiple interpretations, and when it simply doesn’t know.
+      </p>
+
+      <form class="ask" id="ask-form" data-reveal autocomplete="off" novalidate>
+        <label for="question" class="sr-only">Your question</label>
+        <div class="ask-field">
+          <textarea id="question" name="question" rows="1" maxlength="2000"
+            placeholder="Ask anything — e.g. What is the capital of Georgia?" required></textarea>
+          <button class="btn btn-yellow btn-ask magnetic" id="submit" type="submit">
+            <span class="btn-label">Analyze</span>
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg>
+          </button>
+        </div>
+        <div class="ask-meta">
+          <label class="toggle" title="Bypass the adaptive fast path and always sample the full response set">
+            <input type="checkbox" id="force-multi" />
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            <span>Force full multi-response analysis</span>
+          </label>
+          <span class="hint"><kbd>Enter</kbd> to analyze · <kbd>Shift</kbd>+<kbd>Enter</kbd> new line</span>
+        </div>
+        <div class="examples" aria-label="Example questions">
+          <span class="examples-label">Try</span>
+          <button type="button" class="chip" data-q="What is the capital of Georgia?">Capital of Georgia?</button>
+          <button type="button" class="chip" data-q="Who is Jordan?">Who is Jordan?</button>
+          <button type="button" class="chip" data-q="What number am I thinking of right now?">Number I’m thinking of?</button>
+          <button type="button" class="chip" data-q="What is the boiling point of water at sea level in Celsius?">Boiling point of water?</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ANALYSIS STAGE (loading / error / results) -->
+    <section class="stage" id="stage" aria-live="polite" hidden>
+      <!-- Loading -->
+      <div class="panel loading" id="loading" hidden>
+        <div class="loading-head">
+          <div class="pixel-loader" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div>
+            <p class="mono small muted">Running pipeline</p>
+            <p class="loading-q" id="loading-q"></p>
+          </div>
+          <p class="timer mono" id="timer">0.0s</p>
+        </div>
+        <p class="loading-ctx small" id="loading-ctx" hidden></p>
+        <ol class="steps" id="steps">
+          <li>Generating responses</li>
+          <li>Analyzing semantic consistency</li>
+          <li>Identifying response clusters</li>
+          <li>Evaluating uncertainty</li>
+        </ol>
+        <p class="mono small muted note">These stages are illustrative — the backend runs the whole pipeline as a single request and reports back once it finishes.</p>
+      </div>
+
+      <!-- Error -->
+      <div class="panel error" id="error" hidden role="alert">
+        <p class="eyebrow coral">Pipeline could not complete</p>
+        <h3 id="error-title">Something went wrong</h3>
+        <pre class="error-msg mono" id="error-msg"></pre>
+        <p class="muted small" id="error-help"></p>
+        <button class="btn btn-ghost" id="error-retry" type="button">Try again</button>
+      </div>
+
+      <!-- Clarification (shown only when the pipeline's HITL decision is pending on the user) -->
+      <div class="panel clarify" id="clarify" hidden></div>
+
+      <!-- Results -->
+      <div class="results" id="results" hidden></div>
+    </section>
+
+    <!-- TAXONOMY -->
+    <section class="section" id="taxonomy">
+      <header class="section-head" data-reveal>
+        <p class="eyebrow">Three-class taxonomy</p>
+        <h2>Not all uncertainty is the same.</h2>
+      </header>
+      <div class="tax-grid">
+        <article class="card tax tax-known" data-reveal>
+          <span class="badge">KNOWN</span>
+          <h3>Confident & consistent</h3>
+          <p>A well-specified question with a definitive answer. Samples converge into one dominant semantic cluster with low entropy.</p>
+          <p class="mono small muted">“What is 2 + 2?”</p>
+        </article>
+        <article class="card tax tax-ambiguous" data-reveal>
+          <span class="badge">AMBIGUOUS</span>
+          <h3>Many valid readings</h3>
+          <p>The question has several materially different interpretations. Sampling reveals competing clusters, each internally coherent.</p>
+          <p class="mono small muted">“What is the capital of Georgia?”</p>
+        </article>
+        <article class="card tax tax-unknown" data-reveal>
+          <span class="badge">UNKNOWN</span>
+          <h3>Beyond what it can know</h3>
+          <p>The question is clear, but the answer is inaccessible — private thoughts, future events. Responses disperse or refuse.</p>
+          <p class="mono small muted">“What number am I thinking of?”</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- METHOD -->
+    <section class="section" id="method">
+      <header class="section-head" data-reveal>
+        <p class="eyebrow">How it works</p>
+        <h2>Ask once. Sample many. Measure the spread.</h2>
+      </header>
+      <ol class="method">
+        <li class="card" data-reveal><span class="mono n">01</span><h3>Adaptive routing</h3><p>A greedy first answer is routed: simple, confident questions take a fast path; everything else is escalated.</p></li>
+        <li class="card" data-reveal><span class="mono n">02</span><h3>Stochastic sampling</h3><p>The local LLM produces a set of responses at temperature 0.7 through Ollama.</p></li>
+        <li class="card" data-reveal><span class="mono n">03</span><h3>Semantic clustering</h3><p>Responses are embedded and grouped with agglomerative clustering on cosine similarity.</p></li>
+        <li class="card" data-reveal><span class="mono n">04</span><h3>16 features</h3><p>Entropy, agreement, margins, similarity, lexical diversity, hedging and negation are extracted.</p></li>
+        <li class="card" data-reveal><span class="mono n">05</span><h3>Classification</h3><p>A trained classifier predicts KNOWN / AMBIGUOUS / UNKNOWN, guarded by ambiguity and inaccessibility checks.</p></li>
+      </ol>
+      <p class="caveat muted small" data-reveal>Agreement ≠ truth. High consensus does not prove factual correctness — a model can repeat the same mistake ten times.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>LLM Uncertainty Classification Using Multi-Response Consistency and Feature-Based Machine Learning</span>
+    <span class="mono small" id="footer-model"></span>
+  </footer>
+
+  <template id="tpl-response">
+    <article class="card response">
+      <header>
+        <span class="mono small r-idx"></span>
+        <span class="r-tags"></span>
+        <span class="mono small muted r-meta"></span>
+      </header>
+      <p class="r-text"></p>
+    </article>
+  </template>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
