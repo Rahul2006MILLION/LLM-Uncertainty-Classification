@@ -1,0 +1,266 @@
+{
+  "S1_Baseline_RandomForest": {
+    "classes": [
+      "KNOWN",
+      "AMBIGUOUS",
+      "UNKNOWN"
+    ],
+    "confusion_matrix": [
+      [
+        13,
+        5,
+        2
+      ],
+      [
+        6,
+        9,
+        5
+      ],
+      [
+        1,
+        3,
+        16
+      ]
+    ],
+    "per_class": {
+      "KNOWN": {
+        "precision": 0.65,
+        "recall": 0.65,
+        "f1-score": 0.65,
+        "support": 20.0
+      },
+      "AMBIGUOUS": {
+        "precision": 0.5294117647058824,
+        "recall": 0.45,
+        "f1-score": 0.4864864864864865,
+        "support": 20.0
+      },
+      "UNKNOWN": {
+        "precision": 0.6956521739130435,
+        "recall": 0.8,
+        "f1-score": 0.7441860465116279,
+        "support": 20.0
+      }
+    }
+  },
+  "S2_TFIDF_LinearSVC": {
+    "classes": [
+      "KNOWN",
+      "AMBIGUOUS",
+      "UNKNOWN"
+    ],
+    "confusion_matrix": [
+      [
+        16,
+        4,
+        0
+      ],
+      [
+        3,
+        17,
+        0
+      ],
+      [
+        1,
+        2,
+        17
+      ]
+    ],
+    "per_class": {
+      "KNOWN": {
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1-score": 0.8,
+        "support": 20.0
+      },
+      "AMBIGUOUS": {
+        "precision": 0.7391304347826086,
+        "recall": 0.85,
+        "f1-score": 0.7906976744186046,
+        "support": 20.0
+      },
+      "UNKNOWN": {
+        "precision": 1.0,
+        "recall": 0.85,
+        "f1-score": 0.918918918918919,
+        "support": 20.0
+      }
+    }
+  },
+  "S3_Embedding_LinearSVC": {
+    "classes": [
+      "KNOWN",
+      "AMBIGUOUS",
+      "UNKNOWN"
+    ],
+    "confusion_matrix": [
+      [
+        14,
+        2,
+        4
+      ],
+      [
+        2,
+        15,
+        3
+      ],
+      [
+        3,
+        2,
+        15
+      ]
+    ],
+    "per_class": {
+      "KNOWN": {
+        "precision": 0.7368421052631579,
+        "recall": 0.7,
+        "f1-score": 0.717948717948718,
+        "support": 20.0
+      },
+      "AMBIGUOUS": {
+        "precision": 0.7894736842105263,
+        "recall": 0.75,
+        "f1-score": 0.7692307692307693,
+        "support": 20.0
+      },
+      "UNKNOWN": {
+        "precision": 0.6818181818181818,
+        "recall": 0.75,
+        "f1-score": 0.7142857142857143,
+        "support": 20.0
+      }
+    }
+  },
+  "S4_ExtLinguistic_RandomForest": {
+    "classes": [
+      "KNOWN",
+      "AMBIGUOUS",
+      "UNKNOWN"
+    ],
+    "confusion_matrix": [
+      [
+        13,
+        5,
+        2
+      ],
+      [
+        4,
+        11,
+        5
+      ],
+      [
+        1,
+        5,
+        14
+      ]
+    ],
+    "per_class": {
+      "KNOWN": {
+        "precision": 0.7222222222222222,
+        "recall": 0.65,
+        "f1-score": 0.6842105263157895,
+        "support": 20.0
+      },
+      "AMBIGUOUS": {
+        "precision": 0.5238095238095238,
+        "recall": 0.55,
+        "f1-score": 0.5365853658536586,
+        "support": 20.0
+      },
+      "UNKNOWN": {
+        "precision": 0.6666666666666666,
+        "recall": 0.7,
+        "f1-score": 0.6829268292682927,
+        "support": 20.0
+      }
+    }
+  },
+  "S4_HybridA_LinearSVC": {
+    "classes": [
+      "KNOWN",
+      "AMBIGUOUS",
+      "UNKNOWN"
+    ],
+    "confusion_matrix": [
+      [
+        16,
+        2,
+        2
+      ],
+      [
+        2,
+        14,
+        4
+      ],
+      [
+        3,
+        2,
+        15
+      ]
+    ],
+    "per_class": {
+      "KNOWN": {
+        "precision": 0.7619047619047619,
+        "recall": 0.8,
+        "f1-score": 0.7804878048780488,
+        "support": 20.0
+      },
+      "AMBIGUOUS": {
+        "precision": 0.7777777777777778,
+        "recall": 0.7,
+        "f1-score": 0.7368421052631579,
+        "support": 20.0
+      },
+      "UNKNOWN": {
+        "precision": 0.7142857142857143,
+        "recall": 0.75,
+        "f1-score": 0.7317073170731707,
+        "support": 20.0
+      }
+    }
+  },
+  "S4_HybridB_LinearSVC": {
+    "classes": [
+      "KNOWN",
+      "AMBIGUOUS",
+      "UNKNOWN"
+    ],
+    "confusion_matrix": [
+      [
+        16,
+        2,
+        2
+      ],
+      [
+        2,
+        13,
+        5
+      ],
+      [
+        3,
+        2,
+        15
+      ]
+    ],
+    "per_class": {
+      "KNOWN": {
+        "precision": 0.7619047619047619,
+        "recall": 0.8,
+        "f1-score": 0.7804878048780488,
+        "support": 20.0
+      },
+      "AMBIGUOUS": {
+        "precision": 0.7647058823529411,
+        "recall": 0.65,
+        "f1-score": 0.7027027027027027,
+        "support": 20.0
+      },
+      "UNKNOWN": {
+        "precision": 0.6818181818181818,
+        "recall": 0.75,
+        "f1-score": 0.7142857142857143,
+        "support": 20.0
+      }
+    }
+  }
+}

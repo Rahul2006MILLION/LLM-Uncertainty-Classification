@@ -1,0 +1,42 @@
+{
+  "experiment_name": "generalization_and_lexical_audit",
+  "dataset_path": "data/batch_2_combined_unified.jsonl",
+  "random_seed": 42,
+  "n_bootstrap": 2000,
+  "classes": ["KNOWN", "AMBIGUOUS", "UNKNOWN"],
+  "canonical_features": [
+    "response_len",
+    "distinct_1gram_ratio",
+    "distinct_2gram_ratio",
+    "question_overlap",
+    "hedging_score",
+    "negation_count"
+  ],
+  "tfidf_config": {
+    "ngram_range": [1, 3],
+    "max_features": 10000,
+    "min_df": 2,
+    "sublinear_tf": true
+  },
+  "embedding_model": "all-minilm",
+  "protocols": [
+    "standard_grouped_cv",
+    "category_heldout_evaluation"
+  ],
+  "models": [
+    "TFIDF_LinearSVC",
+    "Baseline_RandomForest",
+    "TFIDF_LogisticRegression",
+    "Embedding_LinearSVC",
+    "HybridA_LinearSVC"
+  ],
+  "lexical_audit_experiments": [
+    "A_Original_Text",
+    "B_Stopwords_Removed",
+    "C_Entity_Masked",
+    "D_Domain_Term_Masked",
+    "E_Epistemic_Only",
+    "F_Marker_Counts",
+    "G_Domain_Neutral_TFIDF"
+  ]
+}

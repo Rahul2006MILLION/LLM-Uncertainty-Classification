@@ -1,0 +1,190 @@
+{
+  "experiment_id": "logistic_regression_single_response_baseline",
+  "run_timestamp": "2026-11-20 18:43:55",
+  "dataset_path": "data/features.jsonl",
+  "dataset_sha256": "c9350085e9993224b6e9377da1ece2d27bc3d004db8ad035573cd02e78109382",
+  "dataset_size": 67,
+  "class_distribution": {
+    "AMBIGUOUS": 22,
+    "UNKNOWN": 25,
+    "KNOWN": 20
+  },
+  "model_name": "logistic_regression",
+  "model_parameters": {},
+  "feature_config_name": "single_response_baseline",
+  "feature_names": [
+    "response_len_mean",
+    "distinct_1gram_ratio",
+    "distinct_2gram_ratio",
+    "question_overlap_mean",
+    "hedging_score",
+    "negation_count"
+  ],
+  "split_info": {
+    "train_count": 47,
+    "val_count": 10,
+    "test_count": 10,
+    "train_ids": [
+      "known_4790842463458965203",
+      "known_-8765341210106443690",
+      "known_-8984315366060644345",
+      "known_-4757397641844293607",
+      "known_-6857918454805495301",
+      "known_1561260788294720798",
+      "known_4722519916015127979",
+      "ambig_-4469503464110108318",
+      "ambig_-3359151041540098032",
+      "ambig_-3609553841261159056",
+      "unk_001",
+      "unk_002",
+      "unk_003",
+      "unk_004",
+      "unk_005",
+      "unk_006",
+      "unk_007",
+      "unk_008",
+      "known_def_003",
+      "known_def_004",
+      "known_-807825952267713091",
+      "known_7336174019902289593",
+      "known_8630912480840635425",
+      "known_9187719029377880470",
+      "known_-6975273415196871312",
+      "known_7047651726317069852",
+      "known_-2679834896038341541",
+      "ambig_cur_002",
+      "ambig_cur_003",
+      "ambig_cur_005",
+      "ambig_cur_007",
+      "ambig_cur_008",
+      "ambig_5780388869788119926",
+      "ambig_-6301642079833452476",
+      "ambig_-196855123397981737",
+      "ambig_3015237958274673918",
+      "ambig_-4837453704802656318",
+      "unk_009",
+      "unk_010",
+      "unk_012",
+      "unk_013",
+      "unk_014",
+      "unk_016",
+      "unk_017",
+      "unk_018",
+      "unk_003",
+      "unk_004"
+    ],
+    "val_ids": [
+      "known_128788970421661020",
+      "ambig_-927805218867163489",
+      "known_def_001",
+      "known_8266116451988110240",
+      "ambig_cur_004",
+      "ambig_cur_006",
+      "ambig_-962065981949449467",
+      "unk_011",
+      "unk_019",
+      "unk_005"
+    ],
+    "test_ids": [
+      "ambig_-6631915997977101143",
+      "ambig_-3098213414945179817",
+      "ambig_6601536662148726350",
+      "ambig_-4132174036373265970",
+      "known_def_002",
+      "ambig_cur_001",
+      "unk_015",
+      "unk_020",
+      "unk_002",
+      "unk_008"
+    ],
+    "train_distribution": {
+      "KNOWN": 16,
+      "AMBIGUOUS": 13,
+      "UNKNOWN": 18
+    },
+    "val_distribution": {
+      "KNOWN": 3,
+      "AMBIGUOUS": 4,
+      "UNKNOWN": 3
+    },
+    "test_distribution": {
+      "KNOWN": 1,
+      "AMBIGUOUS": 5,
+      "UNKNOWN": 4
+    },
+    "group_disjoint": false,
+    "split_ratios": [
+      0.7,
+      0.15,
+      0.15
+    ],
+    "random_seed": 42,
+    "is_small_sample": true,
+    "limitations": [
+      "Small sample size limitation: Total records (67) < 100. Test partition performance carries high empirical variance. Recommend stratified cross-validation or expanding development dataset.",
+      "CRITICAL: Group leakage detected across partitions!"
+    ]
+  },
+  "metrics": {
+    "accuracy": 0.3,
+    "balanced_accuracy": 0.5,
+    "macro_f1": 0.3055555555555555,
+    "weighted_f1": 0.29166666666666663,
+    "macro_precision": 0.38095238095238093,
+    "macro_recall": 0.5,
+    "cohen_kappa": 0.125,
+    "matthews_corrcoef": 0.1936007731655916,
+    "per_class": {
+      "KNOWN": {
+        "precision": 0.14285714285714285,
+        "recall": 1.0,
+        "f1": 0.25,
+        "support": 1
+      },
+      "AMBIGUOUS": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 5
+      },
+      "UNKNOWN": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "support": 4
+      }
+    },
+    "confusion_matrix": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        5,
+        0,
+        0
+      ],
+      [
+        1,
+        1,
+        2
+      ]
+    ],
+    "roc_auc_ovr": 0.7277777777777779,
+    "brier_score": 0.8799616098403931,
+    "total_samples": 10
+  },
+  "execution_time_seconds": 0.013,
+  "output_dir": "experiments/ml_runs/smoke_test_suite",
+  "software_versions": {
+    "python": "3.11.14",
+    "scikit_learn": "1.9.1",
+    "numpy": "2.4.6",
+    "xgboost": "3.2.0"
+  },
+  "notes": [
+    "Small sample size limitation: Total records (67) < 100. Test partition performance carries high empirical variance. Recommend stratified cross-validation or expanding development dataset.",
+    "CRITICAL: Group leakage detected across partitions!"
+  ]
+}

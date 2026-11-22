@@ -1,0 +1,83 @@
+{
+  "dataset_name": "Batch_2_Combined_Robustness_Corpus_60",
+  "description": "Consolidated robustness dataset combining Batch 2A (N=30) and Batch 2B (N=30)",
+  "creation_timestamp": "2026-11-22T03:00:00Z",
+  "total_questions": 60,
+  "total_responses": 600,
+  "class_distribution": {
+    "KNOWN": 20,
+    "AMBIGUOUS": 20,
+    "UNKNOWN": 20
+  },
+  "category_distribution": {
+    "K-DIR": 4,
+    "K-DER": 4,
+    "K-SCI": 4,
+    "K-HIS": 4,
+    "K-NEG": 4,
+    "A-POL": 4,
+    "A-UND": 4,
+    "A-PRE": 4,
+    "A-PER": 4,
+    "A-TMP": 4,
+    "U-FUT": 4,
+    "U-PRV": 4,
+    "U-HIS": 4,
+    "U-FAB": 4,
+    "U-MYS": 4
+  },
+  "provenance_distribution": {
+    "mined": 24,
+    "synthesized": 24,
+    "expert_curated": 12
+  },
+  "question_length_statistics": {
+    "KNOWN": {
+      "mean": 144.4,
+      "std": 23.669389514729783,
+      "min": 102,
+      "max": 213
+    },
+    "AMBIGUOUS": {
+      "mean": 145.05,
+      "std": 6.399023362982824,
+      "min": 132,
+      "max": 155
+    },
+    "UNKNOWN": {
+      "mean": 144.15,
+      "std": 7.926380006030496,
+      "min": 125,
+      "max": 160
+    }
+  },
+  "kruskal_wallis_question_length": {
+    "h_statistic": 0.34290471811163764,
+    "p_value": 0.8424404017201672,
+    "significant_05": false
+  },
+  "source_slices": {
+    "Batch_2A": {
+      "questions_path": "data/batch_2_questions.jsonl",
+      "questions_sha256": "8a2a3ed489fac14739905678e6b19d974e84dcf01016c5802ec14b2ee8d118bc",
+      "raw_responses_path": "data/raw/batch_2_generated_responses.jsonl",
+      "raw_responses_sha256": "e8e72c34960a01f276623a3f1c0829b5ff647251c6664a74df3aeb4cfbb0ceab",
+      "count_questions": 30,
+      "count_responses": 300
+    },
+    "Batch_2B": {
+      "questions_path": "data/batch_2b_questions.jsonl",
+      "questions_sha256": "5fa7e2bb64c2a56e28431251de0982d3e0ceed3ba0660eae59375e37e7af8c78",
+      "raw_responses_path": "data/raw/batch_2b_generated_responses.jsonl",
+      "raw_responses_sha256": "9511e8f442a4e7bd6c21cb06b2bbb3434a6306421e9c0d539ff8820058bfbf94",
+      "count_questions": 30,
+      "count_responses": 300
+    }
+  },
+  "combined_artifacts": {
+    "questions_path": "data/batch_2_combined_questions.jsonl",
+    "questions_sha256": "3ce85308cc4d2732109efb2d39eb4c47053d9024dea73ba18c53d8025cb96013",
+    "raw_responses_path": "data/raw/batch_2_combined_generated_responses.jsonl",
+    "raw_responses_sha256": "7a641f117174082baca321547177896670a1b9b773c20d30e940bd448ae9a337"
+  }
+}

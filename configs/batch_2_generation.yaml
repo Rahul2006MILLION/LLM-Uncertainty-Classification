@@ -1,0 +1,28 @@
+# Batch 2 Response Generation Configuration
+# Dedicated configuration for supplementary Batch 2 evaluation (N=30, M=300 responses)
+# Leaves configs/default.yaml untouched.
+
+ollama:
+  host: "http://localhost:11434"
+  generation_model: "qwen3:4b"
+  embedding_model: "all-minilm:latest"
+  temperature: 0.7
+  top_p: 0.9
+  request_timeout: 120.0
+  max_retries: 3
+  backoff_factor: 1.5
+
+pipeline:
+  fast_path_enabled: false
+  multi_response_count: 10 # 1 greedy (T=0.0) + 9 stochastic (T=0.7, top_p=0.9)
+  protocol: "r1: T=0.0 (greedy), r2-r10: T=0.7, top_p=0.9 (stochastic)"
+
+clustering:
+  method: "hierarchical"
+  similarity_threshold: 0.80 # Cosine distance threshold 0.20
+  linkage: "average"
+
+storage:
+  raw_output_path: "data/raw/batch_2_generated_responses.jsonl"
+  features_output_path: "data/features/batch_2_features.jsonl"
+  unified_output_path: "data/batch_2_unified.jsonl"
