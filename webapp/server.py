@@ -28,7 +28,7 @@ import time
 import traceback
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
 
 WEBAPP_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -52,6 +52,14 @@ def _load_ask_module():
 
 
 ask = _load_ask_module()
+
+from src.classification.hitl_engine import ConversationState  # noqa: E402
+from src.classification.hitl_prompts import (  # noqa: E402
+    contains_sensitive_credentials,
+    is_user_declining,
+    sanitize_user_input,
+)
+from webapp.clarify import merge_clarification, suggest_interpretations  # noqa: E402
 CONFIG_PATH = os.path.join("configs", "default.yaml")
 MAX_QUESTION_CHARS = 2000
 
@@ -120,17 +128,101 @@ def health() -> Dict[str, Any]:
     }
 
 
-def analyze(question: str, force_multi: bool) -> Dict[str, Any]:
-    """Delegate to the existing pipeline and return its record unchanged."""
+def _needs_clarification(record: Dict[str, Any]) -> bool:
+    """The pipeline's own HITL signal: decision pending on the user."""
+    return (
+        record.get("clarification_decision") == "CLARIFICATION_REQUIRED"
+        and record.get("interaction_status") == "PENDING"
+    )
+
+
+def analyze(
+    question: str,
+    force_multi: bool,
+    clarification: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """Run the existing pipeline (with its HITL gates) and return its record unchanged.
+
+    The pipeline's interactive HITL gates call ``clarification_callback`` when they
+    decide clarification is required. In a web request we cannot block on terminal
+    input, so the callback records the gate's decision and returns ``None`` — the
+    pipeline then finishes exactly as it does when a CLI user skips the prompt, and
+    the UI asks the user afterwards.
+
+    When ``clarification`` is given, the clarified question is re-run through the same
+    pipeline with a ``ConversationState`` recording the turn (the pipeline's own
+    mechanism for clarified follow-ups).
+    """
     config = ask.load_config(CONFIG_PATH)
+    gate_decisions: List[Any] = []
+
+    def record_gate(decision, _state):
+        gate_decisions.append(decision)
+        return None  # defer to the web UI
+
+    state = None
+    merge_method = None
+    run_question = question
+    if clarification:
+        state = ConversationState(original_question=question, current_question=question)
+        for prev in clarification.get("previous", [])[: state.max_rounds]:
+            state.add_turn(
+                clarification_prompt=str(prev.get("prompt", "")),
+                user_response=sanitize_user_input(str(prev.get("text", ""))),
+                consolidated_question=sanitize_user_input(str(prev.get("question", ""))) or question,
+                ambiguity_type=str(prev.get("ambiguity_type") or ""),
+            )
+        text = sanitize_user_input(str(clarification.get("text", "")))
+        proposed = sanitize_user_input(str(clarification.get("question", "")))
+        with _pipeline_lock:
+            if proposed and proposed.lower() != state.current_question.lower():
+                run_question, merge_method = proposed, "suggestion"
+            else:
+                merged = merge_clarification(state.current_question, text, config)
+                run_question, merge_method = merged["question"], merged["method"]
+        state.add_turn(
+            clarification_prompt=str(clarification.get("prompt", "")),
+            user_response=text,
+            consolidated_question=run_question,
+            ambiguity_type=str(clarification.get("ambiguity_type") or ""),
+        )
+
     with _pipeline_lock:
         record = ask.run_pipeline(
-            question=question,
+            question=run_question,
             config=config,
             force_multi_response=force_multi,
-            interactive_hitl=False,  # no terminal prompts in a web request
+            interactive_hitl=True,
+            conversation_state=state,
+            clarification_callback=record_gate,
         )
-    return _json_safe(record.model_dump())
+        record_dict = _json_safe(record.model_dump())
+
+        result: Dict[str, Any] = {"record": record_dict, "clarification": None}
+        if merge_method:
+            result["clarified"] = {"question": run_question, "method": merge_method}
+
+        if _needs_clarification(record_dict):
+            gate = gate_decisions[-1] if gate_decisions else None
+            # Grounded on the question and the gate's own clarification prompt. Sampled
+            # answers are deliberately not passed: they describe how the model answered,
+            # not what the user meant, and they pull a small model toward generic readings.
+            suggestions = suggest_interpretations(
+                record_dict["question"],
+                config,
+                ambiguity_type=record_dict.get("ambiguity_type"),
+                pipeline_prompt=getattr(gate, "clarification_prompt", None),
+            )
+            result["clarification"] = {
+                "pipeline_prompt": getattr(gate, "clarification_prompt", None),
+                "pipeline_options": list(getattr(gate, "options", []) or []),
+                "why_it_matters": getattr(gate, "why_it_matters", None),
+                "gate_ambiguity_type": getattr(getattr(gate, "ambiguity_type", None), "value", None),
+                "round": record_dict.get("clarification_rounds", 0) + 1,
+                "max_rounds": state.max_rounds if state else ConversationState("", "").max_rounds,
+                "suggestions": suggestions,
+            }
+    return _json_safe(result)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -195,9 +287,25 @@ class Handler(BaseHTTPRequestHandler):
             self._send_json(HTTPStatus.BAD_REQUEST, {"error": f"Question exceeds {MAX_QUESTION_CHARS} characters."})
             return
 
+        clarification = payload.get("clarification")
+        if clarification is not None:
+            if not isinstance(clarification, dict):
+                self._send_json(HTTPStatus.BAD_REQUEST, {"error": "clarification must be an object."})
+                return
+            text = str(clarification.get("text", "")).strip()
+            if not text:
+                self._send_json(HTTPStatus.BAD_REQUEST, {"error": "Please choose an interpretation or describe what you mean."})
+                return
+            if contains_sensitive_credentials(text):
+                self._send_json(HTTPStatus.BAD_REQUEST, {"error": "That looks like a password or key. Please don't include credentials in a clarification."})
+                return
+            if is_user_declining(text):
+                self._send_json(HTTPStatus.BAD_REQUEST, {"error": "Use “Show analysis without clarifying” to skip clarification."})
+                return
+
         started = time.time()
         try:
-            record = analyze(question.strip(), bool(payload.get("force_multi", False)))
+            result = analyze(question.strip(), bool(payload.get("force_multi", False)), clarification)
         except Exception as e:
             traceback.print_exc()
             self._send_json(
@@ -209,7 +317,7 @@ class Handler(BaseHTTPRequestHandler):
                 },
             )
             return
-        self._send_json(HTTPStatus.OK, {"record": record})
+        self._send_json(HTTPStatus.OK, result)
 
 
 def main() -> None:

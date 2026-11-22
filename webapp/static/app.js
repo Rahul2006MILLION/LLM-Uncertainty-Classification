@@ -248,8 +248,8 @@
    * 5. Ask form + analysis flow
    * ===================================================================== */
   const form = $("#ask-form"), qEl = $("#question"), submitBtn = $("#submit"), forceEl = $("#force-multi");
-  const stage = $("#stage"), loading = $("#loading"), errorBox = $("#error"), results = $("#results");
-  let busy = false, lastQuestion = "", stepTimer = null, clock = null;
+  const stage = $("#stage"), loading = $("#loading"), errorBox = $("#error"), results = $("#results"), clarifyBox = $("#clarify");
+  let busy = false, lastRun = null, stepTimer = null, clock = null;
 
   if (innerWidth < 560) qEl.placeholder = "Ask any question…";
   const autosize = () => { qEl.style.height = "auto"; qEl.style.height = Math.min(qEl.scrollHeight, 200) + "px"; };
@@ -259,17 +259,24 @@
   });
   $$(".chip").forEach(c => c.addEventListener("click", () => { qEl.value = c.dataset.q; autosize(); qEl.focus(); }));
   form.addEventListener("submit", e => { e.preventDefault(); run(qEl.value, forceEl.checked); });
-  $("#error-retry").addEventListener("click", () => run(lastQuestion, forceEl.checked));
+  $("#error-retry").addEventListener("click", () => lastRun && run(lastRun.question, lastRun.forceMulti, lastRun.clarification));
 
   function show(which) {
     stage.hidden = false;
     loading.hidden = which !== "loading";
     errorBox.hidden = which !== "error";
     results.hidden = which !== "results";
+    clarifyBox.hidden = which !== "clarify";
   }
 
-  function startLoadingUI(question) {
+  /** The pipeline's own HITL signal: clarification required and pending on the user. */
+  const needsClarification = r => r && r.clarification_decision === "CLARIFICATION_REQUIRED" && r.interaction_status === "PENDING";
+
+  function startLoadingUI(question, clarification) {
     $("#loading-q").textContent = question;
+    const ctx = $("#loading-ctx");
+    ctx.hidden = !clarification;
+    if (clarification) ctx.textContent = `With your clarification: “${clarification.text}”`;
     const steps = $$("#steps li");
     steps.forEach(s => s.classList.remove("active", "seen"));
     let i = 0;
@@ -284,17 +291,17 @@
   }
   function stopLoadingUI() { clearInterval(stepTimer); clearInterval(clock); }
 
-  async function run(question, forceMulti) {
+  async function run(question, forceMulti, clarification = null) {
     question = (question || "").trim();
     if (!question) { qEl.focus(); form.querySelector(".ask-field").animate([{ transform: "translateX(0)" }, { transform: "translateX(-6px)" }, { transform: "translateX(6px)" }, { transform: "translateX(0)" }], { duration: 300 }); return; }
     if (busy) return;
-    busy = true; lastQuestion = question;
+    busy = true; lastRun = { question, forceMulti, clarification };
     form.classList.add("busy");
     submitBtn.disabled = true; submitBtn.classList.add("loading");
     $(".btn-label", submitBtn).textContent = "Analyzing";
     $(".hero").classList.add("compact");
     show("loading");
-    startLoadingUI(question);
+    startLoadingUI(question, clarification);
     // Let the hero finish collapsing before measuring the scroll target.
     setTimeout(() => stage.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" }), reduceMotion ? 0 : 820);
 
@@ -304,7 +311,7 @@
         res = await fetch("/api/analyze", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ question, force_multi: !!forceMulti }),
+          body: JSON.stringify({ question, force_multi: !!forceMulti, ...(clarification ? { clarification } : {}) }),
         });
       } catch (netErr) {
         throw Object.assign(new Error("Could not reach the adapter server at " + location.origin + ". Is `python webapp/server.py` running?"), { kind: "network" });
@@ -313,8 +320,15 @@
       try { body = await res.json(); } catch { throw new Error(`Backend returned HTTP ${res.status} with a non-JSON body.`); }
       if (!res.ok || !body.record) throw Object.assign(new Error(body.error || `HTTP ${res.status}`), { kind: body.error_type || "pipeline" });
       stopLoadingUI();
-      renderResults(body.record);
-      show("results");
+      const ctx = { originalQuestion: question, forceMulti, clarification, clarified: body.clarified || null };
+      if (needsClarification(body.record) && body.clarification && body.clarification.round <= body.clarification.max_rounds) {
+        renderClarification(body.record, body.clarification, ctx);
+        show("clarify");
+        requestAnimationFrame(() => stage.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" }));
+      } else {
+        renderResults(body.record, ctx);
+        show("results");
+      }
     } catch (err) {
       stopLoadingUI();
       renderError(err);
@@ -339,7 +353,107 @@
   }
 
   /* =====================================================================
-   * 6. Results rendering (real backend values only)
+   * 6. Clarification state (driven by the pipeline's HITL decision)
+   * ===================================================================== */
+  const LABEL_COLOR = { KNOWN: "var(--known)", AMBIGUOUS: "var(--ambiguous)", UNKNOWN: "var(--unknown)" };
+  const CRITERIA_TYPES = new Set(["SUBJECTIVE_CRITERIA", "MISSING_COMPARISON", "MISSING_CONTEXT", "UNDERSPECIFIED_CONTEXT"]);
+
+  function renderClarification(r, c, ctx) {
+    clarifyBox.replaceChildren();
+    const ambType = r.ambiguity_type || c.gate_ambiguity_type;
+    const criteria = CRITERIA_TYPES.has(ambType);
+    const previous = [...(ctx.clarification?.previous || []), ...(ctx.clarification ? [{
+      prompt: ctx.clarification.prompt, text: ctx.clarification.text,
+      question: ctx.clarified?.question || "", ambiguity_type: ctx.clarification.ambiguity_type,
+    }] : [])];
+
+    // Options: model-generated interpretations; fall back to the pipeline's own HITL options.
+    let items = (c.suggestions?.items || []).map(it => ({ label: it.label, detail: it.detail, question: it.question }));
+    let source = c.suggestions?.source === "model" ? `Suggested by ${c.suggestions.model} from your question and the pipeline’s clarification prompt.` : "";
+    if (!items.length) {
+      items = (c.pipeline_options || []).filter(o => !/^(other|skip)\b/i.test(o)).map(o => ({ label: o, detail: "", question: "" }));
+      source = `Options from the pipeline’s clarification gate${c.suggestions?.error ? ` (suggestion model: ${c.suggestions.error})` : ""}.`;
+    }
+
+    let selected = null;
+    const custom = h("textarea", { id: "clarify-text", rows: "2", maxlength: "200", placeholder: criteria ? "e.g. for building iOS apps on a budget" : "Describe what you mean in your own words…" });
+    const preview = h("p", { class: "clarify-preview mono small", "aria-live": "polite" });
+    const submit = h("button", { class: "btn btn-yellow magnetic", type: "submit", disabled: true },
+      h("span", { class: "btn-label", text: "Analyze clarified question" }),
+      h("span", { class: "btn-arrow", "aria-hidden": "true", text: "→" }));
+
+    const options = h("div", { class: "clarify-options", role: "radiogroup", "aria-label": "Possible interpretations" });
+    const refresh = () => {
+      $$(".opt", options).forEach(o => o.setAttribute("aria-checked", String(o === selected?.el)));
+      const text = selected && !selected.other ? selected.label : custom.value.trim();
+      submit.disabled = !text;
+      if (selected && !selected.other && selected.question) preview.textContent = `Will analyze: “${selected.question}”`;
+      else if (text) preview.textContent = `Will analyze: your original question combined with “${text}”`;
+      else preview.textContent = "";
+    };
+    const pick = (opt) => {
+      selected = selected?.el === opt.el ? null : opt;
+      if (selected && !selected.other) custom.value = "";
+      if (selected?.other) custom.focus();
+      opt.el.animate([{ transform: "scale(0.97)" }, { transform: "scale(1.02)" }, { transform: "scale(1)" }], { duration: 320, easing: "cubic-bezier(.22,1,.36,1)" });
+      refresh();
+    };
+    [...items, { label: "Something else", detail: "Describe it in your own words", other: true }].forEach((it, i) => {
+      const el = h("button", { type: "button", role: "radio", "aria-checked": "false", class: `opt${it.other ? " opt-other" : ""}`, style: `--i:${i}` },
+        h("span", { class: "opt-check", "aria-hidden": "true" }),
+        h("span", { class: "opt-body" },
+          h("span", { class: "opt-label", text: it.label }),
+          it.detail ? h("span", { class: "opt-detail", text: it.detail }) : null,
+          it.question ? h("span", { class: "opt-q mono", text: it.question }) : null));
+      const opt = { ...it, el };
+      el.addEventListener("click", () => pick(opt));
+      options.append(el);
+    });
+    custom.addEventListener("input", () => { if (selected && !selected.other) selected = null; refresh(); });
+    custom.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); clarifyForm.requestSubmit(); } });
+
+    const clarifyForm = h("form", { class: "clarify-form", novalidate: true },
+      options,
+      h("label", { class: "clarify-custom", for: "clarify-text" },
+        h("span", { class: "mono small muted", text: "Or clarify in your own words" }),
+        h("span", { class: "clarify-field" }, custom)),
+      preview,
+      h("div", { class: "clarify-actions" }, submit,
+        h("button", { class: "btn btn-ghost", type: "button", onclick: () => { renderResults(r, { ...ctx, skipped: { clarification: c } }); show("results"); } }, "Show analysis without clarifying")));
+    clarifyForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const text = selected && !selected.other ? selected.label : custom.value.trim();
+      if (!text) return;
+      run(ctx.originalQuestion, ctx.forceMulti, {
+        text,
+        question: selected && !selected.other ? selected.question || "" : "",
+        prompt: c.pipeline_prompt || "",
+        ambiguity_type: ambType || "",
+        previous,
+      });
+    });
+
+    const pill = (k, v, color) => h("span", { class: "sig" }, h("span", { class: "sig-k", text: k }), h("span", { class: "sig-v", text: v, style: color ? `color:${color}` : null }));
+    clarifyBox.append(
+      h("div", { class: "clarify-head" },
+        h("p", { class: "eyebrow", text: `Human clarification · round ${c.round} of ${c.max_rounds}` }),
+        h("div", { class: "signals", "aria-label": "Pipeline signals" },
+          pill("Classification", r.predicted_label || "—", LABEL_COLOR[r.predicted_label]),
+          pill("HITL decision", humanize(r.clarification_decision), "var(--yellow)"),
+          pill("Question clarity", `${humanize(r.clarity_status)}${isNum(r.clarity_confidence) ? ` (${r.clarity_confidence.toFixed(2)})` : ""}`),
+          pill("Ambiguity type", humanize(ambType)))),
+      h("h2", { class: "clarify-title", text: criteria ? "Your question depends on what you have in mind." : "Your question has multiple possible interpretations." }),
+      h("p", { class: "clarify-sub", text: "Could you clarify what you mean?" }),
+      h("blockquote", { class: "clarify-q" }, h("span", { class: "mono small muted", text: "You asked" }), h("span", { text: r.question })),
+      c.why_it_matters || r.clarification_reason ? h("p", { class: "clarify-why small", text: c.why_it_matters || r.clarification_reason }) : null,
+      clarifyForm,
+      h("p", { class: "clarify-source mono small muted", text: source }),
+    );
+    refresh();
+  }
+
+  /* =====================================================================
+   * 7. Results rendering (real backend values only)
    * ===================================================================== */
   const CLUSTER_COLORS = ["#fff31a", "#5b6dff", "#2fe3a1", "#f2963a", "#b07bff", "#ff7aa8", "#7ee8ff", "#ffffff"];
   const LABEL_COPY = {
@@ -384,7 +498,7 @@
   }
   const growLater = (el, w) => requestAnimationFrame(() => requestAnimationFrame(() => { el.style.width = w; }));
 
-  function renderResults(r) {
+  function renderResults(r, ctx = {}) {
     results.replaceChildren();
     let d = 0;
     const add = node => { node.style.setProperty("--d", d++); results.append(node); return node; };
@@ -420,16 +534,33 @@
         h("dl", { class: "kv" },
           h("dt", { text: "Path" }), h("dd", { text: isFast ? "Fast path" : "Multi-response" }),
           h("dt", { text: "Decided by" }), h("dd", { text: source, title: statusRaw }),
-          h("dt", { text: "HITL decision" }), h("dd", { text: humanize(r.clarification_decision) }),
+          h("dt", { text: "HITL decision" }), h("dd", { text: `${humanize(r.clarification_decision)}${r.interaction_status && r.interaction_status !== "NOT_REQUIRED" ? ` · ${humanize(r.interaction_status)}` : ""}` }),
           h("dt", { text: "Question clarity" }), h("dd", { text: r.clarity_status ? `${humanize(r.clarity_status)}${isNum(r.clarity_confidence) ? ` · ${r.clarity_confidence.toFixed(2)}` : ""}` : "—" }),
           r.ambiguity_type ? [h("dt", { text: "Ambiguity type" }), h("dd", { text: humanize(r.ambiguity_type) })] : null,
           h("dt", { text: "Elapsed" }), h("dd", { text: isNum(r.elapsed_seconds) ? r.elapsed_seconds.toFixed(2) + " s" : "—" })),
         evidence ? h("details", { class: "evidence" }, h("summary", { class: "mono small", text: "Safeguard evidence" }), h("code", { class: "mono small", text: evidence })) : null)));
     if (isNum(r.confidence)) countUp(confEl, r.confidence, 2);
 
+    // ---- Clarification context ----
+    if (r.is_clarified) {
+      const methods = { suggestion: "selected interpretation", model_rewrite: "merged by the local model", context_block: "appended as context" };
+      add(h("section", { class: "card clarified" },
+        h("h4", null, "Clarified question", h("span", { text: `${r.clarification_rounds} round${r.clarification_rounds === 1 ? "" : "s"} · ${humanize(r.interaction_status)}` })),
+        h("div", { class: "clar-flow" },
+          h("p", { class: "clar-from" }, h("span", { class: "mono small muted", text: "Original" }), h("span", { text: r.original_question })),
+          h("span", { class: "clar-arrow", "aria-hidden": "true", text: "→" }),
+          h("p", { class: "clar-to" }, h("span", { class: "mono small muted", text: "Analyzed" }), h("span", { text: r.clarified_question || r.question }))),
+        ctx.clarification ? h("p", { class: "small muted", text: `Your clarification: “${ctx.clarification.text}”${ctx.clarified ? ` · ${methods[ctx.clarified.method] || ctx.clarified.method}` : ""}` }) : null));
+    }
+    if (ctx.skipped) {
+      add(h("section", { class: "card notice warn" },
+        h("p", { text: "The pipeline flagged this question as needing clarification. This analysis is shown without it, so the answer may address a different interpretation than you intended." }),
+        h("button", { class: "btn btn-ghost btn-sm", type: "button", onclick: () => { renderClarification(r, ctx.skipped.clarification, ctx); show("clarify"); stage.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" }); } }, "Clarify instead")));
+    }
+
     // ---- Answer ----
     add(h("section", { class: "card answer" },
-      h("h4", { text: "Generated answer" }),
+      h("h4", null, "Generated answer", ctx.skipped ? h("span", { class: "tag y", text: "Unclarified" }) : null),
       h("p", { text: r.final_answer }),
       r.clarification_reason ? h("p", { class: "reason", text: r.clarification_reason }) : null));
 

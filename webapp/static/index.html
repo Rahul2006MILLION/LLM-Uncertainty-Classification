@@ -87,6 +87,7 @@
           </div>
           <p class="timer mono" id="timer">0.0s</p>
         </div>
+        <p class="loading-ctx small" id="loading-ctx" hidden></p>
         <ol class="steps" id="steps">
           <li>Generating responses</li>
           <li>Analyzing semantic consistency</li>
@@ -104,6 +105,9 @@
         <p class="muted small" id="error-help"></p>
         <button class="btn btn-ghost" id="error-retry" type="button">Try again</button>
       </div>
+
+      <!-- Clarification (shown only when the pipeline's HITL decision is pending on the user) -->
+      <div class="panel clarify" id="clarify" hidden></div>
 
       <!-- Results -->
       <div class="results" id="results" hidden></div>
