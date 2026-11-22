@@ -1,0 +1,16 @@
+category,total_questions_best,correct_count_best,accuracy_best,total_questions_baseline,correct_count_baseline,accuracy_baseline
+A-PRE,4,4,1.0,4,2,0.5
+A-UND,4,4,1.0,4,3,0.75
+K-DER,4,4,1.0,4,2,0.5
+K-DIR,4,4,1.0,4,3,0.75
+K-NEG,4,4,1.0,4,4,1.0
+U-FUT,4,4,1.0,4,2,0.5
+U-MYS,4,4,1.0,4,3,0.75
+U-PRV,4,4,1.0,4,4,1.0
+A-PER,4,3,0.75,4,1,0.25
+A-POL,4,3,0.75,4,0,0.0
+A-TMP,4,3,0.75,4,3,0.75
+U-HIS,4,3,0.75,4,3,0.75
+K-HIS,4,2,0.5,4,2,0.5
+K-SCI,4,2,0.5,4,2,0.5
+U-FAB,4,2,0.5,4,4,1.0

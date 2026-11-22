@@ -1,0 +1,50 @@
+{
+  "dataset_name": "Batch_2_Supplementary_Corpus_30",
+  "created_at": "2026-11-21T19:45:00Z",
+  "file_path": "data/batch_2_questions.jsonl",
+  "sha256": "8a2a3ed489fac14739905678e6b19d974e84dcf01016c5802ec14b2ee8d118bc",
+  "total_questions": 30,
+  "class_distribution": {
+    "KNOWN": 10,
+    "AMBIGUOUS": 10,
+    "UNKNOWN": 10
+  },
+  "category_distribution": {
+    "K-DIR": 2,
+    "K-DER": 2,
+    "K-SCI": 2,
+    "K-HIS": 2,
+    "K-NEG": 2,
+    "A-POL": 2,
+    "A-UND": 2,
+    "A-PRE": 2,
+    "A-PER": 2,
+    "A-TMP": 2,
+    "U-FUT": 2,
+    "U-PRV": 2,
+    "U-HIS": 2,
+    "U-FAB": 2,
+    "U-MYS": 2
+  },
+  "provenance_distribution": {
+    "mined": 12,
+    "synthesized": 12,
+    "expert_curated": 6
+  },
+  "isolation_metrics": {
+    "benchmark_isolation": {
+      "status": "PASS",
+      "threshold": 0.75,
+      "max_observed_similarity": 0.7131,
+      "violations_count": 0,
+      "violations": []
+    },
+    "batch_1_separation": {
+      "status": "PASS",
+      "threshold": 0.8,
+      "max_observed_similarity": 0.6193,
+      "violations_count": 0,
+      "violations": []
+    }
+  }
+}

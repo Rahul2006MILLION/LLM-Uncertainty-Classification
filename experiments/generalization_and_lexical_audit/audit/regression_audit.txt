@@ -1,0 +1,68 @@
+================================================================================
+REGRESSION AUDIT & DATA INTEGRITY VERIFICATION REPORT
+Experiment: Category Generalization and Lexical Shortcut Audit
+Date: 2026-11-22
+================================================================================
+
+1. DATASET INTEGRITY CHECK
+--------------------------------------------------------------------------------
+- Batch 1 datasets: data/batch_1* (UNTOUCHED)
+- Batch 2 datasets: data/batch_2_questions.jsonl, data/batch_2b_questions.jsonl (UNTOUCHED)
+- Batch 2 Combined unified dataset: data/batch_2_combined_unified.jsonl (UNTOUCHED)
+  - MD5 / SHA-256 verification: Confirmed identical byte count and line count (60 lines).
+  - Target labels: 20 KNOWN, 20 AMBIGUOUS, 20 UNKNOWN (VERIFIED).
+  - Question texts and responses: 100% byte-for-byte preserved.
+
+2. EXISTING RESULTS & REPORTS CHECK
+--------------------------------------------------------------------------------
+- docs/BATCH_2_COMBINED_EVALUATION_REPORT.md (UNTOUCHED)
+- docs/BATCH_2_STATISTICAL_AUDIT_REPORT.md (UNTOUCHED)
+- experiments/single_response_accuracy/ (UNTOUCHED)
+  - The previous 83.3% TF-IDF Linear SVM result is preserved and reproduced exactly.
+  - No existing result file, CSV, or report was overwritten.
+
+3. CANONICAL FEATURE PIPELINE INTEGRITY
+--------------------------------------------------------------------------------
+- src/features/feature_extractor.py (UNTOUCHED)
+- src/experimentation/feature_groups.py (UNTOUCHED)
+- The canonical 16-feature schema was not altered in any way.
+
+4. ISOLATION VERIFICATION
+--------------------------------------------------------------------------------
+- All new code, results, figures, and documentation reside strictly inside:
+  experiments/generalization_and_lexical_audit/
+  - reproduce_baseline.py
+  - category_heldout_evaluation.py
+  - lexical_audit.py
+  - statistical_analysis.py
+  - generate_figures.py
+  - config.json
+  - README.md
+  - REPORT.md
+  - results/ (6 CSV files)
+  - figures/ (4 PNG files)
+  - audit/ (regression_audit.txt)
+
+5. DATA LEAKAGE & REPRODUCIBILITY AUDIT
+--------------------------------------------------------------------------------
+- Question-level leakage check: PASSED
+  - No question appeared simultaneously in training and test splits.
+- Category-level leakage check: PASSED
+  - In Leave-One-Category-Out, every test split contained exactly 4 questions from the held-out category.
+  - The training split contained exactly 56 questions from the remaining 14 categories. Zero category overlap.
+- Preprocessing leakage check: PASSED
+  - TfidfVectorizer vocabulary and IDF frequencies were fit strictly on the training partition of each fold.
+  - StandardScaler parameters (mean, variance) were fit strictly on the training partition.
+- Label-independent transformations check: PASSED
+  - All text transformations (stopword removal, entity masking, domain term masking, epistemic filtering, marker counts) were computed strictly from the prompt/response strings without any reference to class labels.
+
+6. BASELINE REPRODUCIBILITY VERIFICATION
+--------------------------------------------------------------------------------
+- Command: python3 experiments/generalization_and_lexical_audit/reproduce_baseline.py
+- Outcome:
+  - Accuracy: 0.8333 (83.33%, 50/60 correct)
+  - Macro-F1: 0.8296
+  - Status: EXACT MATCH CONFIRMED.
+
+AUDIT VERDICT: PASSED ALL CHECKS — ZERO REGRESSION DETECTED
+================================================================================

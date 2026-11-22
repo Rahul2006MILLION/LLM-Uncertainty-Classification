@@ -1,0 +1,16 @@
+category,target_class,n_questions,A_TFIDF_LinearSVC_acc,A_TFIDF_LinearSVC_correct,B_Baseline_RandomForest_acc,B_Baseline_RandomForest_correct,C_TFIDF_LogisticRegression_acc,C_TFIDF_LogisticRegression_correct,D_Embedding_LinearSVC_acc,D_Embedding_LinearSVC_correct,E_HybridA_LinearSVC_acc,E_HybridA_LinearSVC_correct
+A-PER,AMBIGUOUS,4,0.25,1,0.25,1,0.0,0,0.0,0,0.0,0
+A-POL,AMBIGUOUS,4,0.5,2,0.0,0,0.5,2,0.25,1,0.25,1
+A-PRE,AMBIGUOUS,4,0.5,2,0.25,1,0.0,0,0.25,1,0.0,0
+A-TMP,AMBIGUOUS,4,0.75,3,0.75,3,0.75,3,0.5,2,0.5,2
+A-UND,AMBIGUOUS,4,0.5,2,0.75,3,0.5,2,0.5,2,0.5,2
+K-DER,KNOWN,4,1.0,4,0.25,1,0.75,3,0.75,3,0.75,3
+K-DIR,KNOWN,4,1.0,4,0.5,2,1.0,4,0.75,3,0.75,3
+K-HIS,KNOWN,4,0.5,2,0.5,2,0.5,2,0.0,0,0.25,1
+K-NEG,KNOWN,4,1.0,4,1.0,4,1.0,4,1.0,4,1.0,4
+K-SCI,KNOWN,4,0.5,2,0.25,1,0.25,1,1.0,4,1.0,4
+U-FAB,UNKNOWN,4,0.5,2,0.5,2,0.5,2,0.0,0,0.0,0
+U-FUT,UNKNOWN,4,0.75,3,0.75,3,0.75,3,0.5,2,0.5,2
+U-HIS,UNKNOWN,4,0.5,2,0.75,3,0.5,2,0.75,3,0.75,3
+U-MYS,UNKNOWN,4,1.0,4,0.5,2,0.5,2,0.75,3,0.75,3
+U-PRV,UNKNOWN,4,0.5,2,0.75,3,0.5,2,0.25,1,0.25,1

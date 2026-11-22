@@ -1,0 +1,16 @@
+{
+  "baseline": {
+    "response_len_vs_prediction_spearman": 0.8107225609799691,
+    "response_len_vs_correct_spearman": 0.03794672477928119,
+    "question_len_vs_prediction_spearman": 0.04980691649697149,
+    "hedging_vs_prediction_spearman": 0.2684801581819582,
+    "negation_vs_prediction_spearman": 0.6943213801091752
+  },
+  "best_model": {
+    "response_len_vs_prediction_spearman": 0.7311397128091206,
+    "response_len_vs_correct_spearman": 0.06843601407972343,
+    "question_len_vs_prediction_spearman": 0.055873712624053586,
+    "hedging_vs_prediction_spearman": 0.3240277771161565,
+    "negation_vs_prediction_spearman": 0.7807577410940887
+  }
+}

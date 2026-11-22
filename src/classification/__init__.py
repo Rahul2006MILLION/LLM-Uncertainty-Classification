@@ -5,6 +5,14 @@ from src.classification.inaccessibility_assessor import InaccessibilityAssessor,
 from src.classification.ambiguity_assessor import CriterionAmbiguityAssessor, AmbiguityAssessment
 from src.classification.fast_path_assessor import FastPathAnswerabilityAssessor, FastPathAssessment
 from src.classification.clarity_assessor import QuestionClarityAssessor, ClarityAssessment
+from src.classification.inference_pipeline import (
+    InferencePipeline,
+    InferencePipelineError,
+    InvalidInputError,
+    ModelNotLoadedError,
+    GenerationError,
+    FeatureExtractionError,
+)
 
 __all__ = [
     "AdaptiveRouter",
@@ -20,5 +28,11 @@ __all__ = [
     "FastPathAssessment",
     "QuestionClarityAssessor",
     "ClarityAssessment",
+    "InferencePipeline",
+    "InferencePipelineError",
+    "InvalidInputError",
+    "ModelNotLoadedError",
+    "GenerationError",
+    "FeatureExtractionError",
 ]
 
