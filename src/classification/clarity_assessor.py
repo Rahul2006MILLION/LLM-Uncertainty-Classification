@@ -14,6 +14,8 @@ import re
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
 
+from src.classification.entity_ambiguity import EntityAmbiguityAssessor
+
 
 @dataclass
 class ClarityAssessment:
@@ -70,14 +72,56 @@ class QuestionClarityAssessor:
     MISSING_CONTEXT_PATTERNS = [
         r"^\s*what\s+time\s+does\s+(the\s+)?(bank|post\s+office|store|supermarket|mall|pharmacy)\s+close\??\s*$",
         r"^\s*what\s+is\s+(the\s+)?(sales\s+tax\s+rate|speed\s+limit|minimum\s+wage|legal\s+voting\s+age|drinking\s+age)\??\s*$",
-        r"^\s*who\s+won\s+(the\s+)?championship\s+game\s+last\s+night\??\s*$",
+        # "Who won the (championship) game last night?" — an unnamed event. Anchored to the
+        # whole question, so any named event, team, year or place ("the 2018 World Cup",
+        # "the game between the Lakers and the Celtics") cannot match.
+        r"^\s*who\s+won\s+(the\s+|last\s+night'?s\s+|yesterday'?s\s+|today'?s\s+|tonight'?s\s+)?(big\s+|final\s+)?"
+        r"(championship\s+)?(game|match|race|fight|bout|final|finals|tournament|election|competition|contest)"
+        r"(\s+(last\s+night|yesterday|today|tonight|this\s+(morning|afternoon|evening|weekend)))?\??\s*$",
         r"^\s*what\s+is\s+the\s+temperature\s+right\s+now\??\s*$",
+        # Size superlative over places/organisations with neither scope nor measure:
+        # "What is the largest city?" (by population, area or metro area? where?).
+        # Any qualifier ("in Japan", "by area", "in the world") makes the question clear.
+        r"^\s*(what|which)\s+(is|are)\s+the\s+(largest|biggest|smallest)\s+"
+        r"(city|cities|country|countries|state|states|company|companies|economy|economies|university|universities)\??\s*$",
     ]
 
     # 6. Polysemic terms with multiple common referents
     POLYSEMIC_TERMS = [
         r"\b(georgia|jordan|mercury|columbia|springfield|alexandria|victoria)\b",
     ]
+
+    # Pronouns / deictic adverbs that need an antecedent
+    _ANAPHORS = r"(he|she|him|her|his|hers|they|them|their|there)"
+    # Words that cannot serve as an antecedent (question words, auxiliaries, fillers)
+    _FUNCTION_WORDS = {
+        "what", "who", "whom", "whose", "where", "when", "why", "how", "which", "is", "are", "was", "were", "be",
+        "been", "do", "does", "did", "can", "could", "will", "would", "should", "shall", "may", "might", "must",
+        "the", "a", "an", "to", "of", "in", "on", "at", "for", "by", "from", "with", "about", "it", "its", "this",
+        "that", "these", "those", "he", "she", "him", "her", "his", "hers", "they", "them", "their", "there", "i",
+        "me", "my", "you", "your", "we", "us", "our", "take", "takes", "get", "go", "long", "tall", "old", "much",
+        "many", "far", "big", "now", "right", "currently", "still", "really", "very", "so", "and", "or", "not",
+        "live", "lives", "work", "works", "say", "said", "mean", "means", "like", "doing", "going", "come",
+    }
+
+    @classmethod
+    def _has_unanchored_pronoun(cls, question: str) -> bool:
+        q = question.strip()
+        if len(q.split()) > 12 or "\n" in q:
+            return False
+        ql = q.lower()
+        if not re.search(rf"\b{cls._ANAPHORS}\b", ql):
+            return False
+        # Existential "there" ("Is there life on Mars?") is not deictic
+        if re.search(r"\b(is|are|was|were)\s+there\b|\bthere\s+(is|are|was|were)\b", ql) and not re.search(
+            r"\b(he|she|him|her|his|hers|they|them|their)\b", ql):
+            return False
+        # A proper noun after the first word, or any remaining content word, can be the antecedent
+        tokens = re.findall(r"[A-Za-z']+", q)
+        if any(t[0].isupper() for t in tokens[1:]):
+            return False
+        content = [t for t in (w.lower().split("'")[0] for w in tokens) if t and t not in cls._FUNCTION_WORDS]
+        return len(content) == 0
 
     @classmethod
     def assess(cls, question: str) -> ClarityAssessment:
@@ -133,24 +177,32 @@ class QuestionClarityAssessor:
                     evidence=[f"missing_context:{pat}"],
                 )
 
-        # 4. Multiple Interpretations: Polysemic terms
-        # Check if question mentions polysemic terms without disambiguating context
-        for pat in cls.POLYSEMIC_TERMS:
-            if re.search(pat, q_lower):
-                # Ensure question doesn't already disambiguate (e.g. "country of Georgia" or "capital of Georgia")
-                disambiguated = re.search(
-                    r"\b(state\s+of|country\s+of|republic\s+of|element|planet|god|river|island|capital\s+of|city\s+of|river\s+in)\b",
-                    q_lower
-                )
-                if not disambiguated:
-                    return ClarityAssessment(
-                        status="AMBIGUOUS",
-                        confidence=0.88,
-                        ambiguity_type="MULTIPLE_INTERPRETATIONS",
-                        clarification_required=True,
-                        reason=f"Question contains polysemic entity or name with multiple common interpretations: '{pat}'.",
-                        evidence=[f"polysemic_term:{pat}"],
-                    )
+        # 3b. Missing antecedent: a standalone question that hinges on a pronoun or deictic
+        #     adverb with nothing it could refer to ("How tall is he?", "How long does it
+        #     take to get there?"). Proper nouns or other content words that could serve as
+        #     an antecedent disable the rule.
+        if cls._has_unanchored_pronoun(q_clean):
+            return ClarityAssessment(
+                status="AMBIGUOUS",
+                confidence=0.90,
+                ambiguity_type="MISSING_REFERENT",
+                clarification_required=True,
+                reason="Question depends on a pronoun or place reference ('he', 'she', 'they', 'there', …) with no antecedent.",
+                evidence=["missing_antecedent"],
+            )
+
+        # 4. Multiple Interpretations: polysemous entities, resolved by context
+        #    (sense cues, adjacent proper names, sense-restricting attributes).
+        entity = EntityAmbiguityAssessor.assess(q_clean)
+        if entity.is_ambiguous:
+            return ClarityAssessment(
+                status="AMBIGUOUS",
+                confidence=0.88,
+                ambiguity_type="MULTIPLE_INTERPRETATIONS",
+                clarification_required=True,
+                reason=f"Question contains polysemic entity or name with multiple common interpretations: {entity.reason}",
+                evidence=entity.evidence,
+            )
 
         # 5. Subjective Criteria: Superlatives without criteria or use-case constraints
         has_constraint = any(re.search(pat, q_lower) for pat in cls.OBJECTIVE_CRITERIA_CONSTRAINTS)

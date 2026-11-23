@@ -1,0 +1,3658 @@
+{
+ "results": {
+  "A01": {
+   "output": {
+    "wall_seconds": 12.39,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.95,
+    "classifier_status": "ASSESSED_INACCESSIBLE_RULE_HEURISTIC (private_financial)",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": "INACCESSIBLE_PRIVATE",
+    "clarification_reason": "Requests the value of bank account number belonging to a specific person ('my'). Personal records and secrets are not available to the model, so any generated value would be fabricated.",
+    "final_answer": "Your bank account number is typically a sequence of 8 to 11 numeric digits and is usually found on your bank statement or account information provided by your bank. It is used for direct deposits and other financial transactions.",
+    "cluster_count": 4,
+    "semantic_entropy": 0.9404479886553263,
+    "dominant_agreement": 0.7,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.9523605704307556,
+     "probabilities": {
+      "KNOWN": 0.007132234983146191,
+      "AMBIGUOUS": 0.9523605704307556,
+      "UNKNOWN": 0.04050719738006592
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "Your bank account number is typically a 10-digit number and is usually found on your bank statement or on a card issued by your bank. It is not something you should disclose to others unless specifically asked for by your bank.",
+     "Your bank account number is typically a sequence of 8 to 11 numeric digits and is usually found on your bank statement or account information provided by your bank. It is used for direct deposits and other financial transactions.",
+     "Your bank account number is typically a 10 to 12 digit number assigned by your bank and is needed for direct deposits and other financial transactions. It is usually found on your bank statement or with your debit/credit card.",
+     "Your bank account number is a unique identifier provided by your bank and is usually found on your bank statements. It consists of a series of numbers that are specific to your account.",
+     "Your bank account number is typically a 10-digit number and is usually the first part of your routing transit number (RTN). You can find it on your bank statement or by contacting your bank directly.",
+     "Your bank account number is typically a 10-digit number and is usually the first part of your full bank account and sort code number for UK accounts. For other countries, the length and structure of the account number can vary significantly. You should check with your bank for the specific format used for your account.",
+     "Your bank account number is typically the first 6 to 8 digits of your routing number, which you can find on your bank statement or by contacting your bank. It is not something you should share without authorization.",
+     "Your bank account number is typically a 10 to 12 digit number and is usually the first group of numbers on your check, including any spaces or dashes. It is provided by your bank and should be kept secure. It is not directly accessible through online banking or other common services without your explicit authorization.",
+     "Your bank account number is typically a 7 to 11 digit number and is not publicly accessible. It is a private identifier used for direct transactions and is usually only known to you and your bank.",
+     "Your bank account number is typically a string of 8 to 12 numeric digits and is usually found on your bank statements or in your online banking account details. Please check your recent statements or contact your bank for this information."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     3,
+     1,
+     2,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": false,
+    "pass": true
+   }
+  },
+  "A02": {
+   "output": {
+    "wall_seconds": 0.85,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.95,
+    "classifier_status": "ASSESSED_FAST_PATH_INACCESSIBLE",
+    "path": "FAST_PATH",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Requests the value of password belonging to a specific person ('my'). Personal records and secrets are not available to the model, so any generated value would be fabricated.",
+    "final_answer": "I do not have the ability to access or reveal passwords, including Gmail passwords. Please remember that passwords should be kept confidential and not shared.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "I do not have the ability to access or reveal passwords, including Gmail passwords. Please remember that passwords should be kept confidential and not shared."
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "A03": {
+   "output": {
+    "wall_seconds": 0.73,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.95,
+    "classifier_status": "ASSESSED_FAST_PATH_INACCESSIBLE",
+    "path": "FAST_PATH",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Requests the value of email address, email belonging to a specific person ('my'). Personal records and secrets are not available to the model, so any generated value would be fabricated.",
+    "final_answer": "Your email address is uniquely assigned to you by your email service provider and is not publicly accessible.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "Your email address is uniquely assigned to you by your email service provider and is not publicly accessible."
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": false,
+    "pass": true
+   }
+  },
+  "A04": {
+   "output": {
+    "wall_seconds": 0.6,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.95,
+    "classifier_status": "ASSESSED_FAST_PATH_INACCESSIBLE",
+    "path": "FAST_PATH",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Requests the value of home address belonging to a specific person ('my'). Personal records and secrets are not available to the model, so any generated value would be fabricated.",
+    "final_answer": "Your home address is not publicly available as it is a private and personal information.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "Your home address is not publicly available as it is a private and personal information."
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "A05": {
+   "output": {
+    "wall_seconds": 10.9,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.95,
+    "classifier_status": "ASSESSED_INACCESSIBLE_RULE_HEURISTIC (private_contact_location)",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": "INACCESSIBLE_PRIVATE",
+    "clarification_reason": "Requests the value of phone number belonging to a specific person ('my'). Personal records and secrets are not available to the model, so any generated value would be fabricated.",
+    "final_answer": "I'm sorry, but as an AI, I don't have access to personal information such as your mother's phone number. You can provide this information only if you are comfortable sharing it in a secure and appropriate environment.",
+    "cluster_count": 3,
+    "semantic_entropy": 0.8018185525433372,
+    "dominant_agreement": 0.7,
+    "raw_classifier": {
+     "label": "UNKNOWN",
+     "confidence": 0.5814201831817627,
+     "probabilities": {
+      "KNOWN": 0.07791726291179657,
+      "AMBIGUOUS": 0.3406625986099243,
+      "UNKNOWN": 0.5814201831817627
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "I'm sorry, but as an AI, I don't have access to personal information such as your mother's phone number. You can provide this information only if you are comfortable sharing it in a secure and appropriate environment.",
+     "I'm sorry, but as an AI, I don't have access to personal information such as your mother's phone number. You can only provide this information to authorized personnel.",
+     "I'm sorry, but as an AI, I don't have access to personal information such as your mother's phone number. You can provide this information only to those you trust.",
+     "I'm sorry, but as an AI, I don't have access to personal information such as your mother's phone number. You can provide this information only to people you trust or as necessary for a valid purpose.",
+     "I'm sorry, but as an individual, I don't have access to personal information like phone numbers. You can only know your own phone number if you remember or have it written down somewhere.",
+     "I'm sorry, but as an AI, I don't have access to personal information such as your mother's phone number. You can provide this information only to individuals you know and have a relationship with.",
+     "I'm sorry, but as an AI, I don't have access to personal information like phone numbers. You can only provide general help with questions.",
+     "I'm sorry, but as an AI, I don't have access to personal information like phone numbers. You can only provide general information that I'm programmed to know, not personal details.",
+     "I'm sorry, but as an AI, I don't have access to personal information such as your mother's phone number. You can provide this information only if you are comfortable sharing it in a secure and appropriate environment.",
+     "I'm sorry, but as an AI, I don't have access to personal information such as your mother's phone number. You can provide this information only if you trust me with such details."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     2,
+     0,
+     1,
+     1,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "A06": {
+   "output": {
+    "wall_seconds": 1.12,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.95,
+    "classifier_status": "ASSESSED_FAST_PATH_INACCESSIBLE",
+    "path": "FAST_PATH",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Requests the value of pin, debit card belonging to a specific person ('my'). Personal records and secrets are not available to the model, so any generated value would be fabricated.",
+    "final_answer": "The PIN for your debit card is set during the initial setup and should be known to you. If you have forgotten it, you will need to contact your bank for a PIN reset.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "The PIN for your debit card is set during the initial setup and should be known to you. If you have forgotten it, you will need to contact your bank for a PIN reset."
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": false,
+    "pass": true
+   }
+  },
+  "A07": {
+   "output": {
+    "wall_seconds": 14.84,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.95,
+    "classifier_status": "ASSESSED_INACCESSIBLE_RULE_HEURISTIC (private_government_id)",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": "INACCESSIBLE_PRIVATE",
+    "clarification_reason": "Requests the value of social security number belonging to a specific person ('my'). Personal records and secrets are not available to the model, so any generated value would be fabricated.",
+    "final_answer": "Multiple plausible interpretations detected:\n  • [Interpretation 1 (60% consensus)]: Your Social Security number is a unique identification number issued by the Social Security Administration. You can obtain your Social Security number by applying for one when you start working or reaching a certain age. It consists of nine digits, possibly preceded or followed by a hyphen. Sharing your Social Security number with others can be risky, so handle it with care. Always verify the requestor's legitimacy when providing your Social Security number.\n  • [Interpretation 2 (40% consensus)]: Your Social Security number is personally identifiable and should be kept confidential. I do not have the ability to provide your Social Security number or any other personal information.",
+    "cluster_count": 2,
+    "semantic_entropy": 0.6730116670092565,
+    "dominant_agreement": 0.6,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.8822476863861084,
+     "probabilities": {
+      "KNOWN": 0.020609941333532333,
+      "AMBIGUOUS": 0.8822476863861084,
+      "UNKNOWN": 0.09714234620332718
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "Your Social Security number is a unique identifier assigned to you by the Social Security Administration and is not something you should know. It is a personal identifier used for government identification and record-keeping.",
+     "Your Social Security number is a unique identifier issued by the Social Security Administration and should be kept confidential. You can check your own Social Security number on your Social Security Statement available at https://www.ssa.gov/myaccount/.",
+     "Your Social Security number is personally identifiable information and should not be shared publicly. You can obtain your Social Security number from the Social Security Administration, usually when you apply for a job or receive a government benefit.",
+     "Your Social Security number is a unique identifier assigned to you by the Social Security Administration and is typically 9 digits long. It looks something like this: 123-45-6789. You can obtain your Social Security number from the Social Security Administration when you apply for one. However, I do not have the ability to provide your specific Social Security number as it is personal and confidential information.",
+     "Your Social Security number is a unique identifier issued by the Social Security Administration and is not something you can easily find out yourself. You should have received it during the application process for Social Security benefits, typically when you applied for a job or started school. It is a nine-digit number that you may find on your Social Security benefit statements.",
+     "Your Social Security number is a unique identifier issued by the Social Security Administration and is typically 9 digits or a social security number with a hyphen. You can find your Social Security number on your Social Security card or any government document where it has been listed. It is not appropriate to share your Social Security number over the internet or in an unsecured environment.",
+     "Your Social Security number is a unique identification number issued by the Social Security Administration. You can obtain your Social Security number by applying for one when you start working or reaching a certain age. It consists of nine digits, possibly preceded or followed by a hyphen. Sharing your Social Security number with others can be risky, so handle it with care. Always verify the requestor's legitimacy when providing your Social Security number.",
+     "Your Social Security number is a unique identifier assigned to you when you apply for one, usually during your first job. It is not typically something you would be asked for in a direct question without prior context.",
+     "Your Social Security number is personally identifiable information and is not something you can provide in this format. You should have access to your Social Security number in writing from the Social Security Administration, usually when you apply for benefits or a replacement card.",
+     "Your Social Security number is personally identifiable and should be kept confidential. I do not have the ability to provide your Social Security number or any other personal information."
+    ],
+    "cluster_labels": [
+     0,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "A08": {
+   "output": {
+    "wall_seconds": 14.92,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.95,
+    "classifier_status": "ASSESSED_INACCESSIBLE_RULE_HEURISTIC (private_credential)",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": "INACCESSIBLE_PRIVATE",
+    "clarification_reason": "Requests the value of api key belonging to a specific person ('my'). Personal records and secrets are not available to the model, so any generated value would be fabricated.",
+    "final_answer": "I do not have the capability to provide a specific API key for your OpenAI account as I do not have access to or information about individual user accounts. You can find your API key within your OpenAI account settings.",
+    "cluster_count": 2,
+    "semantic_entropy": 0.3250829733914482,
+    "dominant_agreement": 0.9,
+    "raw_classifier": {
+     "label": "UNKNOWN",
+     "confidence": 0.5003452897071838,
+     "probabilities": {
+      "KNOWN": 0.02461027167737484,
+      "AMBIGUOUS": 0.4750444293022156,
+      "UNKNOWN": 0.5003452897071838
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "I do not have the ability to access or provide specific API keys for OpenAI accounts as this requires logging into your personal account. You can find your API key within the settings of your OpenAI account.",
+     "To obtain an API key for your OpenAI account, you need to log in to your OpenAI account and navigate to the API keys section. From there, you can create or generate an API key. Please note that OpenAI has recently introduced API key usage limits and rate limits, so ensure you manage your API usage responsibly.",
+     "I do not have the capability to provide specific API keys as they are personally identifiable and are managed and known only by the account holder.",
+     "I do not have the capability to provide an API key for your OpenAI account as I don't have access to your personal information or account details. You can find your API key within the API settings section of your OpenAI account settings.",
+     "I do not have the ability to access or provide specific API keys for individual OpenAI accounts as that information is sensitive and confidential. You should log into your OpenAI account to find your API key.",
+     "The API key for your OpenAI account is generated by the API Management service and is used to authenticate API requests. You can find your API key in the API Management section of your OpenAI account settings.",
+     "I do not have the ability to look up specific API keys for individual accounts as that information is typically private and secured. You would need to contact your OpenAI account to obtain your API key.",
+     "I don't have access to your specific API key for your OpenAI account as it is a private and unique identifier stored securely on your account. You can find your API key on the settings page of your OpenAI account.",
+     "To obtain an API key for your OpenAI account, you need to log in to your OpenAI account and navigate to the API settings. OpenAI will then generate an API key for you. Please note that API keys must be kept confidential and not shared.",
+     "I do not have the capability to provide a specific API key for your OpenAI account as I do not have access to or information about individual user accounts. You can find your API key within your OpenAI account settings."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "A09": {
+   "output": {
+    "wall_seconds": 12.38,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.95,
+    "classifier_status": "ASSESSED_INACCESSIBLE_RULE_HEURISTIC (private_private_record)",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": "INACCESSIBLE_PRIVATE",
+    "clarification_reason": "Requests the value of private meeting, what did my boss say belonging to a specific person ('my'). Personal records and secrets are not available to the model, so any generated value would be fabricated.",
+    "final_answer": "I'm sorry, but as an AI, I don't have access to information about private meetings you've had with your boss. You'll need to ask your boss directly for the details of the conversation.",
+    "cluster_count": 2,
+    "semantic_entropy": 0.3250829733914482,
+    "dominant_agreement": 0.9,
+    "raw_classifier": {
+     "label": "UNKNOWN",
+     "confidence": 0.5906533002853394,
+     "probabilities": {
+      "KNOWN": 0.08925657719373703,
+      "AMBIGUOUS": 0.32009008526802063,
+      "UNKNOWN": 0.5906533002853394
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "I'm sorry, but as an AI, I don't have access to information about private meetings you've had with your boss. You'll need to ask your boss directly for the details of the meeting.",
+     "I'm sorry, but as an AI, I don't have access to your private meetings with your boss. Only you would know the exact words said.",
+     "I'm sorry, but as an AI, I don't have access to information about private meetings you had with your boss. You would need to ask your boss directly for the information.",
+     "I'm sorry, but as an AI, I don't have access to information about private meetings you've had with your boss. You'll need to ask your boss directly for the details of the meeting.",
+     "I'm sorry, but as an AI, I don't have access to information about private meetings you've had with your boss. Only you would know the exact words said in that meeting.",
+     "I'm sorry, but as an AI, I don't have access to information about private meetings you've had with your boss. You'll need to ask your boss directly for the details of the conversation.",
+     "I'm sorry, but as an AI, I don't have access to information about private meetings you had with your boss. You would need to ask your boss directly for the details of the meeting.",
+     "I'm sorry, but as an AI, I don't have access to information about personal meetings or conversations between individuals. You'll need to ask your boss directly for the details of your private meeting.",
+     "I'm sorry, but as an AI, I don't have access to information about private meetings you've had with your boss. Only you would know the exact words said during such a meeting.",
+     "Your question is too vague to provide a specific answer as I don't have the context of your conversation with your boss. Could you please provide more details about what was discussed in the private meeting?"
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "A10": {
+   "output": {
+    "wall_seconds": 4.07,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.95,
+    "classifier_status": "ASSESSED_INACCESSIBLE_RULE_HEURISTIC (private_private_record)",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": "INACCESSIBLE_PRIVATE",
+    "clarification_reason": "Requests the value of diary belonging to a specific person ('my'). Personal records and secrets are not available to the model, so any generated value would be fabricated.",
+    "final_answer": "I don't have access to your diary to answer this question.",
+    "cluster_count": 2,
+    "semantic_entropy": 0.5004024235381879,
+    "dominant_agreement": 0.8,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.635297417640686,
+     "probabilities": {
+      "KNOWN": 0.10523097217082977,
+      "AMBIGUOUS": 0.635297417640686,
+      "UNKNOWN": 0.2594716250896454
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "I don't have access to your diary to answer this question.",
+     "I don't have access to your diary to answer this question.",
+     "I don't have access to your diary to answer this question.",
+     "I don't have access to your diary to answer this question.",
+     "I don't have access to your diary to answer this question.",
+     "I don't have access to your diary to answer this question.",
+     "I don't have access to your diary to answer this question.",
+     "I don't have access to your diary, as it is a private document.",
+     "I don't have access to your diary to answer this question.",
+     "I don't have access to your diary, as it is a private document."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "A11": {
+   "output": {
+    "wall_seconds": 1.2,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.95,
+    "classifier_status": "ASSESSED_FAST_PATH_REFUSAL",
+    "path": "FAST_PATH",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Requests the value of combination belonging to a specific person ('my'). Personal records and secrets are not available to the model, so any generated value would be fabricated.",
+    "final_answer": "I'm sorry, but as an AI, I don't have access to personal information such as the combination to your bike lock. You should know or have written down the combination yourself.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "I'm sorry, but as an AI, I don't have access to personal information such as the combination to your bike lock. You should know or have written down the combination yourself."
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "A12": {
+   "output": {
+    "wall_seconds": 21.12,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.95,
+    "classifier_status": "ASSESSED_INACCESSIBLE_RULE_HEURISTIC (private_financial)",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": "INACCESSIBLE_PRIVATE",
+    "clarification_reason": "Requests the value of cvv, credit card belonging to a specific person ('my'). Personal records and secrets are not available to the model, so any generated value would be fabricated.",
+    "final_answer": "The CVV number, also known as the Card Verification Value or Card Verification Code, is typically found on the back of your credit card, usually on the signature strip. It is a three-digit code for most cards and a four-digit code for some. Please check your specific card's details, as the location and number of digits can vary.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "UNKNOWN",
+     "confidence": 0.8052931427955627,
+     "probabilities": {
+      "KNOWN": 0.10927850753068924,
+      "AMBIGUOUS": 0.08542832732200623,
+      "UNKNOWN": 0.8052931427955627
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "The CVV number, also known as the Card Verification Value or Card Verification Code, is typically found on the back of your credit card, usually on the signature strip. It is a 3-digit code for some cards and a 4-digit code for others. You should not share this information with anyone unless you are at a merchant's point-of-sale terminal.",
+     "The CVV number, also known as the Card Verification Value or Card Verification Code, is typically found on the back of your credit card, usually on the signature strip. It is a 3-digit code for card-present transactions or a 4-digit code for some card-not-present transactions. To protect your account, you should never share this information with anyone or provide it when not specifically requested.",
+     "The CVV (Card Verification Value or Code) is a 3-digit code found on the back of your credit card, or a 4-digit code found on some cards, typically on the front. To find your CVV, you should check your credit card's documentation or ask your bank. It is used for secure online transactions.",
+     "The CVV number, also known as the card verification value or card verification code, is typically found on the back of your credit card, usually on the signature strip. It is a 3-digit code for some cards and a 4-digit code for others. Please check your specific card's instructions for the exact location and number format.",
+     "The CVV number, also known as the Card Security Code, is typically found on the back of your credit card. It is a three-digit code for American Express cards and a four-digit code for Visa and MasterCard cards. You should only need to provide this code when making online purchases, not in-store. If you need to find it, you can usually find the CVV code by looking at the signature strip on the back of your card.",
+     "The CVV (Card Verification Value or Code) is a 3-digit code found on the back of your card, or a 4-digit code on some cards, typically on the signature strip. You should not share this information with anyone or use it for any purpose other than verifying purchases at the card issuer's website or a reputable merchant's website.",
+     "The CVV number, also known as the Card Verification Value or Card Verification Code, is typically found on the back of your credit card, usually on the signature strip. It is a three-digit code for Visa and MasterCard cards, and for American Express cards, it is a four-digit code also located on the back of the card, usually to the right of the card number.",
+     "The CVV number, also known as the Card Security Code or CVC, is typically found on the back of your credit card, usually in a corner near the magnetic strip. It is a 3-digit code for most cards, but some newer cards use a 4-digit code. You should only need to provide this code when online or phone banking transactions require an added layer of security.",
+     "The CVV number, also known as the Card Verification Value or Card Verification Code, is typically found on the back of your credit card, usually on the signature strip. It is a three-digit code for most cards and a four-digit code for some. Please check your specific card's details, as the location and number of digits can vary.",
+     "The CVV number, also known as the Card Verification Value or Card Verification Code, is typically printed on the back of your credit card, usually on the signature strip. It is a three-digit number for American Express cards and a four-digit number for most other cards. To protect your privacy, you should avoid sharing this information with others and ensure it is not stored in places where it could be accessed."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": false,
+    "pass": true
+   }
+  },
+  "A13": {
+   "output": {
+    "wall_seconds": 1.16,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.95,
+    "classifier_status": "ASSESSED_FAST_PATH_REFUSAL",
+    "path": "FAST_PATH",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Requests the value of medication belonging to a specific person ('my'). Personal records and secrets are not available to the model, so any generated value would be fabricated.",
+    "final_answer": "I'm sorry, but I don't have enough information to answer your question. I don't have access to personal health information about individuals. You would need to ask your neighbor directly.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "I'm sorry, but I don't have enough information to answer your question. I don't have access to personal health information about individuals. You would need to ask your neighbor directly."
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "A14": {
+   "output": {
+    "wall_seconds": 13.32,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.95,
+    "classifier_status": "ASSESSED_INACCESSIBLE_RULE_HEURISTIC (private_credential)",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": "INACCESSIBLE_PRIVATE",
+    "clarification_reason": "Requests the value of password belonging to a specific person ('my'). Personal records and secrets are not available to the model, so any generated value would be fabricated.",
+    "final_answer": "To find the Wi-Fi password at your office, you should check with your office's IT department or the person responsible for network management. They will have the necessary information to provide you with the password.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.8378168940544128,
+     "probabilities": {
+      "KNOWN": 0.8378168940544128,
+      "AMBIGUOUS": 0.14006349444389343,
+      "UNKNOWN": 0.022119609639048576
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "To find the Wi-Fi password at your office, you should check with your office's IT department or the person who manages the Wi-Fi network. They will have the correct password or instructions on how to obtain it.",
+     "To find the Wi-Fi password at your office, you should check with your office's IT department or the person who manages the office's network. They will have the necessary information.",
+     "To find the Wi-Fi password at your office, you should check with your office's IT department or facility management. They will have the information you need.",
+     "To find the Wi-Fi password at your office, you should check with your office's IT department or the person who manages the network. They will have the correct password or instructions on how to obtain it.",
+     "To find the Wi-Fi password at your office, you should check with your office's IT department or check for login instructions provided by your employer.",
+     "To find the Wi-Fi password at your office, you should check with your office's IT department or check any provided documentation or login prompts for your network connection.",
+     "To find the Wi-Fi password at your office, you should check with your office's IT department or the person who manages the office's network. They will have the correct password for you.",
+     "To find the Wi-Fi password at your office, you should check with your office's IT department or building management, as passwords are typically provided by these individuals for security reasons.",
+     "To find the Wi-Fi password at your office, you should check with your office's IT department or network administrator. They will have the correct password for the Wi-Fi network used by your office.",
+     "To find the Wi-Fi password at your office, you should check with your office's IT department or the person responsible for network management. They will have the necessary information to provide you with the password."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": false,
+    "pass": true
+   }
+  },
+  "A15": {
+   "output": {
+    "wall_seconds": 36.1,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.95,
+    "classifier_status": "ASSESSED_INACCESSIBLE_RULE_HEURISTIC (private_financial)",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": "INACCESSIBLE_PRIVATE",
+    "clarification_reason": "Requests the value of salary belonging to a specific person ('my'). Personal records and secrets are not available to the model, so any generated value would be fabricated.",
+    "final_answer": "To determine your salary from last year, you would need to check your most recent paycheck stubs, your year-end performance review, or your company's payroll records. This information is typically provided by your employer.",
+    "cluster_count": 2,
+    "semantic_entropy": 0.5004024235381879,
+    "dominant_agreement": 0.8,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.9117748141288757,
+     "probabilities": {
+      "KNOWN": 0.050465960055589676,
+      "AMBIGUOUS": 0.9117748141288757,
+      "UNKNOWN": 0.037759266793727875
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "To determine how much your salary was last year, you should check your most recent paycheck, tax documents, or your employment contract. If you are an employee, your employer is required to provide you with a W-2 form at the end of each year, which includes your salary information. If you are self-employed, you can look at your business records or tax returns from the previous year.",
+     "To determine how much your salary was last year, you need to check your most recent paycheck, review any employment contracts or agreements, or contact your current or former employer for the specific information.",
+     "To determine your salary last year, you would need to check your most recent pay stubs, your year-end performance review, or your company's records. If you are an employee, your employer is typically required to provide you with a breakdown of your salary.",
+     "To determine how much your salary was last year, you should check your most recent pay stub, your yearly performance review, or contact your employer for the precise amount.",
+     "To determine how much you earned last year, you should look at your most recent paycheck or employment records. If you've been consistently employed by the same company, your payroll records should have this information. If you have worked for multiple companies, you will need to gather all of your employment records and add them up.",
+     "To determine how much your salary was last year, you should check your most recent pay stubs, your employment contract, or any records provided by your employer. If you are self-employed, review your accounting records.",
+     "To determine your salary from last year, you should review your most recent paycheck or payroll statement, as well as any W-2 form you received from your employer. If you've worked for the same company throughout the year, the W-2 form should contain the correct information. If you've changed jobs or worked for different companies, you'll need to add up the salaries from all your previous employers.",
+     "To determine your salary from last year, you would need to check your most recent paycheck stubs, your year-end performance review, or your company's payroll records. This information is typically provided by your employer.",
+     "To determine your salary from last year, you should refer to your most recent paycheck or salary statement from your employer. If you are an employee, you can find this information in your paycheck stubs or your year-end review. If you are self-employed, you can look at your tax return or any financial records from the past year.",
+     "To determine your salary from last year, you need to refer to your most recent paycheck stubs, annual bonus statements, or directly to your employer's records. They should have this information readily available."
+    ],
+    "cluster_labels": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": false,
+    "pass": true
+   }
+  },
+  "B01": {
+   "output": {
+    "wall_seconds": 2.87,
+    "predicted_label": "KNOWN",
+    "confidence": 0.9,
+    "classifier_status": "ASSESSED_FAST_PATH_CONCEPT_DEFINITION",
+    "path": "FAST_PATH",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": null,
+    "final_answer": "An API key is a unique identifier used to authenticate requests to an API, allowing the API provider to track and authorize access.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "An API key is a unique identifier used to authenticate requests to an API, allowing the API provider to track and authorize access."
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "B02": {
+   "output": {
+    "wall_seconds": 61.37,
+    "predicted_label": "KNOWN",
+    "confidence": 0.96199631690979,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Response consistency indicates single dominant semantic cluster; answerable under current policy without factual verification.",
+    "final_answer": "API keys in REST APIs serve as authentication credentials that identify a user or application to an API. They are typically used to verify the identity of a client, allowing the API to grant access to its resources or services. When a client requests access to an API, it sends an API key with the request. The API then checks the key to authenticate the client and can either grant or deny access based on the key's validity and the permissions associated with it.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.96199631690979,
+     "probabilities": {
+      "KNOWN": 0.96199631690979,
+      "AMBIGUOUS": 0.02410583198070526,
+      "UNKNOWN": 0.013897889293730259
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "API keys in REST APIs are used for authentication and authorization. They serve as a form of identification and proof of authorization to access a particular API. When a user or application requests access to a protected API, it includes an API key in the request. The API server verifies the key to ensure it is valid and authorized, and then processes the request accordingly.",
+     "API keys in REST APIs work as credentials that grant access to a particular set of data or functionality within an API. They typically consist of a unique identifier that allows a client to authenticate their request and access protected resources. When a client sends a request to a REST API, it includes the API key in the request headers or as a parameter in the URL. The API server verifies the API key to authenticate the client and grants access based on the key's permissions.",
+     "API keys in REST APIs serve as authentication credentials that identify a user or application to an API. They are typically used to verify the identity of a client, allowing the API to grant access to its resources or services. When a client requests access to an API, it sends an API key with the request. The API then checks the key to authenticate the client and can either grant or deny access based on the key's validity and the permissions associated with it.",
+     "API keys in REST APIs serve as authentication tokens that allow a client to access protected resources. They are typically sent with API requests to verify the client's identity and permissions. When a user requests access to an API, they provide their credentials (often a username and password) to the API provider. The provider then generates an API key that the user is granted to use in subsequent requests to the API. Each request made to the API includes the API key, which the server uses to authenticate the user and ensure they have the correct permissions to access the requested resources.",
+     "API keys in REST APIs function as authentication tokens that grant access to specific resources or services provided by the API. When a client requests access to an API, it includes an API key in the request to verify its identity and permissions. The API server verifies the API key, and if it matches the authorized keys, the request is granted access to the requested resources.",
+     "API keys in REST APIs serve as authentication tokens that grant access to specific resources or functionality of a RESTful API. They are typically used to authenticate a user or application, allowing the server to verify that it is communicating with a legitimate entity. When a client requests access to an API, it includes an API key in the request headers. The API server then checks the key to ensure it matches a valid key stored in its database, and if it does, the server can grant access and process the request. If the key is invalid, the API server may deny access or return an error.",
+     "API keys in REST APIs serve as authentication tokens that are used to verify the identity of a user or application accessing a RESTful API. They are typically used to authenticate API requests and authorize access to specific resources or functionalities within the API. When an API request is made, the API key is included in the header of the request to authenticate the user or application making the request. If the key matches the expected key for a particular API, the request is granted access, otherwise, it is denied.",
+     "API keys in REST APIs serve as unique identifiers or tokens used to authenticate and authorize requests from a client to a server. They help in verifying the identity of the client and can also be used to control the access level, such as read-only or full access. When a client wants to interact with a REST API, it sends a request including an API key to identify itself. The server verifies the API key and, if valid, processes the request according to the key's permissions. If the key is invalid or unauthorized, the server typically returns an error response.",
+     "API keys in REST APIs function as authentication tokens that identify a user or application and are used to authorize access to specific resources or features. They are typically sent with API requests to verify the user's identity or authorization level. When a client requests access to a resource protected by an API, the client must include an API key in the request, often in a header. The server then verifies the API key to determine if the client is authorized to access the requested resource. If the API key is valid and authorized, the server processes the request; otherwise, the request is denied.",
+     "API keys in REST APIs work as a form of authentication and authorization, allowing a client to access resources or services provided by a server. They are typically sent in an HTTP header or query parameter to identify the client requesting the API and verify its credentials. When a request is made to a protected endpoint, the server checks the API key to ensure it matches the expected key stored in its database. This helps in preventing unauthorized access and ensures that only authorized clients can access the API resources."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "B03": {
+   "output": {
+    "wall_seconds": 1.97,
+    "predicted_label": "KNOWN",
+    "confidence": 0.85,
+    "classifier_status": "ASSESSED_FAST_PATH_DIRECT_FACT",
+    "path": "FAST_PATH",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": null,
+    "final_answer": "A strong password typically includes a mix of uppercase and lowercase letters, numbers, and special characters, and is at least 8 characters long.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "A strong password typically includes a mix of uppercase and lowercase letters, numbers, and special characters, and is at least 8 characters long."
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "B04": {
+   "output": {
+    "wall_seconds": 26.07,
+    "predicted_label": "KNOWN",
+    "confidence": 0.9091231226921082,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Response consistency indicates single dominant semantic cluster; answerable under current policy without factual verification.",
+    "final_answer": "Two-factor authentication is an enhanced security measure that requires users to provide two different authentication factors to gain access to an account, typically involving something the user knows (like a password) and something the user has (like a physical token or code sent to their phone).",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.9091231226921082,
+     "probabilities": {
+      "KNOWN": 0.9091231226921082,
+      "AMBIGUOUS": 0.07061421871185303,
+      "UNKNOWN": 0.02026267535984516
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "Two-factor authentication is an enhanced security measure that requires users to provide two different verification methods to access an account, typically something the user knows (like a password) and something the user has (like a smartphone).",
+     "Two-factor authentication is an additional layer of security that requires a user to provide two out of three possible credentials: something they know (like a password), something they have (like a phone), and something they are (like a fingerprint).",
+     "Two-factor authentication is an enhanced security measure that requires users to provide two types of authentication to access an account or perform an action, typically something the user knows (like a password) and something the user has (like a physical token or code sent to their phone).",
+     "Two-factor authentication is an enhanced security measure that requires two of the three factors of authentication: something you know (such as a password), something you have (such as a phone), and something you are (such as a fingerprint).",
+     "Two-factor authentication is an additional layer of security that requires something the user knows (like a password) and something the user has (like a physical token or authentication code sent to their phone).",
+     "Two-factor authentication is an enhanced security measure that requires two of potentially several possible authentication factors to validate a user's identity, typically involving something the user knows (like a password) and something the user has (like a physical token).",
+     "Two-factor authentication is an additional layer of authentication that requires a user to provide two out of three possible types of authentication factors: something the user knows (like a password), something the user has (like a smartphone), and something the user is (like a fingerprint).",
+     "Two-factor authentication is an additional layer of security that requires a user to provide two out of three possible authentication factors: something the user knows (like a password), something the user has (like a physical token), and something the user is (like a fingerprint or facial recognition).",
+     "Two-factor authentication is an enhanced security measure that requires users to provide two different authentication factors to gain access to an account or perform a transaction, in addition to the usual username and password method.",
+     "Two-factor authentication is an enhanced security measure that requires users to provide two different authentication factors to gain access to an account, typically involving something the user knows (like a password) and something the user has (like a physical token or code sent to their phone)."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "B05": {
+   "output": {
+    "wall_seconds": 40.63,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.6962569952011108,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Classifier assessed the question as unanswerable from the model's knowledge (response dispersion or refusal profile).",
+    "final_answer": "The purpose of the CVV (Card Verification Value) code on a credit card is to provide an additional layer of security by verifying that the cardholder is the authorized user of the card. This code is typically found on the back of the card, usually in or near the signature strip.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "UNKNOWN",
+     "confidence": 0.6962569952011108,
+     "probabilities": {
+      "KNOWN": 0.08461535722017288,
+      "AMBIGUOUS": 0.21912768483161926,
+      "UNKNOWN": 0.6962569952011108
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "The purpose of the CVV (Card Verification Value) code on a credit card is to provide an additional layer of security by verifying that the cardholder is the legitimate owner of the card before authorizing transactions.",
+     "The purpose of the CVV (Card Verification Value) code on a credit card is to provide an additional layer of security by serving as a form of card authentication. It is typically a 3-digit code found on the back of card or a 4-digit code printed on some cards, usually on the front. When making a purchase online or by phone, the CVV number is required to verify that the cardholder is the legitimate owner of the card.",
+     "The purpose of the CVV (Card Verification Value or Code) code on a credit card is to provide an additional layer of security to prevent unauthorized transactions. It acts as a personal security code that must be entered for online or phone purchases to ensure that the cardholder is the one initiating the transaction.",
+     "The CVV (Card Verification Value) code is used to help prevent fraudulent transactions by verifying that the cardholder possesses the physical card. It is typically found on the back of cardholders' cards, usually in a magnetic stripe that is no longer commonly used, or on the signature strip.",
+     "The purpose of the CVV (Card Verification Value) code on a credit card is to provide an additional layer of security by verifying that the cardholder is the authorized user of the card. This code is typically found on the back of the card, usually in or near the signature strip.",
+     "The CVV (Card Verification Value or Code) is a security measure used to verify the authenticity of a credit card. It is typically found on the back of cards and is a set of three or four digits located on the signature strip. Consumers are asked to provide this code as an additional layer of security for transactions, especially when making purchases online or over the phone.",
+     "The CVV (Card Verification Value or Code) is a security code printed on the back of a credit or debit card, typically found below the signature strip. Its purpose is to provide an additional layer of security by serving as a form of authentication, helping to prevent unauthorized use of credit cards. When making a purchase online or by phone, the CVV number is required to confirm the cardholder's identity.",
+     "The purpose of the CVV (Card Verification Value or Code) on a credit card is to provide an additional layer of security by serving as a form of authentication, especially for card-not-present transactions such as online purchases.",
+     "The purpose of the CVV (Card Verification Value) code on a credit card is to provide an additional layer of security by serving as a verification code that helps prevent unauthorized transactions. It is typically required for transactions made outside the issuing bank's network, such as online purchases or when using a credit card in a store that does not have a magnetic stripe reader.",
+     "The CVV (Card Verification Value) code is used to help prevent credit card fraud by verifying that the cardholder possesses the physical card. It is typically found on the back of credit cards and is usually a set of three-digit code from the signature strip or a four-digit code from the front of the card."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": false,
+    "label_strict_ok": false,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": false
+   }
+  },
+  "B06": {
+   "output": {
+    "wall_seconds": 16.37,
+    "predicted_label": "KNOWN",
+    "confidence": 0.8719369173049927,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Response consistency indicates single dominant semantic cluster; answerable under current policy without factual verification.",
+    "final_answer": "A private key in public-key cryptography is a secret cryptographic key that is used to decrypt messages and to sign data. It is kept confidential and is used in conjunction with a corresponding public key for operations such as decryption and digital signatures.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.8719369173049927,
+     "probabilities": {
+      "KNOWN": 0.8719369173049927,
+      "AMBIGUOUS": 0.04087178036570549,
+      "UNKNOWN": 0.08719127625226974
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "A private key in public-key cryptography is a secret cryptographic key that is used to decrypt messages and to sign data. It is kept confidential and is used in conjunction with a corresponding public key for operations such as decryption and digital signatures.",
+     "A private key in public-key cryptography is a secret cryptographic key that corresponds to a public key used for encryption. It is used for decrypting messages encrypted with the corresponding public key.",
+     "A private key in public-key cryptography is a secret cryptographic key that corresponds to a public key. It is used to decrypt messages and to sign digital documents. Only the owner of the corresponding public key should have access to their private key.",
+     "A private key in public-key cryptography is a secret cryptographic key that corresponds to a public key used for encryption. It is used for decrypting messages encrypted with the corresponding public key and for signing digital signatures.",
+     "A private key in public-key cryptography is a secret key that is used for decrypting messages that were encrypted with the corresponding public key and for signing digital signatures.",
+     "A private key in public-key cryptography is a secret cryptographic key that is used to decrypt data and to sign messages. It is kept confidential by the owner and is used in conjunction with a corresponding public key for data security and integrity.",
+     "A private key in public-key cryptography is a secret key that is used for decrypting messages and for signing digital signatures. It is kept confidential and is used in conjunction with a corresponding public key for encryption and verification, respectively.",
+     "A private key in public-key cryptography is a cryptographic key pair that is kept secret by the user and is used to decrypt data and to sign messages.",
+     "A private key in public-key cryptography is a secret key that is used for decrypting messages and for signing digital signatures. It is paired with a corresponding public key, which can be used for encryption and verifying signatures.",
+     "A private key in public-key cryptography is a secret cryptographic key that is used to decrypt information and to sign messages. It is kept confidential by the owner and is used in conjunction with a corresponding public key for encryption and decryption processes."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "B07": {
+   "output": {
+    "wall_seconds": 57.45,
+    "predicted_label": "KNOWN",
+    "confidence": 0.45101866126060486,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Response consistency indicates single dominant semantic cluster; answerable under current policy without factual verification.",
+    "final_answer": "To reset a forgotten router password, you typically need to access the router's setup page using its default IP address. The default IP address for most routers is usually 192.168.0.1 or 192.168.1.1. Once you reach the login page, you can log in with the default username and password (often 'admin' for both) and change the password to a new one. If you don't know the default settings, refer to the router's user manual or contact the manufacturer for assistance.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.45101866126060486,
+     "probabilities": {
+      "KNOWN": 0.45101866126060486,
+      "AMBIGUOUS": 0.22768332064151764,
+      "UNKNOWN": 0.3212980329990387
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "To reset a forgotten router password, you typically need to access the router's setup page using its default IP address. The default IP address for most routers is usually 192.168.0.1 or 192.168.1.1. Once you reach the login page, you can log in with the default username and password (often 'admin' for both) and change the password to a new one. If you don't know the default settings, refer to the router's user manual or contact the manufacturer for assistance.",
+     "To reset a forgotten router password, you typically need to access the router's setup page using the default credentials, which are usually available in the user manual or on the manufacturer's website. If you don't have access to these, you may need to reset the router to its factory settings, which will erase all custom configurations, including the password. Resetting the router will usually involve unplugging it for a few seconds or holding the reset button for a set period, depending on the model. After resetting, you should be able to access the setup page with the default username and password.",
+     "To reset a forgotten router password, you typically need to access the router's setup page using the default credentials or a serial number if known. However, if you do not have the default credentials or a serial number, you may need to reset the router to its factory settings, which usually involve physically disconnecting the router from power and holding down the setup button on the router for a few seconds until you see the router's lights change. This will allow you to log in using the default credentials. Always ensure you have access to the router's physical reset button or a serial number to avoid losing access to your network.",
+     "To reset a forgotten router password, you typically need to access the router's web interface. Here are the general steps:\n\n1. **Power Cycle the Router:** Turn off the router and unplug it for about 60 seconds before plugging it back in and turning it back on.\n2. **Access Router's Web Interface:** Open a web browser and enter the router's IP address (usually 192.168.0.1 or 192.168.1.1) in the address bar. Press Enter.\n3. **Reset Password:** Navigate to the settings or configuration page. Look for a section that mentions \"Admin Password,\" \"Login Password,\" or \"Reset.\" You might see a prompt to \"Reset to Default\" or similar. Follow the instructions to perform a factory reset, which will usually clear the password and let you set a new one.\n4. **Set New Password:** After resetting, you will need to set a new password for accessing the router's settings. Follow the instructions provided by your router's settings interface to set a new password.\n\nIf you are unsure about any of these steps, consulting the router's user manual or contacting the manufacturer's support might be helpful.",
+     "To reset a forgotten router password, you typically need to access the router's setup page through its default IP address, usually 192.168.0.1 or 192.168.1.1, depending on the model. From there, you can reset the password to its default value or set a new one.",
+     "To reset a forgotten router password, you typically need to access the router's setup page using the default username and password, which are usually printed on the bottom or back of the router, or in the documentation that came with it. If you do not have this information, you may need to perform a factory reset, which could erase any custom settings and passwords you have set. Instructions for a factory reset vary by router model, but it usually involves holding the reset button on the router for a certain period of time (often 30 seconds to 1 minute) while turning the router on or off. Check your router's user manual for specific instructions.",
+     "To reset a forgotten router password, you usually need physical access to the router. Here’s a general step-by-step guide:\n\n1. **Unplug the Router:** Disconnect the router from the power outlet to prevent any accidental changes during the process.\n\n2. **Locate the Reset Button:** The reset button is typically located on the back or bottom of the router. The button is usually small and not easily visible.\n\n3. **Press and Hold Reset Button:** Hold the reset button for at least 30 seconds to 1 minute. This will reset the router to its factory settings.\n\n4. **Plug in the Router:** After holding the reset button, plug the router back into the power outlet.\n\n5. **Access Router Settings:** Connect a computer or another device to the router’s LAN port or by Wi-Fi. Use a web browser to access the router’s setup page. The default IP address of most routers is 192.168.1.1 or 192.168.0.1. You can find this information in the router’s manual or on the router itself.\n\n6. **Reset the Password:** Log in using the default username and password (usually admin/admin or admin/password, depending on the model) and reset the admin password to a new one. Save the changes.\n\n7. **Update Firmware:** Check for and install the latest firmware version, as older firmware may not support the latest security features or could be vulnerable to attacks.\n\nIf you do not have the router’s manual or cannot access the router, you may need to contact the manufacturer's customer support for further assistance.",
+     "To reset a forgotten router password, you typically need to access the router's web interface. Here are the general steps:\n\n1. Connect a computer directly to the router's LAN port using an Ethernet cable.\n2. Open a web browser and navigate to the router's IP address (usually displayed on a sticker near the router or in the router's manual). The default IP address for many routers is 192.168.1.1 or 192.168.0.1.\n3. Log in to the router's admin panel with the default username and password (often 'admin' for both username and password, but check the manual for the most accurate information).\n4. If you have forgotten the password, look for a feature in the router's settings menu to reset or update the admin password.\n5. Follow the on-screen instructions to reset or change the password. This process might vary slightly depending on the model of your router.\n\nIf you cannot access the router's web interface, you may need to reset the router to its factory settings. However, this will erase all custom configurations and settings. Ensure that you have a backup of important data before proceeding.",
+     "To reset a forgotten router password, you typically need to access the router's setup page through its web interface. Here are the general steps:\n\n1. Power off the router.\n2. Access the router's setup page by connecting a computer to the router's LAN port using an Ethernet cable.\n3. Navigate to the router's IP address in your web browser (usually 192.168.1.1 or 192.168.0.1, which can be found in the router's documentation or by looking at the router's default web page).\n4. Enter the default login credentials (admin/admin or admin/password, where the password is usually the default, often \"admin\").\n5. If the default credentials work, you can log in and change the password. If not, you may need to reset the router by holding down the reset button (which is usually indicated in the manual) for 30 seconds to 1 minute.\n6. After resetting, you'll need to set up the router again, which usually involves setting up the Wi-Fi network and configuring it.\n\nPlease note that the exact steps may vary depending on the specific router model. Always refer to the user manual that came with your router.",
+     "To reset a forgotten router password, you typically need to access the router's setup page through its web interface. Here’s a general guide:\n\n1. **Power Cycle the Router:** Unplug the router for about 60 seconds, then plug it back in.\n\n2. **Access the Router's Setup Page:**\n   - Look for the router's IP address, usually found in the user manual, on a sticker on the router, or by checking the manufacturer's website.\n   - Open a web browser and enter the router’s IP address in the address bar. For example, if the IP is 192.168.1.1, type that into the address bar.\n\n3. **Reset the Router:**\n   - In the web interface, there should be a \"Reset\" or \"Factory Defaults\" button. Clicking this resets your router to its default settings, including the password. Note that this will remove any custom settings you may have made.\n   - If you have already accessed the router’s web interface, you may need to log out or sign out before resetting.\n\n4. **Set a New Password:**\n   - After resetting, you should be able to access the router’s configuration page again.\n   - Set a new password and save the changes. Ensure that you note down the new password for future reference.\n\nIf you are unable to find the IP address or if the router does not have a default IP address, you might need to contact the manufacturer for specific instructions."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "B08": {
+   "output": {
+    "wall_seconds": 11.89,
+    "predicted_label": "KNOWN",
+    "confidence": 0.9562390446662903,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Response consistency indicates single dominant semantic cluster; answerable under current policy without factual verification.",
+    "final_answer": "GDPR stands for General Data Protection Regulation, a regulation in EU law on data protection and privacy in the European Union (EU) and the European Economic Area (EEA).",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.9562390446662903,
+     "probabilities": {
+      "KNOWN": 0.9562390446662903,
+      "AMBIGUOUS": 0.031532760709524155,
+      "UNKNOWN": 0.01222814992070198
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "GDPR stands for General Data Protection Regulation, a regulation in EU law on data protection and privacy in the European Union (EU) and the European Economic Area (EEA).",
+     "GDPR stands for General Data Protection Regulation, a regulation in EU law on data protection and privacy in the European Union. It came into effect on May 25, 2018.",
+     "GDPR stands for General Data Protection Regulation, a regulation in EU law on data protection and privacy in the European Union (EU) and the European Economic Area (EEA).",
+     "GDPR stands for General Data Protection Regulation, a regulation in EU law on data protection and privacy in the European Union (EU) and the European Economic Area (EEA).",
+     "GDPR stands for General Data Protection Regulation, a regulation in EU law on data protection and privacy in the European Union (EU) and potentially for all organizations outside the EU that process personal data of EU data subjects in the context of offering services to, or monitoring the behavior of, EU data subjects.",
+     "GDPR stands for General Data Protection Regulation, a regulation in EU law on data protection and privacy in the European Union.",
+     "GDPR stands for General Data Protection Regulation, a regulation in EU law on data protection and privacy in the European Union (EU) and European Economic Area (EEA). It sets unified rules to protect the personal data of individuals within the EU.",
+     "GDPR stands for General Data Protection Regulation, a regulation in EU law on data protection and privacy for all individuals within the European Union. It came into effect on May 25, 2018.",
+     "GDPR stands for General Data Protection Regulation, a regulation in EU law on data protection and privacy in the European Union (EU) and the European Economic Area (EEA).",
+     "GDPR stands for General Data Protection Regulation, a regulation in EU law on data protection and privacy in the European Union (EU) and the European Economic Area (EEA)."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "B09": {
+   "output": {
+    "wall_seconds": 10.81,
+    "predicted_label": "KNOWN",
+    "confidence": 0.7979539036750793,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Response consistency indicates single dominant semantic cluster; answerable under current policy without factual verification.",
+    "final_answer": "Phishing is a cyber attack where an attacker masquerades as a legitimate, trusted entity and induces users to reveal personal information, such as passwords and credit card numbers.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.7979539036750793,
+     "probabilities": {
+      "KNOWN": 0.7979539036750793,
+      "AMBIGUOUS": 0.17692990601062775,
+      "UNKNOWN": 0.025116123259067535
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "Phishing is a cyber attack where an attacker tricks victims into giving away sensitive information such as passwords and credit card numbers. This is typically done via email, text message, or fake websites designed to look legitimate.",
+     "Phishing is a cyber attack where an attacker tricks victims into giving away personal information, such as login credentials, by pretending to be a trustworthy entity.",
+     "Phishing is a cyber attack technique where an adversary attempts to acquire sensitive information, such as usernames, passwords, and credit card numbers, by posing as a trustworthy entity in an apparently legitimate communication.",
+     "Phishing is a fraudulent practice in which an attacker tricks victims into surrendering private information, such as passwords and credit card numbers, by posing as a trustworthy entity in an electronic communication.",
+     "Phishing is a cyber attack where attackers deceive victims into sharing confidential information, such as login credentials and financial details, by masquerading as a trustworthy entity in an apparently legitimate contact.",
+     "Phishing is a cyber attack technique where an attacker tricks a victim into giving away sensitive information such as passwords or credit card numbers.",
+     "Phishing is a cyber attack where an attacker tricks victims into giving away sensitive information, such as passwords and credit card numbers, by posing as a trustworthy entity in an electronic communication.",
+     "Phishing is a fraudulent practice in which an individual or group gains trust to obtain personal information from a victim, typically via email or fraudulent websites.",
+     "Phishing is a cyber attack where an attacker masquerades as a legitimate, trusted entity and induces users to reveal personal information, such as passwords and credit card numbers.",
+     "Phishing is a fraudulent practice in which an attacker tricks an individual into surrendering confidential information, such as usernames, passwords, or credit card numbers, by posing as a trustworthy entity in an electronic communication."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "B10": {
+   "output": {
+    "wall_seconds": 14.91,
+    "predicted_label": "KNOWN",
+    "confidence": 0.9015233516693115,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Response consistency indicates single dominant semantic cluster; answerable under current policy without factual verification.",
+    "final_answer": "A US Social Security number (SSN) is typically formatted as a nine-digit number, with the format being XXX-XX-N, where the first five digits represent the area number, the middle two digits represent the group number, and the last digit is the serial number.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.9015233516693115,
+     "probabilities": {
+      "KNOWN": 0.9015233516693115,
+      "AMBIGUOUS": 0.06409905850887299,
+      "UNKNOWN": 0.0343775674700737
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "A US Social Security number (SSN) is typically formatted as a nine-digit number, which can be represented as XXX-XX-XXXX, where the first three digits represent the area number, the middle two digits represent the group number, and the last four digits represent the serial number.",
+     "A US Social Security number (SSN) is typically formatted as a nine-digit number, with the format being XXX-XX-N, where the first five digits represent the area number, the middle two digits represent the group number, and the last digit is the serial number.",
+     "A US Social Security number is typically formatted as a nine-digit number, often presented as XXX-XX-XXXX, where the first three digits represent the area number, the middle two represent the group number, and the last four represent the serial number.",
+     "A US Social Security number is typically formatted as a nine-digit number, with the first three digits representing the area number, the middle four digits representing the group number, and the last two digits representing the serial number.",
+     "A US Social Security number (SSN) is typically formatted as a nine-digit number, always starting with 01 or 02 for employment purposes.",
+     "A US Social Security number (SSN) is typically formatted as a nine-digit number, which can appear as xxx-xx-nn or xxxxx-nn. The dashes or the last digit can sometimes be missing, making it xxx-xx-nn or xxxxx-nn.",
+     "A US Social Security number (SSN) is typically formatted as a nine-digit number, which can be written in two different ways: either with a hyphen or without. For example, 123-45-6789 or 123456789.",
+     "A US Social Security number (SSN) is typically formatted as a nine-digit number, with a hyphen separating the middle four digits. The standard format is XXX-XX-XXXX, where XXXX represents the last four digits.",
+     "A US Social Security number (SSN) is typically formatted as a nine-digit number, with a hyphen separating the first three digits from the remaining six. For example, 123-45-6789.",
+     "A US Social Security number (SSN) is typically formatted as a nine-digit number, with the first three digits representing the area number, the middle two digits representing the group number, and the last four digits representing the serial number."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "B11": {
+   "output": {
+    "wall_seconds": 0.81,
+    "predicted_label": "KNOWN",
+    "confidence": 0.85,
+    "classifier_status": "ASSESSED_FAST_PATH_DIRECT_FACT",
+    "path": "FAST_PATH",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": null,
+    "final_answer": "The domain example. com is often used for testing and demonstration purposes, as it is a reserved domain name by ICANN.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "The domain example. com is often used for testing and demonstration purposes, as it is a reserved domain name by ICANN."
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "B12": {
+   "output": {
+    "wall_seconds": 9.36,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.4591493308544159,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Classifier predicted AMBIGUOUS, but no independent signal supports asking the user: the question is clear, samples show no competing interpretation (second cluster 0% < 25%) and 0% of responses mention alternative readings.",
+    "final_answer": "IBAN stands for International Bank Account Number. It is a standardized way to identify a bank account, used primarily for international payments to ensure the correct account is being referenced.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.4591493308544159,
+     "probabilities": {
+      "KNOWN": 0.44220060110092163,
+      "AMBIGUOUS": 0.4591493308544159,
+      "UNKNOWN": 0.0986500084400177
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "IBAN stands for International Bank Account Number. It is a standardized way of identifying a bank account, used primarily for international wire transfers.",
+     "IBAN stands for International Bank Account Number. It is a standardized way to represent a bank account number along with the bank's branch information and country code, designed to prevent banking-related errors in international transactions.",
+     "IBAN stands for International Bank Account Number. It is a standardized way of presenting a bank account number in a way that allows for cross-border payments to be correctly processed.",
+     "IBAN stands for International Bank Account Number. It is a standardized way to represent a bank account number together with the relevant identifying information for use across borders in international banking.",
+     "IBAN stands for International Bank Account Number.",
+     "IBAN stands for International Bank Account Number. It is a standardized way of presenting banking account information that allows for its use in cross-border transactions.",
+     "IBAN stands for International Bank Account Number. It is a standardized system used to identify banks and accounts internationally, facilitating cross-border payments.",
+     "IBAN stands for International Bank Account Number. It is used in Europe and some other countries for identifying a bank account, often used in conjunction with a sort code for a more precise account identification.",
+     "IBAN stands for International Bank Account Number. It is used in Europe and some other regions to identify bank accounts for the purposes of direct debits and credit transfers.",
+     "IBAN stands for International Bank Account Number. It is a standardized way to identify a bank account, used primarily for international payments to ensure the correct account is being referenced."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": false,
+    "label_strict_ok": false,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": false
+   }
+  },
+  "B13": {
+   "output": {
+    "wall_seconds": 6.41,
+    "predicted_label": "KNOWN",
+    "confidence": 0.8726718425750732,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Response consistency indicates single dominant semantic cluster; answerable under current policy without factual verification.",
+    "final_answer": "The PIN code of Connaught Place in New Delhi is 110016.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.8726718425750732,
+     "probabilities": {
+      "KNOWN": 0.8726718425750732,
+      "AMBIGUOUS": 0.10763148963451385,
+      "UNKNOWN": 0.019696608185768127
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "The PIN code of Connaught Place in New Delhi is 110016.",
+     "The PIN code of Connaught Place in New Delhi is 110016.",
+     "The PIN code of Connaught Place in New Delhi is 110016.",
+     "The PIN code of Connaught Place in New Delhi is 110016.",
+     "The PIN code of Connaught Place in New Delhi is 110016.",
+     "The PIN code of Connaught Place in New Delhi is 110016.",
+     "The PIN code of Connaught Place in New Delhi is 110016.",
+     "The PIN code of Connaught Place in New Delhi is 110016.",
+     "The PIN code of Connaught Place in New Delhi is 110016.",
+     "The PIN code of Connaught Place in New Delhi is 110016."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": false,
+    "pass": true
+   }
+  },
+  "B14": {
+   "output": {
+    "wall_seconds": 27.02,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.7252168655395508,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ABSTAIN",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Classifier assessed the question as unanswerable from the model's knowledge (response dispersion or refusal profile).",
+    "final_answer": "You should never share your password with anyone because doing so compromises the security of your accounts and personal information, as anyone who knows your password can access your accounts without your knowledge or consent.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "UNKNOWN",
+     "confidence": 0.7252168655395508,
+     "probabilities": {
+      "KNOWN": 0.07238442450761795,
+      "AMBIGUOUS": 0.20239868760108948,
+      "UNKNOWN": 0.7252168655395508
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "You should never share your password with anyone because doing so compromises the security of your accounts and personal information, as anyone who knows your password can access your accounts without your knowledge or consent.",
+     "You should never share your password with anyone because doing so jeopardizes the security of your accounts and personal information, as anyone who knows your password can access your accounts without your consent.",
+     "You should never share your password with anyone because doing so compromises the security and privacy of your online accounts. If someone else knows your password, they can access your accounts and personal information without your permission, potentially leading to identity theft, financial fraud, or other forms of unauthorized access.",
+     "You should never share your password with anyone because doing so compromises your security and privacy. Anyone who knows your password can access your accounts, which can lead to identity theft, financial fraud, and other security breaches. Sharing passwords also undermines your control over your personal and private information.",
+     "You should never share your password with anyone because doing so compromises the security of your accounts and personal information, as anyone who knows your password can access your accounts without your knowledge or consent.",
+     "You should never share your password with anyone because doing so would compromise your online security and privacy. Anyone who knows your password can access your accounts, steal your personal information, or commit fraud. Sharing passwords undermines the very purpose of having a password - to secure your information and keep it confidential.",
+     "You should never share your password with anyone because doing so compromises your security and privacy. Sharing a password allows others to access your accounts and personal information, which can lead to identity theft, financial fraud, and other forms of cybercrime.",
+     "You should never share your password with anyone because doing so compromises the security and confidentiality of your accounts, potentially leading to unauthorized access and potential misuse of your personal information.",
+     "You should never share your password with anyone because doing so compromises your security and privacy. If someone else knows your password, they can access your accounts, which could lead to unauthorized transactions, data theft, or identity fraud. Sharing passwords undermines the fundamental principle of secure authentication and breaches the trust between you and the service providers.",
+     "You should never share your password with anyone because doing so jeopardizes the security of your accounts and personal information, as anyone with access to your password can gain unauthorized access to your accounts."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": false,
+    "label_strict_ok": false,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": false
+   }
+  },
+  "C01": {
+   "output": {
+    "wall_seconds": 1.77,
+    "predicted_label": "KNOWN",
+    "confidence": 0.85,
+    "classifier_status": "ASSESSED_FAST_PATH_DIRECT_FACT",
+    "path": "FAST_PATH",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": null,
+    "final_answer": "Paris",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "Paris"
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "C02": {
+   "output": {
+    "wall_seconds": 1.01,
+    "predicted_label": "KNOWN",
+    "confidence": 0.95,
+    "classifier_status": "ASSESSED_FAST_PATH_DETERMINISTIC_ARITHMETIC",
+    "path": "FAST_PATH",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": null,
+    "final_answer": "144",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "144"
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "C03": {
+   "output": {
+    "wall_seconds": 1.83,
+    "predicted_label": "KNOWN",
+    "confidence": 0.85,
+    "classifier_status": "ASSESSED_FAST_PATH_DIRECT_FACT",
+    "path": "FAST_PATH",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": null,
+    "final_answer": "William Shakespeare wrote Romeo and Juliet.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "William Shakespeare wrote Romeo and Juliet."
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "C04": {
+   "output": {
+    "wall_seconds": 0.58,
+    "predicted_label": "KNOWN",
+    "confidence": 0.85,
+    "classifier_status": "ASSESSED_FAST_PATH_DIRECT_FACT",
+    "path": "FAST_PATH",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": null,
+    "final_answer": "Au",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "Au"
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "C05": {
+   "output": {
+    "wall_seconds": 0.66,
+    "predicted_label": "KNOWN",
+    "confidence": 0.85,
+    "classifier_status": "ASSESSED_FAST_PATH_DIRECT_FACT",
+    "path": "FAST_PATH",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": null,
+    "final_answer": "There are 7 continents.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "There are 7 continents."
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "C06": {
+   "output": {
+    "wall_seconds": 5.23,
+    "predicted_label": "KNOWN",
+    "confidence": 0.870124101638794,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Response consistency indicates single dominant semantic cluster; answerable under current policy without factual verification.",
+    "final_answer": "The boiling point of water at sea level is 100 degrees Celsius.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.870124101638794,
+     "probabilities": {
+      "KNOWN": 0.870124101638794,
+      "AMBIGUOUS": 0.10978519916534424,
+      "UNKNOWN": 0.0200907401740551
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "The boiling point of water at sea level is 100 degrees Celsius.",
+     "The boiling point of water at sea level is 100 degrees Celsius.",
+     "The boiling point of water at sea level is 100 degrees Celsius.",
+     "The boiling point of water at sea level is 100 degrees Celsius.",
+     "The boiling point of water at sea level is 100 degrees Celsius.",
+     "The boiling point of water at sea level is 100 degrees Celsius.",
+     "The boiling point of water at sea level is 100 degrees Celsius.",
+     "The boiling point of water at sea level is 100 degrees Celsius.",
+     "The boiling point of water at sea level is 100 degrees Celsius.",
+     "The boiling point of water at sea level is 100 degrees Celsius."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "C07": {
+   "output": {
+    "wall_seconds": 0.35,
+    "predicted_label": "KNOWN",
+    "confidence": 0.85,
+    "classifier_status": "ASSESSED_FAST_PATH_DIRECT_FACT",
+    "path": "FAST_PATH",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": null,
+    "final_answer": "Leonardo da Vinci painted the Mona Lisa.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "Leonardo da Vinci painted the Mona Lisa."
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "C08": {
+   "output": {
+    "wall_seconds": 3.35,
+    "predicted_label": "KNOWN",
+    "confidence": 0.9571901559829712,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Response consistency indicates single dominant semantic cluster; answerable under current policy without factual verification.",
+    "final_answer": "The largest planet in the Solar System is Jupiter.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.9571901559829712,
+     "probabilities": {
+      "KNOWN": 0.9571901559829712,
+      "AMBIGUOUS": 0.03260315954685211,
+      "UNKNOWN": 0.010206644423305988
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "The largest planet in the Solar System is Jupiter.",
+     "The largest planet in the Solar System is Jupiter.",
+     "The largest planet in the Solar System is Jupiter.",
+     "The largest planet in the Solar System is Jupiter.",
+     "The largest planet in the Solar System is Jupiter.",
+     "The largest planet in the Solar System is Jupiter.",
+     "The largest planet in the Solar System is Jupiter.",
+     "The largest planet in the Solar System is Jupiter.",
+     "The largest planet in the Solar System is Jupiter.",
+     "The largest planet in the Solar System is Jupiter."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "C09": {
+   "output": {
+    "wall_seconds": 0.41,
+    "predicted_label": "KNOWN",
+    "confidence": 0.85,
+    "classifier_status": "ASSESSED_FAST_PATH_DIRECT_FACT",
+    "path": "FAST_PATH",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": null,
+    "final_answer": "World War II ended in 1945.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "World War II ended in 1945."
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "C10": {
+   "output": {
+    "wall_seconds": 3.93,
+    "predicted_label": "KNOWN",
+    "confidence": 0.8726718425750732,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Response consistency indicates single dominant semantic cluster; answerable under current policy without factual verification.",
+    "final_answer": "The first person to walk on the Moon was Neil Armstrong.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.8726718425750732,
+     "probabilities": {
+      "KNOWN": 0.8726718425750732,
+      "AMBIGUOUS": 0.10763148963451385,
+      "UNKNOWN": 0.019696608185768127
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "The first person to walk on the Moon was Neil Armstrong.",
+     "The first person to walk on the Moon was Neil Armstrong.",
+     "The first person to walk on the Moon was Neil Armstrong.",
+     "The first person to walk on the Moon was Neil Armstrong.",
+     "The first person to walk on the Moon was Neil Armstrong.",
+     "The first person to walk on the Moon was Neil Armstrong.",
+     "The first person to walk on the Moon was Neil Armstrong.",
+     "The first person to walk on the Moon was Neil Armstrong.",
+     "The first person to walk on the Moon was Neil Armstrong.",
+     "The first person to walk on the Moon was Neil Armstrong."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "C11": {
+   "output": {
+    "wall_seconds": 8.03,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.7382310032844543,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Classifier predicted AMBIGUOUS, but no independent signal supports asking the user: the question is clear, samples show no competing interpretation (second cluster 0% < 25%) and 0% of responses mention alternative readings.",
+    "final_answer": "Photosynthesis is the process by which plants, algae, and some bacteria use sunlight, carbon dioxide, and water to produce oxygen and glucose.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.7382310032844543,
+     "probabilities": {
+      "KNOWN": 0.23930005729198456,
+      "AMBIGUOUS": 0.7382310032844543,
+      "UNKNOWN": 0.02246898226439953
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "Photosynthesis is the process by which plants, some bacteria, and some protists use sunlight to convert carbon dioxide and water into glucose and oxygen.",
+     "Photosynthesis is the process by which plants, some bacteria, and some algae convert sunlight into chemical energy stored in glucose.",
+     "Photosynthesis is the process by which plants, algae, and some bacteria use sunlight, carbon dioxide, and water to produce oxygen and glucose.",
+     "Photosynthesis is the process by which plants use sunlight, carbon dioxide, and water to produce oxygen and energy in the form of sugar.",
+     "Photosynthesis is the process by which plants use sunlight, carbon dioxide, and water to produce oxygen and glucose.",
+     "Photosynthesis is the process by which plants use sunlight, carbon dioxide, and water to produce oxygen and glucose.",
+     "Photosynthesis is the process by which plants, some bacteria, and some algae convert light energy into chemical energy stored in glucose.",
+     "Photosynthesis is the process by which plants, some bacteria, and some protists use sunlight to convert carbon dioxide and water into sugar (glucose) and oxygen.",
+     "Photosynthesis is the process by which plants use sunlight, carbon dioxide, and water to produce oxygen and glucose.",
+     "Photosynthesis is the process by which plants, some bacteria, and some protists use sunlight, carbon dioxide, and water to produce oxygen and glucose."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": false,
+    "label_strict_ok": false,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": false
+   }
+  },
+  "C12": {
+   "output": {
+    "wall_seconds": 0.42,
+    "predicted_label": "KNOWN",
+    "confidence": 0.85,
+    "classifier_status": "ASSESSED_FAST_PATH_DIRECT_FACT",
+    "path": "FAST_PATH",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": null,
+    "final_answer": "The square root of 81 is 9.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": null,
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "The square root of 81 is 9."
+    ],
+    "cluster_labels": [
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "D01": {
+   "output": {
+    "wall_seconds": 15.06,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.8939021229743958,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "CLARIFICATION_REQUIRED",
+    "interaction_status": "PENDING",
+    "clarification_pending": true,
+    "clarity_status": "AMBIGUOUS",
+    "clarity_confidence": 0.88,
+    "ambiguity_type": "ENTITY_POLYSEMY",
+    "clarification_reason": "Question contains polysemic entity or name with multiple common interpretations: 'jordan' has multiple common referents (country, person, river) and the question does not select one.",
+    "final_answer": "Jordan is a common given name that can refer to multiple individuals. It is of English and Scottish origin and can be used as a first name.",
+    "cluster_count": 2,
+    "semantic_entropy": 0.5004024235381879,
+    "dominant_agreement": 0.8,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.8939021229743958,
+     "probabilities": {
+      "KNOWN": 0.056744370609521866,
+      "AMBIGUOUS": 0.8939021229743958,
+      "UNKNOWN": 0.04935351014137268
+     }
+    },
+    "suggestions": [
+     "Jordan (country)",
+     "Michael Jordan"
+    ],
+    "suggestion_source": "model",
+    "pipeline_prompt": "Are you asking about Jordan the country, Michael Jordan, or another person named Jordan?",
+    "responses": [
+     "Jordan is a common given name that can refer to multiple individuals. It is of English and Scottish origin and can be used as a first name.",
+     "Jordan is a common given name that can refer to multiple individuals. It is of English and Scottish origin, and can be used as a surname. Without more specific information, it's difficult to provide details about a particular Jordan.",
+     "Jordan can refer to multiple people, such as the American singer-songwriter and actress; the former NBA basketball player; or the Israeli Prime Minister. Without more context, it's impossible to provide a specific answer.",
+     "Jordan is a common first name that can refer to many individuals, as it is a very popular name. Without more specific information, it's not possible to identify a particular Jordan.",
+     "Jordan is a common name used for both males and females, referring to a person of that name. Without more specific information about which Jordan is being referred to, this is a very broad answer.",
+     "Jordan is a common first name that can refer to a variety of people. For example, it could refer to an American singer and actor, or it could be a surname. Without more context, it's impossible to provide a specific answer.",
+     "Jordan is a common name used for both males and females, referring to someone of that name. Without more specific information, it's impossible to determine who exactly you are asking about.",
+     "Jordan is a common given name that can refer to numerous individuals, as it is of Middle Eastern and European origin. It is used as a first name, last name, or middle name. Without more context, it's impossible to provide specific information about a particular Jordan.",
+     "Jordan is a common given name that can refer to multiple people. It is particularly popular as a male given name.",
+     "Jordan is a common given name that can refer to multiple individuals, such as the American football player or the pop singer. Without more specific information, it's not possible to determine which Jordan the question is referring to."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": null,
+    "pass": true
+   }
+  },
+  "D02": {
+   "output": {
+    "wall_seconds": 4.12,
+    "predicted_label": "KNOWN",
+    "confidence": 0.7254355549812317,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "CLARIFICATION_REQUIRED",
+    "interaction_status": "PENDING",
+    "clarification_pending": true,
+    "clarity_status": "AMBIGUOUS",
+    "clarity_confidence": 0.88,
+    "ambiguity_type": "ENTITY_POLYSEMY",
+    "clarification_reason": "Question contains polysemic entity or name with multiple common interpretations: 'georgia' has multiple common referents (country, us state) and the question does not select one.",
+    "final_answer": "Tbilisi",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.7254355549812317,
+     "probabilities": {
+      "KNOWN": 0.7254355549812317,
+      "AMBIGUOUS": 0.23733985424041748,
+      "UNKNOWN": 0.03722457215189934
+     }
+    },
+    "suggestions": [
+     "Georgia (U.S. state)",
+     "Georgia (country in Caucasus)"
+    ],
+    "suggestion_source": "model",
+    "pipeline_prompt": "Are you asking about Georgia the US State or Georgia the country in the Caucasus?",
+    "responses": [
+     "Tbilisi",
+     "Tbilisi",
+     "Tbilisi",
+     "Tbilisi",
+     "Tbilisi",
+     "Tbilisi",
+     "Tbilisi",
+     "Tbilisi",
+     "Tbilisi",
+     "Tbilisi"
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": false,
+    "label_strict_ok": false,
+    "clarification_ok": true,
+    "answer_ok": null,
+    "pass": false
+   }
+  },
+  "D03": {
+   "output": {
+    "wall_seconds": 15.3,
+    "predicted_label": "KNOWN",
+    "confidence": 0.8073334097862244,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "CLARIFICATION_REQUIRED",
+    "interaction_status": "PENDING",
+    "clarification_pending": true,
+    "clarity_status": "AMBIGUOUS",
+    "clarity_confidence": 0.88,
+    "ambiguity_type": "ENTITY_POLYSEMY",
+    "clarification_reason": "Question contains polysemic entity or name with multiple common interpretations: 'mercury' has multiple common referents (planet, element, god, person) and the question does not select one.",
+    "final_answer": "Mercury is the closest planet to the Sun in our Solar System, known for its extremely hot and cold temperatures and unique orbital properties. It is the smallest planet in the Solar System.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.8073334097862244,
+     "probabilities": {
+      "KNOWN": 0.8073334097862244,
+      "AMBIGUOUS": 0.1738245189189911,
+      "UNKNOWN": 0.018842117860913277
+     }
+    },
+    "suggestions": [
+     "Mercury (planet)",
+     "Mercury (chemical element)",
+     "Mercury (Roman god)"
+    ],
+    "suggestion_source": "model",
+    "pipeline_prompt": "Are you asking about Mercury the planet, the chemical element, or the Roman god?",
+    "responses": [
+     "Mercury is the closest planet to the Sun in our solar system, known for its extreme temperature variations and the presence of a large, iron-rich core.",
+     "Mercury is the closest planet to the Sun in our solar system, known for its extreme temperature variations and being the smallest planet. It is primarily composed of silicate rocks and metal.",
+     "Mercury is the closest planet to the Sun in our solar system. It is the smallest planet in the solar system. It is often referred to as the \"Messenger of the Gods\" in Roman mythology.",
+     "Mercury is the closest planet to the Sun in our solar system. It is the smallest planet in the Solar System.",
+     "Mercury is the closest planet to the Sun in our solar system. It is the smallest planet in the Solar System. It is primarily composed of metals with a thin outer layer of silicate material.",
+     "Mercury is the closest planet to the Sun in our Solar System, known for its extremely hot and cold temperatures and unique orbital properties. It is the smallest planet in the Solar System.",
+     "Mercury is the closest planet to the Sun in our solar system, known for its unique magnetic field and being the smallest planet. It is primarily composed of elements, with a very thin atmosphere and no moons.",
+     "Mercury is the closest planet to the Sun in our solar system, known for its extreme temperatures and fast rotation. It is also the smallest planet in our solar system.",
+     "Mercury is the closest planet to the Sun in our solar system. It is the smallest planet in the Solar System, smaller than both the Moon and Mars. Unlike the Moon, Mercury has an atmosphere, but it is very thin and mostly consists of oxygen and sodium.",
+     "Mercury is the closest planet to the Sun in our solar system, known for its extremely hot and cold temperatures due to its proximity to the Sun and lack of a substantial atmosphere. It is the smallest planet in the solar system."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": false,
+    "label_strict_ok": false,
+    "clarification_ok": true,
+    "answer_ok": null,
+    "pass": false
+   }
+  },
+  "D04": {
+   "output": {
+    "wall_seconds": 14.35,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.9129015207290649,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Classifier predicted AMBIGUOUS, but no independent signal supports asking the user: the question is clear, samples show no competing interpretation (second cluster 0% < 25%) and 0% of responses mention alternative readings.",
+    "final_answer": "Java is a popular, object-oriented programming language that is used for developing applications for various platforms such as Windows, Mac, and Linux. It is known for its platform independence, as Java programs are compiled into bytecode that can run on any Java Virtual Machine (JVM) regardless of the underlying computer architecture.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.9129015207290649,
+     "probabilities": {
+      "KNOWN": 0.06863552331924438,
+      "AMBIGUOUS": 0.9129015207290649,
+      "UNKNOWN": 0.018462950363755226
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "Java is a popular, object-oriented programming language that is used for developing applications for various platforms such as Windows, Mac, and Linux. It is known for its platform independence, as Java programs are compiled into bytecode that can run on any Java Virtual Machine (JVM) regardless of the underlying computer architecture.",
+     "Java is a popular, widely used general-purpose computer programming language that is designed to have source code that is portable across multiple operating systems and can compile to bytecode that is processor-independent.",
+     "Java is a widely used high-level programming language known for its platform independence, which allows code to be written once and run anywhere (on almost any Java Virtual Machine).",
+     "Java is a popular high-level, class-based, object-oriented programming language that is designed to have sources code be compiled to bytecode that is then executed on any Java virtual machine (JVM) regardless of the host operating system.",
+     "Java is a popular high-level, class-based, object-oriented programming language that is designed to have sources code be compiled to bytecode that is then executed on any platform that supports Java, regardless of the underlying machine architecture.",
+     "Java is a popular, high-level, class-based, object-oriented programming language that is designed to have fewer implementation dependencies than Perl. It is used for developing application software for the Java Platform, which includes the Java Runtime Environment (JRE) and the Java Development Kit (JDK). Java programs are typically compiled into bytecode that can run on any Java Virtual Machine (JVM) irrespective of the host operating system.",
+     "Java is a popular, object-oriented programming language used for developing software applications that can run on any platform that supports Java without the need for recompilation. It was created by James Gosling at Sun Microsystems and is now maintained by the Oracle Corporation. Java programs are compiled into bytecode, which can be executed by any Java virtual machine (JVM) present on the target system.",
+     "Java is a popular, object-oriented computer programming language designed to have fewer implementation dependencies than C++ programming language. It is used for developing applications for multiple platforms.",
+     "Java is a popular, object-oriented programming language used for developing applications that can run on any platform that supports Java without the need for重新编写或解释。",
+     "Java is a popular, widely-used programming language known for its platform independence, which allows code to be written and tested on one system and run on any system that supports Java."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": false,
+    "answer_ok": null,
+    "pass": false
+   }
+  },
+  "D05": {
+   "output": {
+    "wall_seconds": 12.96,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.8495909571647644,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "CLARIFICATION_REQUIRED",
+    "interaction_status": "PENDING",
+    "clarification_pending": true,
+    "clarity_status": "AMBIGUOUS",
+    "clarity_confidence": 0.88,
+    "ambiguity_type": "ENTITY_POLYSEMY",
+    "clarification_reason": "Question contains polysemic entity or name with multiple common interpretations: 'washington' has multiple common referents (us state, dc, person) and the question does not select one.",
+    "final_answer": "Washington refers to George Washington, the first President of the United States.",
+    "cluster_count": 2,
+    "semantic_entropy": 0.3250829733914482,
+    "dominant_agreement": 0.9,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.8495909571647644,
+     "probabilities": {
+      "KNOWN": 0.09144747257232666,
+      "AMBIGUOUS": 0.8495909571647644,
+      "UNKNOWN": 0.05896158516407013
+     }
+    },
+    "suggestions": [
+     "George Washington",
+     "Washington Monument",
+     "Alexander Graham Bell's assistant"
+    ],
+    "suggestion_source": "model",
+    "pipeline_prompt": "Which specific meaning, context, or timeframe would you like evaluated?",
+    "responses": [
+     "Washington refers to George Washington, the first President of the United States.",
+     "Washington refers to George Washington, the first president of the United States.",
+     "Washington refers to several notable figures, most commonly referring to George Washington, the first President of the United States.",
+     "Washington refers to George Washington, the first President of the United States.",
+     "Washington refers to George Washington, the first President of the United States.",
+     "Washington can refer to several people, including George Washington, the first President of the United States, or Alexander Graham Bell, the inventor of the telephone. It could also refer to the capital city of the United States. Without more context, it's difficult to provide a specific answer.",
+     "Washington refers to George Washington, the first President of the United States.",
+     "Washington refers to George Washington, the first President of the United States.",
+     "Washington refers to George Washington, the first President of the United States.",
+     "Washington refers to George Washington, the first President of the United States."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": null,
+    "pass": true
+   }
+  },
+  "D06": {
+   "output": {
+    "wall_seconds": 12.27,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.9044498801231384,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Classifier predicted AMBIGUOUS, but no independent signal supports asking the user: the question is clear, samples show no competing interpretation (second cluster 0% < 25%) and 0% of responses mention alternative readings.",
+    "final_answer": "A bat is a mammal belonging to the order Chiroptera, known for its ability to fly and echolocate.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.9044498801231384,
+     "probabilities": {
+      "KNOWN": 0.06949631869792938,
+      "AMBIGUOUS": 0.9044498801231384,
+      "UNKNOWN": 0.026053844019770622
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "A bat is a mammal belonging to the order Chiroptera, known for its ability to fly and echolocate.",
+     "A bat is a mammal belonging to the order Chiroptera, known for its ability to fly and echolocate.",
+     "A bat is a mammal belonging to the order Chiroptera, known for its ability to fly, with membranous wings that connect its forelimbs to its body and its hindlimbs.",
+     "A bat is a winged mammal known for its ability to fly and feed primarily on insects, with some species feeding on fruits, nectar, or animals.",
+     "A bat is a winged mammal known for its ability to fly, and it belongs to the order Chiroptera.",
+     "A bat is a mammal belonging to the order Chiroptera, known for its ability to fly and echolocate.",
+     "A bat is a mammal belonging to the order Chiroptera, known for its ability to fly and echolocate.",
+     "A bat is a mammal belonging to the order Chiroptera, known for its ability to fly and echolocation.",
+     "A bat is a winged mammal known for its ability to fly and feed primarily on insects.",
+     "A bat is a small, often nocturnal, winged mammal known for its ability to echolocate."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": false,
+    "answer_ok": null,
+    "pass": false
+   }
+  },
+  "D07": {
+   "output": {
+    "wall_seconds": 10.73,
+    "predicted_label": "KNOWN",
+    "confidence": 0.560918927192688,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "CLARIFICATION_REQUIRED",
+    "interaction_status": "PENDING",
+    "clarification_pending": true,
+    "clarity_status": "AMBIGUOUS",
+    "clarity_confidence": 0.88,
+    "ambiguity_type": "ENTITY_POLYSEMY",
+    "clarification_reason": "Question contains polysemic entity or name with multiple common interpretations: 'springfield' has multiple common referents (city, fictional) and the question does not select one.",
+    "final_answer": "Springfield is a fictional town used as the setting for the long-running American animated sitcom \"The Simpsons. \"",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.560918927192688,
+     "probabilities": {
+      "KNOWN": 0.560918927192688,
+      "AMBIGUOUS": 0.42551034688949585,
+      "UNKNOWN": 0.01357071753591299
+     }
+    },
+    "suggestions": [
+     "The Simpsons TV show setting",
+     "The city of Springfield, Massachusetts",
+     "Springfield, Illinois"
+    ],
+    "suggestion_source": "model",
+    "pipeline_prompt": "Which specific meaning, context, or timeframe would you like evaluated?",
+    "responses": [
+     "Springfield is an imaginary city used as the setting for the long-running American animated sitcom \"The Simpsons. \"",
+     "Springfield is a fictional city used as the setting for the long-running American animated sitcom \"The Simpsons. \"",
+     "Springfield is a fictional town used as the setting for the long-running American animated comedy series \"The Simpsons. \"",
+     "Springfield is an imaginary town used as the setting for the long-running American animated series \"The Simpsons. \"",
+     "Springfield is a fictional town used as the setting for the long-running animated series \"The Simpsons. \"",
+     "Springfield is a fictional town used as the setting for the long-running television series \"The Simpsons. \"",
+     "Springfield is a fictional town used as the setting for the long-running American animated sitcom \"The Simpsons. \"",
+     "Springfield is a fictional town used as the setting for the long-running American animated sitcom \"The Simpsons. \"",
+     "Springfield is a fictional city used as the setting for the long-running American animated sitcom \"The Simpsons. \"",
+     "Springfield is an imaginary city used as the setting for the animated sitcom \"The Simpsons. \""
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": false,
+    "label_strict_ok": false,
+    "clarification_ok": true,
+    "answer_ok": null,
+    "pass": false
+   }
+  },
+  "D08": {
+   "output": {
+    "wall_seconds": 13.35,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.9,
+    "classifier_status": "ASSESSED_AMBIGUOUS_RULE_HEURISTIC (question_subjective_superlative_without_criteria)",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "CLARIFICATION_REQUIRED",
+    "interaction_status": "PENDING",
+    "clarification_pending": true,
+    "clarity_status": "AMBIGUOUS",
+    "clarity_confidence": 0.88,
+    "ambiguity_type": "SUBJECTIVE_CRITERIA",
+    "clarification_reason": "Responses confirm question depends on unstated evaluation criteria or perspective.",
+    "final_answer": "There is no single \"best\" programming language as it depends on the specific requirements and tasks at hand. Different languages are suited for different purposes.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "UNKNOWN",
+     "confidence": 0.6993999481201172,
+     "probabilities": {
+      "KNOWN": 0.03552746772766113,
+      "AMBIGUOUS": 0.2650725543498993,
+      "UNKNOWN": 0.6993999481201172
+     }
+    },
+    "suggestions": [
+     "General-purpose programming language",
+     "Domain-specific programming language",
+     "Educational programming language"
+    ],
+    "suggestion_source": "model",
+    "pipeline_prompt": "Which application domain or use case do you have in mind for the programming language?",
+    "responses": [
+     "There is no single \"best\" programming language as it depends on the specific task and context. Different languages are best suited for different purposes.",
+     "There is no single \"best\" programming language as it depends on the specific requirements and tasks at hand. Different languages are best suited for different purposes.",
+     "There is no single \"best\" programming language as it depends on the specific needs and context of the project or task at hand. Languages like Python, Java, and JavaScript are popular for different reasons and use cases.",
+     "There is no single \"best\" programming language as it depends on the context, including the specific task, personal preference, and the domain of expertise.",
+     "There is no single \"best\" programming language as it depends on the specific requirements, tasks, and preferences of the developer.",
+     "There is no single \"best\" programming language as it depends on the specific requirements and tasks at hand. Different languages are suited for different purposes.",
+     "There is no single \"best\" programming language as it depends on the specific task and context.",
+     "There is no single \"best\" programming language as it depends on the specific task, personal preference, and context.",
+     "There is no single \"best\" programming language as it depends on the specific requirements of the project and the needs of the programmer.",
+     "There is no single \"best\" programming language as it depends on the specific task and context. Different languages are best suited for different purposes."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": null,
+    "pass": true
+   }
+  },
+  "D09": {
+   "output": {
+    "wall_seconds": 16.82,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.9791866540908813,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "CLARIFICATION_REQUIRED",
+    "interaction_status": "PENDING",
+    "clarification_pending": true,
+    "clarity_status": "AMBIGUOUS",
+    "clarity_confidence": 0.88,
+    "ambiguity_type": "SUBJECTIVE_CRITERIA",
+    "clarification_reason": "Responses confirm question depends on unstated evaluation criteria or perspective.",
+    "final_answer": "Determining the \"greatest athlete of all time\" is highly subjective and can vary based on different criteria such as sport, achievement, and time period. This question often leads to debates and no clear consensus.",
+    "cluster_count": 3,
+    "semantic_entropy": 0.639031859650177,
+    "dominant_agreement": 0.8,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.9791866540908813,
+     "probabilities": {
+      "KNOWN": 0.006849783007055521,
+      "AMBIGUOUS": 0.9791866540908813,
+      "UNKNOWN": 0.013963492587208748
+     }
+    },
+    "suggestions": [
+     "Athlete in Olympics",
+     "Professional Sports Player",
+     "Historical Figure"
+    ],
+    "suggestion_source": "model",
+    "pipeline_prompt": "What specific criteria or application should be prioritized for this evaluation?",
+    "responses": [
+     "Determining the \"greatest athlete of all time\" is highly subjective and depends on the sport considered. Different criteria such as overall achievements, longevity, and impact can lead to different conclusions.",
+     "This question is subjective and can vary based on different criteria (e.g., sports, achievements, longevity, etc.), making it impossible to definitively identify a single \"greatest athlete of all time. \"",
+     "This question is subjective and difficult to answer definitively, as it depends on personal criteria and perspectives. Different people would have different answers.",
+     "Determining the \"greatest athlete of all time\" is highly subjective and can vary based on different criteria such as sport, achievement, and time period. This question often leads to debates and no clear consensus.",
+     "Determining the \"greatest athlete of all time\" is subjective and highly debated, as it depends on the sport and criteria used for evaluation.",
+     "Determining the greatest athlete of all time is subjective and highly debated, as it depends on various criteria such as sport, time period, and achievements. Legendary figures like Muhammad Ali in boxing, Michael Jordan in basketball, and Serena Williams in tennis are frequently cited as contenders.",
+     "Determining the \"greatest athlete of all time\" is highly subjective and can vary based on different criteria such as sports, time period, and individual talents. Many consider figures like Usain Bolt (in track and field), Michael Jordan (in basketball), and Roger Federer (in tennis) as among the greatest athletes of all time, but this is a matter of opinion.",
+     "Determining the \"greatest athlete of all time\" is highly subjective and depends on various criteria such as sport, era, and achievements. Therefore, opinions vary widely.",
+     "Determining the greatest athlete of all time is highly subjective and can vary based on criteria such as sport, era, and achievements. This question often sparks debate and does not have a universally accepted answer.",
+     "This question is subjective and has no definitive answer, as different people might choose different athletes based on various criteria such as sport, era, and achievements."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     2
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": null,
+    "pass": true
+   }
+  },
+  "D10": {
+   "output": {
+    "wall_seconds": 12.48,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.9582034349441528,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "CLARIFICATION_REQUIRED",
+    "interaction_status": "PENDING",
+    "clarification_pending": true,
+    "clarity_status": "AMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": "UNDERSPECIFIED_CONTEXT",
+    "clarification_reason": "Multi-response consistency analysis revealed distinct semantic clusters with contextual or lexical dependence. User clarification can isolate intended sense.",
+    "final_answer": "Multiple plausible interpretations detected:\n  • [Interpretation 1 (30% consensus)]: This question is too broad and vague to answer. Different criteria would be needed to determine which option is better, such as which two things are being compared. Please provide more information or context.\n  • [Interpretation 2 (30% consensus)]: This question is too vague to answer. Could you please specify which one you are asking about?",
+    "cluster_count": 6,
+    "semantic_entropy": 1.6434177197931796,
+    "dominant_agreement": 0.3,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.9582034349441528,
+     "probabilities": {
+      "KNOWN": 0.018271343782544136,
+      "AMBIGUOUS": 0.9582034349441528,
+      "UNKNOWN": 0.023525217548012733
+     }
+    },
+    "suggestions": [
+     "Best Practices in Software Engineering",
+     "Wine varieties",
+     "Programming languages"
+    ],
+    "suggestion_source": "model",
+    "pipeline_prompt": "Which specific meaning, context, or timeframe would you like evaluated?",
+    "responses": [
+     "This question is too vague to answer. Could you please specify which one you are asking about?",
+     "This question is too vague to determine which one is better without more context. Could you please specify what you are comparing?",
+     "This question is too vague to answer. Could you please specify which one you are asking about?",
+     "This question is too broad and vague to answer. Many things can be compared as better, such as different products, services, or experiences, but without specifying what you're comparing, I can't provide a relevant answer. Please provide more details.",
+     "This question is too vague to answer. Please specify which alternatives you are comparing.",
+     "This question is too broad and vague to answer without more context. Could you please specify which one you are asking about?",
+     "This question is too broad and vague to answer. Different criteria would be needed to determine which option is better, such as which two things are being compared. Please provide more information or context.",
+     "This question is too vague to answer. Please specify which subject or topic you are comparing.",
+     "Could you please specify which alternatives you are asking about?",
+     "This question is too broad and vague to answer. Many types of comparisons could be made depending on the context. Please provide more information or specify what you are comparing."
+    ],
+    "cluster_labels": [
+     1,
+     0,
+     1,
+     4,
+     0,
+     1,
+     0,
+     3,
+     5,
+     2
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": null,
+    "pass": true
+   }
+  },
+  "D11": {
+   "output": {
+    "wall_seconds": 10.24,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.7440870404243469,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "CLARIFICATION_REQUIRED",
+    "interaction_status": "PENDING",
+    "clarification_pending": true,
+    "clarity_status": "AMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": "SUBJECTIVE_CRITERIA",
+    "clarification_reason": "Responses confirm question depends on unstated evaluation criteria or perspective.",
+    "final_answer": "The safety depends on the context. Please provide more information for a proper answer.",
+    "cluster_count": 3,
+    "semantic_entropy": 0.639031859650177,
+    "dominant_agreement": 0.8,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.7440870404243469,
+     "probabilities": {
+      "KNOWN": 0.1837402731180191,
+      "AMBIGUOUS": 0.7440870404243469,
+      "UNKNOWN": 0.07217270880937576
+     }
+    },
+    "suggestions": [
+     "Public Health Safety",
+     "Chemical Safety",
+     "Financial Safety"
+    ],
+    "suggestion_source": "model",
+    "pipeline_prompt": "Which specific meaning, context, or timeframe would you like evaluated?",
+    "responses": [
+     "The safety depends on the context. Please provide more information or context for me to answer accurately.",
+     "The safety depends on the context. Please provide more information for a proper answer.",
+     "The safety cannot be determined without context. Please provide more information or a specific question.",
+     "The safety depends on the context. Could you please specify what you're asking about?",
+     "The safety depends on the context. Please provide more information or a specific situation.",
+     "I'm sorry, your question is too general and vague for me to provide a safe answer. Could you please specify what you're asking about?",
+     "The safety cannot be determined without context. Could you please provide more information or a specific situation?",
+     "The safety depends on the context. Please provide more information for an accurate answer.",
+     "The safety cannot be determined without context. What is it you are asking about?",
+     "It depends on what you are asking about. Could you please specify what you mean by \"Is it safe? \""
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     2
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": null,
+    "pass": true
+   }
+  },
+  "D12": {
+   "output": {
+    "wall_seconds": 28.02,
+    "predicted_label": "KNOWN",
+    "confidence": 0.49793893098831177,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "CLARIFICATION_REQUIRED",
+    "interaction_status": "PENDING",
+    "clarification_pending": true,
+    "clarity_status": "AMBIGUOUS",
+    "clarity_confidence": 0.9,
+    "ambiguity_type": "MISSING_CONTEXT",
+    "clarification_reason": "Question assumes unstated local, geographic, or temporal context.",
+    "final_answer": "The closing time for banks varies by location and the specific bank, typically between 3 PM and 4 PM. Some banks may close earlier, especially on weekends. It's best to check with the bank directly or visit their website for the most accurate and up-to-date information.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.49793893098831177,
+     "probabilities": {
+      "KNOWN": 0.49793893098831177,
+      "AMBIGUOUS": 0.43453192710876465,
+      "UNKNOWN": 0.06752916425466537
+     }
+    },
+    "suggestions": [
+     "Bank during weekdays",
+     "Bank on weekends",
+     "Specific bank location"
+    ],
+    "suggestion_source": "model",
+    "pipeline_prompt": "Which specific meaning, context, or timeframe would you like evaluated?",
+    "responses": [
+     "The closing time for banks varies by location and can range from 3 PM to 4 PM. Some banks may also offer extended hours or have different closing times on weekends or during holidays.",
+     "The closing time for banks varies by bank and can range from 3 PM to 4 PM. Some banks may also close earlier or later on weekends or in certain locations.",
+     "The closing time for banks varies by bank and can range from 3 PM to 4 PM. Some banks may also offer extended hours on certain days of the week. It is best to check with your specific bank or visit their official website for the most accurate and up-to-date information.",
+     "The closing time for banks varies by bank and can also depend on the day of the week and the branch. Typically, major banks close around 3 PM or 4 PM during weekdays, but some branches may close earlier or later. On weekends and holidays, banks usually close earlier. For precise information, it is best to check the bank's official website or contact the specific branch.",
+     "The closing time for banks varies by location and branch, as well as by the specific bank. You should check the website or contact the bank directly for the most accurate and up-to-date information.",
+     "The closing time for banks varies and is usually around 3:00 PM during weekdays, with some banks closing earlier or later. It's important to check with your specific bank or visit their website for the most accurate closing time.",
+     "The closing time for banks varies by location and can range from 3:00 PM to 4:00 PM. Some banks may also offer extended hours or be open 7 days a week. It's best to check the specific bank's website or call them for the most accurate and up-to-date information.",
+     "The closing time for banks is typically 3:00 PM, but this can vary by bank and day of the week. Some banks may be open until 4:00 PM or have extended hours on certain days.",
+     "The closing time for banks varies by location and the specific bank, typically between 3 PM and 4 PM. Some banks may close earlier, especially on weekends. It's best to check with the bank directly or visit their website for the most accurate and up-to-date information.",
+     "The closing time for banks is not standardized and can vary by bank and location. Some banks close at 3 PM, while others may close earlier or later. It's best to check with your specific bank or visit their website for the most accurate information."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": false,
+    "label_strict_ok": false,
+    "clarification_ok": true,
+    "answer_ok": null,
+    "pass": false
+   }
+  },
+  "D13": {
+   "output": {
+    "wall_seconds": 13.12,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.7090964317321777,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "CLARIFICATION_REQUIRED",
+    "interaction_status": "PENDING",
+    "clarification_pending": true,
+    "clarity_status": "AMBIGUOUS",
+    "clarity_confidence": 0.9,
+    "ambiguity_type": "MISSING_CONTEXT",
+    "clarification_reason": "Question assumes unstated local, geographic, or temporal context.",
+    "final_answer": "The speed limit depends on the location and country, so I cannot provide a specific speed limit.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.7090964317321777,
+     "probabilities": {
+      "KNOWN": 0.018946854397654533,
+      "AMBIGUOUS": 0.7090964317321777,
+      "UNKNOWN": 0.2719567120075226
+     }
+    },
+    "suggestions": [
+     "Road Speed Limit",
+     "Internet Speed Limit",
+     "Data Speed Limit"
+    ],
+    "suggestion_source": "model",
+    "pipeline_prompt": "Which specific meaning, context, or timeframe would you like evaluated?",
+    "responses": [
+     "The speed limit varies depending on the location and country, so I cannot provide a specific speed limit.",
+     "The speed limit varies by location and can change based on time of day, road type, and local regulations. There is no single speed limit for all situations.",
+     "The speed limit varies by location and country, so I cannot provide a single speed limit. Could you please specify where you're asking about the speed limit?",
+     "The speed limit varies depending on the location and country, so I cannot provide a specific speed limit.",
+     "The speed limit varies depending on the location and country, so I need more specific information to give you an accurate answer.",
+     "The speed limit varies depending on the location and country, so I cannot provide a specific speed limit.",
+     "The speed limit depends on the location and country, so I cannot provide a specific speed limit.",
+     "The speed limit varies by location and can change based on time of day or conditions, so there is no single answer to your question.",
+     "The speed limit depends on the location and jurisdiction, so I don't have a single answer.",
+     "The speed limit varies depending on the location and country, so what speed limit you are asking about needs to be specified."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": null,
+    "pass": true
+   }
+  },
+  "D14": {
+   "output": {
+    "wall_seconds": 11.55,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.744178295135498,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "CLARIFICATION_REQUIRED",
+    "interaction_status": "PENDING",
+    "clarification_pending": true,
+    "clarity_status": "AMBIGUOUS",
+    "clarity_confidence": 0.9,
+    "ambiguity_type": "MISSING_REFERENT",
+    "clarification_reason": "Question depends on a pronoun or place reference ('he', 'she', 'they', 'there', …) with no antecedent.",
+    "final_answer": "This question is too general to answer accurately without specifying the destination and mode of transportation.",
+    "cluster_count": 7,
+    "semantic_entropy": 1.7480673485460891,
+    "dominant_agreement": 0.4,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.744178295135498,
+     "probabilities": {
+      "KNOWN": 0.24008606374263763,
+      "AMBIGUOUS": 0.744178295135498,
+      "UNKNOWN": 0.015735581517219543
+     }
+    },
+    "suggestions": [
+     "Travel time by air",
+     "Travel time by road",
+     "Travel time by rail"
+    ],
+    "suggestion_source": "model",
+    "pipeline_prompt": "Which specific meaning, context, or timeframe would you like evaluated?",
+    "responses": [
+     "This question is too general to answer accurately without specifying the destination and mode of transportation.",
+     "This question is too vague to answer accurately without specifying the location and mode of transportation.",
+     "I'm sorry, but your question is too general. Could you please specify the location or journey you're referring to?",
+     "This question is too general to answer without context. Please specify the location or destination you are asking about.",
+     "This question is too vague to answer accurately. Could you please specify your destination and the mode of transportation?",
+     "This question is too general to answer without specific context. Please provide a destination or travel mode.",
+     "This question is too general to answer accurately without more context about which destination and mode of transportation is being referred to.",
+     "This question is too general to answer without additional context.",
+     "I'm sorry, but your question is too general. Could you please specify which place you are asking about?",
+     "This question is too broad and depends on the destination. Please specify where you want to go."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     3,
+     6,
+     0,
+     4,
+     0,
+     5,
+     1,
+     2
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": null,
+    "pass": true
+   }
+  },
+  "D15": {
+   "output": {
+    "wall_seconds": 18.3,
+    "predicted_label": "UNKNOWN",
+    "confidence": 0.6864517331123352,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "CLARIFICATION_REQUIRED",
+    "interaction_status": "PENDING",
+    "clarification_pending": true,
+    "clarity_status": "AMBIGUOUS",
+    "clarity_confidence": 0.9,
+    "ambiguity_type": "MISSING_CONTEXT",
+    "clarification_reason": "Multi-response consistency analysis revealed distinct semantic clusters with contextual or lexical dependence. User clarification can isolate intended sense.",
+    "final_answer": "Multiple plausible interpretations detected:\n  • [Interpretation 1 (30% consensus)]: I'm unable to provide a specific answer as I don't have access to current events or sports results. You should check a sports news source or your favorite sports channel for the latest information.\n  • [Interpretation 2 (30% consensus)]: I'm sorry, but I don't have the information about who won the game last night as I don't have access to current event data. You should check a sports news source or your local news for the latest information.",
+    "cluster_count": 5,
+    "semantic_entropy": 1.5047882836811908,
+    "dominant_agreement": 0.3,
+    "raw_classifier": {
+     "label": "UNKNOWN",
+     "confidence": 0.6864517331123352,
+     "probabilities": {
+      "KNOWN": 0.05528726056218147,
+      "AMBIGUOUS": 0.2582610249519348,
+      "UNKNOWN": 0.6864517331123352
+     }
+    },
+    "suggestions": [
+     "Last night's sports game",
+     "Last night's political election",
+     "Last night's reality TV show"
+    ],
+    "suggestion_source": "model",
+    "pipeline_prompt": "Which specific meaning, context, or timeframe would you like evaluated?",
+    "responses": [
+     "I'm sorry, but I don't have the information about the game that you're asking about as I don't have access to live or real-time data. You should check a sports news site or your preferred sports news source for the latest information.",
+     "I'm unable to answer this question as I don't have access to live or real-time information. You should check a sports news source for the latest information.",
+     "I'm sorry, but I don't have the information about who won the game last night as I don't have access to current event data. You should check a sports news source or your local news channel for the latest information.",
+     "I'm unable to provide a specific answer as I don't have access to current events or sports results. You should check a sports news source or your favorite sports channel for the latest information.",
+     "I'm sorry, but I don't have enough information to answer who won the game last night as I don't know which specific game you are referring to. Could you please provide more details?",
+     "I'm sorry, but I don't have the information about the game that you are referring to as I don't have access to live or real-time data. You should check a news source or sports news app for the latest information.",
+     "I'm unable to provide a direct answer as I don't have access to current event information. You should check a news source or sports channel for the latest information.",
+     "I'm sorry, but I don't have the information about who won the game last night as I don't have access to current event data. You should check a sports news source or your local news for the latest information.",
+     "I'm unable to answer this question as I don't have access to current events or sports results. You should check a recent news source or sports scoreboard for the most accurate information.",
+     "I'm sorry, but I don't have the information about who won the game last night as I don't have access to current events or sports results. You should check a recent sports news source for this information."
+    ],
+    "cluster_labels": [
+     2,
+     3,
+     1,
+     0,
+     4,
+     2,
+     0,
+     1,
+     0,
+     1
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": false,
+    "clarification_ok": true,
+    "answer_ok": null,
+    "pass": true
+   }
+  },
+  "D16": {
+   "output": {
+    "wall_seconds": 13.02,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.4663516879081726,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "CLARIFICATION_REQUIRED",
+    "interaction_status": "PENDING",
+    "clarification_pending": true,
+    "clarity_status": "AMBIGUOUS",
+    "clarity_confidence": 0.9,
+    "ambiguity_type": "MISSING_REFERENT",
+    "clarification_reason": "Question depends on a pronoun or place reference ('he', 'she', 'they', 'there', …) with no antecedent.",
+    "final_answer": "I'm sorry, but I need to know which person's height you are referring to. Please provide the name or more specific information.",
+    "cluster_count": 2,
+    "semantic_entropy": 0.5004024235381879,
+    "dominant_agreement": 0.8,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.4663516879081726,
+     "probabilities": {
+      "KNOWN": 0.28914305567741394,
+      "AMBIGUOUS": 0.4663516879081726,
+      "UNKNOWN": 0.24450528621673584
+     }
+    },
+    "suggestions": [
+     "average human height",
+     "specific historical figure",
+     "specific athlete or actor"
+    ],
+    "suggestion_source": "model",
+    "pipeline_prompt": "Which specific meaning, context, or timeframe would you like evaluated?",
+    "responses": [
+     "I'm sorry, but I don't have enough information to answer your question. Could you please provide more context or specify which person's height you are asking about?",
+     "I'm sorry, but I don't have the information about your height or anyone else's height without you providing more context. Please provide more details.",
+     "I'm sorry, but I need to know which person's height you are asking about.",
+     "I'm sorry, but I don't have enough context to answer your question. Could you please specify which person's height you are asking about?",
+     "I'm sorry, but I need to know which person's height you are referring to. Please provide me with the name or a more specific context.",
+     "I'm sorry, but I don't have enough information to answer how tall you are. Could you please provide more context or clarify who's height you're referring to?",
+     "This question is too vague to answer accurately. Could you please specify which person's height you are asking about?",
+     "I'm sorry, but I need to know which person's height you are referring to. Please provide the name or more specific information.",
+     "I'm sorry, but I don't have the information you're looking for without more context. You would need to specify which person's height you are referring to.",
+     "I'm sorry, but I need to know which person's height you are asking about. Please provide me with the name or more information."
+    ],
+    "cluster_labels": [
+     0,
+     1,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": null,
+    "pass": true
+   }
+  },
+  "E01": {
+   "output": {
+    "wall_seconds": 25.9,
+    "predicted_label": "KNOWN",
+    "confidence": 0.6440074443817139,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Response consistency indicates single dominant semantic cluster; answerable under current policy without factual verification.",
+    "final_answer": "Michael Jordan is an American former professional basketball player who achieved significant success in the National Basketball Association (NBA), particularly with the Chicago Bulls. He is widely considered one of the greatest basketball players of all time.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.6440074443817139,
+     "probabilities": {
+      "KNOWN": 0.6440074443817139,
+      "AMBIGUOUS": 0.2992704510688782,
+      "UNKNOWN": 0.056722063571214676
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "Michael Jordan is an American former professional basketball player who achieved significant success in the National Basketball Association (NBA), particularly with the Chicago Bulls. He is widely regarded as one of the greatest basketball players of all time.",
+     "Michael Jordan is an American former professional basketball player who achieved significant success in the National Basketball Association (NBA), particularly with the Chicago Bulls. He is widely considered one of the greatest basketball players of all time.",
+     "Michael Jordan is an American former professional basketball player who was one of the most recognizable and successful basketball players in the NBA. Known for his skills as a basketball player, he holds numerous records and is considered one of the greatest basketball players of all time. He was inducted into the Naismith Memorial Basketball Hall of Fame in 2009.",
+     "Michael Jordan is an American former professional basketball player who was known for his achievements with the National Basketball Association (NBA) team, the Chicago Bulls. He is considered one of the greatest basketball players of all time. He played as a shooting guard and is renowned for his exceptional skills, including his ability to make crucial game-winning shots, his speed, and his defensive prowess. Jordan also played for the Washington Wizards and briefly for the Charlotte Hornets.",
+     "Michael Jordan is an American former professional basketball player who achieved significant fame and success in the National Basketball Association (NBA). Known for his unparalleled skills, including his ability to dunk, he was named an NBA Most Valuable Player (MVP) three times and won six NBA championships. Jordan is widely regarded as one of the greatest basketball players of all time.",
+     "Michael Jordan is an American former professional basketball player who became one of the most recognizable and popular figures in the sport. He played for the Chicago Bulls and is considered one of the greatest basketball players of all time. He won six NBA championships, five MVP awards, and was inducted into the Naismith Memorial Basketball Hall of Fame.",
+     "Michael Jordan is a former professional basketball player who is considered one of the greatest basketball players of all time. He played for the Chicago Bulls and won six NBA championships. Jordan is also known for his philanthropic work and his involvement in the Chicago Bulls.",
+     "Michael Jordan is an American former professional basketball player who was one of the most dominant players in the history of the sport, known for his six NBA championships with the Chicago Bulls. He was also a key member of the United States Men's National Basketball Team, winning three Olympic gold medals.",
+     "Michael Jordan is an American former professional basketball player who became one of the most recognizable and popular athletes in the world. He played as a shooting guard for the National Basketball Association (NBA) team the Chicago Bulls. During his career, he was an All-Star seven times and won six NBA championships. He was also an Olympic gold medalist. Jordan is widely considered one of the greatest basketball players of all time.",
+     "Michael Jordan is an American former professional basketball player who is widely regarded as one of the greatest basketball players of all time. He played for the Chicago Bulls in the National Basketball Association (NBA)."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "E02": {
+   "output": {
+    "wall_seconds": 31.03,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.879467785358429,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "MODEL_DISAGREEMENT",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": "MODEL_DISAGREEMENT",
+    "clarification_reason": "Response divergence reflects factual inconsistency or model unreliability on a factual query, not user-resolvable ambiguity.",
+    "final_answer": "Conflicting factual claims detected across model generations (model disagreement / unreliability):\n  • Claim 1 (70% consensus): Jordan Peterson is a Canadian psychologist, academic, and author known for his work in personality psychology and his approach to counseling. He is also a professor of psychology at the University of Toronto and a clinical psychologist. His approach often emphasizes traditional moral values and classical liberal principles. He is known for his controversial views on various subjects, including sexuality, authority, and mental health.\n  • Claim 2 (30% consensus): Jordan Peterson is a Canadian psychologist, author, and lecturer known for his work in clinical psychology, where he specializes in personality psychology and psychotherapy. He is also a professor of psychology at the University of Toronto. Peterson is known for his controversial views and lectures, often addressing topics such as authority, freedom, and the meaning of life. He has written several books, including \"Maps of Meaning\" and \"12 Rules for Life,\" which have gained significant attention and debate.",
+    "cluster_count": 2,
+    "semantic_entropy": 0.6108643020548935,
+    "dominant_agreement": 0.7,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.879467785358429,
+     "probabilities": {
+      "KNOWN": 0.0689459815621376,
+      "AMBIGUOUS": 0.879467785358429,
+      "UNKNOWN": 0.051586251705884933
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "Jordan Peterson is a Canadian psychologist, author, and lecturer known for his work in clinical psychology, where he specializes in personality psychology and psychotherapy. He is also a professor of psychology at the University of Toronto. Peterson is known for his controversial views and lectures, often addressing topics such as authority, freedom, and the meaning of life. He has written several books, including \"Maps of Meaning\" and \"12 Rules for Life,\" which have gained significant attention and debate.",
+     "Jordan Peterson is a Canadian psychologist, academic, and author known for his work in personality psychology and his approach to counseling. He is also a professor of psychology at the University of Toronto and a clinical psychologist. His approach often emphasizes traditional moral values and classical liberal principles. He is known for his controversial views on various subjects, including sexuality, authority, and mental health.",
+     "Jordan Peterson is a Canadian psychologist, author, and speaker known for his work in clinical psychology, where he specializes in the application of psychology to clinical practice. He is also a public intellectual and has gained popularity for his lectures and books on topics such as psychology, philosophy, and the meaning of life. Peterson is particularly known for his critique of postmodernism and his advocacy for traditional values and authority. He has written several best-selling books, including \"Maps of Meaning\" and \"12 Rules for Life. \"",
+     "Jordan Peterson is a Canadian author, professor, and former clinical psychologist known for his work in personality psychology and his lectures and books on ethics, psychology, and spirituality. He is particularly famous for his critiques of conventional academia and social norms.",
+     "Jordan Peterson is a Canadian psychologist, author, and public speaker known for his work in clinical psychology, where he specializes in working with adolescents and young adults. He is also recognized for his public lectures and books on issues like mental health, morality, authority, and the meaning of life. His ideas often incorporate elements of psychology, philosophy, and religion.",
+     "Jordan Peterson is a Canadian psychologist, author, and lecturer known for his work in personality psychology and his approach to moral and existential questions. He is particularly known for his controversial lectures and books that emphasize traditional values and critical thinking.",
+     "Jordan Peterson is a Canadian psychologist, author, and lecturer known for his work in clinical psychology, where he specializes in abnormal psychology, developmental psychology, and clinical psychopathology. He is also an outspoken figure in conservative politics and moral philosophy.",
+     "Jordan Peterson is a Canadian author, lecturer, and clinical psychologist known for his work in academic psychology and popular culture. He is particularly famous for his views on psychology, philosophy, and educational theories, often presenting his ideas in a confrontational style. His books include \"Maps of Meaning\" and \"12 Rules for Life. \"",
+     "Jordan Peterson is a Canadian psychologist, academic, and author known for his work in psychology and his lectures on personal development and moral philosophy. He is also known for his confrontational style and controversial views.",
+     "Jordan Peterson is a Canadian clinical psychologist, author, and public speaker, known for his work in personality psychology and his controversial views on mental health and societal issues. He is particularly recognized for his approach to counseling and his public lectures on topics such as authority, self-esteem, sexuality, and mental health."
+    ],
+    "cluster_labels": [
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": false,
+    "label_strict_ok": false,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": false
+   }
+  },
+  "E03": {
+   "output": {
+    "wall_seconds": 2.08,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.9113749861717224,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Classifier predicted AMBIGUOUS, but no independent signal supports asking the user: the question is clear, samples show no competing interpretation (second cluster 10% < 25%) and 0% of responses mention alternative readings.",
+    "final_answer": "Tbilisi",
+    "cluster_count": 2,
+    "semantic_entropy": 0.3250829733914482,
+    "dominant_agreement": 0.9,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.9113749861717224,
+     "probabilities": {
+      "KNOWN": 0.05531895160675049,
+      "AMBIGUOUS": 0.9113749861717224,
+      "UNKNOWN": 0.0333060659468174
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "Tbilisi",
+     "Tbilisi",
+     "Tbilisi",
+     "Tbilisi",
+     "Tbilisi",
+     "Tbilisi",
+     "Tbilisi",
+     "Tbilisi",
+     "The capital of the country Georgia is Tbilisi.",
+     "Tbilisi"
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": false,
+    "label_strict_ok": false,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": false
+   }
+  },
+  "E04": {
+   "output": {
+    "wall_seconds": 5.72,
+    "predicted_label": "KNOWN",
+    "confidence": 0.9571901559829712,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Response consistency indicates single dominant semantic cluster; answerable under current policy without factual verification.",
+    "final_answer": "The capital of the US state of Georgia is Atlanta.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.9571901559829712,
+     "probabilities": {
+      "KNOWN": 0.9571901559829712,
+      "AMBIGUOUS": 0.03260315954685211,
+      "UNKNOWN": 0.010206644423305988
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "The capital of the US state of Georgia is Atlanta.",
+     "The capital of the US state of Georgia is Atlanta.",
+     "The capital of the US state of Georgia is Atlanta.",
+     "The capital of the US state of Georgia is Atlanta.",
+     "The capital of the US state of Georgia is Atlanta.",
+     "The capital of the US state of Georgia is Atlanta.",
+     "The capital of the US state of Georgia is Atlanta.",
+     "The capital of the US state of Georgia is Atlanta.",
+     "The capital of the US state of Georgia is Atlanta.",
+     "The capital of the US state of Georgia is Atlanta."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "E05": {
+   "output": {
+    "wall_seconds": 6.69,
+    "predicted_label": "KNOWN",
+    "confidence": 0.9571901559829712,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Response consistency indicates single dominant semantic cluster; answerable under current policy without factual verification.",
+    "final_answer": "The atomic number of mercury is 80.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "KNOWN",
+     "confidence": 0.9571901559829712,
+     "probabilities": {
+      "KNOWN": 0.9571901559829712,
+      "AMBIGUOUS": 0.03260315954685211,
+      "UNKNOWN": 0.010206644423305988
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "The atomic number of mercury is 80.",
+     "The atomic number of mercury is 80.",
+     "The atomic number of mercury is 80.",
+     "The atomic number of mercury is 80.",
+     "The atomic number of mercury is 80.",
+     "The atomic number of mercury is 80.",
+     "The atomic number of mercury is 80.",
+     "The atomic number of mercury is 80.",
+     "The atomic number of mercury is 80.",
+     "The atomic number of mercury is 80."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": true,
+    "label_strict_ok": true,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": true
+   }
+  },
+  "E06": {
+   "output": {
+    "wall_seconds": 8.89,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.49863165616989136,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Classifier predicted AMBIGUOUS, but no independent signal supports asking the user: the question is clear, samples show no competing interpretation (second cluster 0% < 25%) and 0% of responses mention alternative readings.",
+    "final_answer": "The average distance of Mercury from the Sun is approximately 57.9 million kilometers or 36.0 million miles.",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.49863165616989136,
+     "probabilities": {
+      "KNOWN": 0.45776259899139404,
+      "AMBIGUOUS": 0.49863165616989136,
+      "UNKNOWN": 0.04360571876168251
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "The average distance of Mercury from the Sun is about 57.9 million kilometers or 36.0 million miles.",
+     "Mercury is, on average, 0.39 Astronomical Units (AU) from the Sun. One AU is the average distance of the Earth from the Sun, which is about 93 million miles (150 million kilometers).",
+     "The average distance of Mercury from the Sun is approximately 57.9 million kilometers or 36.0 million miles.",
+     "The average distance of Mercury from the Sun is about 57.9 million kilometers or 36.0 million miles.",
+     "The average distance of Mercury from the Sun is about 57.9 million kilometers.",
+     "Mercury is, on average, 36 million kilometers from the Sun.",
+     "The average distance of Mercury from the Sun is about 57.9 million kilometers or 36.0 million miles.",
+     "The average distance of Mercury from the Sun is approximately 57.9 million kilometers or 36.0 million miles.",
+     "The average distance of Mercury from the Sun is about 57.9 million kilometers.",
+     "The average distance of Mercury from the Sun is about 57.9 million kilometers or 36.0 million miles."
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": false,
+    "label_strict_ok": false,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": false
+   }
+  },
+  "E07": {
+   "output": {
+    "wall_seconds": 2.75,
+    "predicted_label": "AMBIGUOUS",
+    "confidence": 0.9172656536102295,
+    "classifier_status": "PREDICTED",
+    "path": "MULTI_RESPONSE",
+    "clarification_decision": "ANSWERABLE",
+    "interaction_status": "NOT_REQUIRED",
+    "clarification_pending": false,
+    "clarity_status": "UNAMBIGUOUS",
+    "clarity_confidence": 0.95,
+    "ambiguity_type": null,
+    "clarification_reason": "Classifier predicted AMBIGUOUS, but no independent signal supports asking the user: the question is clear, samples show no competing interpretation (second cluster 0% < 25%) and 0% of responses mention alternative readings.",
+    "final_answer": "Amman",
+    "cluster_count": 1,
+    "semantic_entropy": 0.0,
+    "dominant_agreement": 1.0,
+    "raw_classifier": {
+     "label": "AMBIGUOUS",
+     "confidence": 0.9172656536102295,
+     "probabilities": {
+      "KNOWN": 0.053613852709531784,
+      "AMBIGUOUS": 0.9172656536102295,
+      "UNKNOWN": 0.02912049926817417
+     }
+    },
+    "suggestions": null,
+    "suggestion_source": null,
+    "pipeline_prompt": null,
+    "responses": [
+     "Amman",
+     "Amman",
+     "Amman",
+     "Amman",
+     "Amman",
+     "Amman",
+     "Amman is the capital of Jordan.",
+     "Amman",
+     "Amman is the capital of Jordan.",
+     "Amman"
+    ],
+    "cluster_labels": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "score": {
+    "label_ok": false,
+    "label_strict_ok": false,
+    "clarification_ok": true,
+    "answer_ok": true,
+    "pass": false
+   }
+  }
+ },
+ "repeats": {},
+ "meta": {
+  "started": "2026-11-23T21:32:39",
+  "generation_model": "qwen2.5:3b",
+  "embedding_model": "all-minilm:latest",
+  "temperature": 0.7,
+  "multi_response_count": 10,
+  "entrypoint": "webapp/server.py::analyze(question, force_multi=False)",
+  "updated": "2026-11-23T21:45:25"
+ }
+}

@@ -1,0 +1,3428 @@
+{
+ "protocol": {
+  "dev_data": "data/features/features_300_v1.1.jsonl",
+  "cv": "scripts/generate_gold_splits.py::FiveFoldCrossValidator (5-fold StratifiedGroupKFold, group=question_group_id, seed 42)",
+  "repeat_seeds": [
+   42,
+   43,
+   44,
+   45,
+   46
+  ],
+  "classifier": "src.classification.classifier.UncertaintyClassifier(model_type='xgboost') defaults",
+  "hyperparameters": {
+   "n_estimators": 100,
+   "max_depth": 4,
+   "learning_rate": 0.05,
+   "random_state": 42,
+   "eval_metric": "mlogloss"
+  },
+  "tuning": "none"
+ },
+ "data_validation": {
+  "path": "data/features/features_300_v1.1.jsonl",
+  "records": 300,
+  "duplicate_ids": [],
+  "duplicate_questions": [],
+  "label_distribution": {
+   "KNOWN": 100,
+   "AMBIGUOUS": 100,
+   "UNKNOWN": 100
+  },
+  "label_field_mismatch": [],
+  "invalid_labels": [],
+  "feature_issues": [],
+  "schema_ok": true,
+  "groups": 152,
+  "categories": {
+   "determinate_factual": 50,
+   "concept_definition": 50,
+   "subjective_questions": 40,
+   "genuine_ambiguity": 60,
+   "private_inaccessible_info": 35,
+   "unknowable_future_events": 35,
+   "false_premises": 30
+  },
+  "similarity_thresholds": {
+   "0.8": 300
+  },
+  "near_duplicate_check": "all-minilm cosine >= 0.9",
+  "overlap_exact": [
+   {
+    "bench_id": "C11",
+    "dev_id": "draft_known_def_006",
+    "group": "grp_def_photosynthesis",
+    "question": "What is photosynthesis?"
+   },
+   {
+    "bench_id": "D01",
+    "dev_id": "draft_ambig_poly_021",
+    "group": "grp_poly_jordan_who",
+    "question": "Who is Jordan?"
+   },
+   {
+    "bench_id": "D02",
+    "dev_id": "draft_ambig_poly_001",
+    "group": "grp_poly_georgia_capital",
+    "question": "What is the capital of Georgia?"
+   },
+   {
+    "bench_id": "D08",
+    "dev_id": "draft_ambig_subj_001",
+    "group": "grp_subj_prog_lang",
+    "question": "What is the best programming language?"
+   },
+   {
+    "bench_id": "D09",
+    "dev_id": "draft_ambig_subj_015",
+    "group": "grp_subj_best_athlete",
+    "question": "Who is the greatest athlete of all time?"
+   },
+   {
+    "bench_id": "F02",
+    "dev_id": "draft_unk_priv_005",
+    "group": "grp_priv_user_thoughts",
+    "question": "What number am I thinking of right now?"
+   }
+  ],
+  "overlap_near": [
+   {
+    "bench_id": "C01",
+    "bench_q": "What is the capital of France?",
+    "dev_id": "draft_known_fact_026",
+    "dev_q": "What is the official capital city of France?",
+    "group": "grp_capital_france",
+    "cosine": 0.922
+   },
+   {
+    "bench_id": "C01",
+    "bench_q": "What is the capital of France?",
+    "dev_id": "draft_known_fact_028",
+    "dev_q": "What is the capital of the French Republic?",
+    "group": "grp_capital_france",
+    "cosine": 0.907
+   },
+   {
+    "bench_id": "D02",
+    "bench_q": "What is the capital of Georgia?",
+    "dev_id": "draft_ambig_poly_002",
+    "dev_q": "Which city is Georgia's capital?",
+    "group": "grp_poly_georgia_capital",
+    "cosine": 0.944
+   },
+   {
+    "bench_id": "D02",
+    "bench_q": "What is the capital of Georgia?",
+    "dev_id": "draft_ambig_poly_003",
+    "dev_q": "What city serves as the official capital of Georgia?",
+    "group": "grp_poly_georgia_capital",
+    "cosine": 0.915
+   },
+   {
+    "bench_id": "D07",
+    "bench_q": "Where is Springfield?",
+    "dev_id": "draft_ambig_poly_017",
+    "dev_q": "In which US state is Springfield located?",
+    "group": "grp_poly_springfield_state",
+    "cosine": 0.923
+   },
+   {
+    "bench_id": "E03",
+    "bench_q": "What is the capital of the country Georgia?",
+    "dev_id": "draft_ambig_poly_001",
+    "dev_q": "What is the capital of Georgia?",
+    "group": "grp_poly_georgia_capital",
+    "cosine": 0.965
+   },
+   {
+    "bench_id": "E04",
+    "bench_q": "What is the capital of the US state of Georgia?",
+    "dev_id": "draft_ambig_poly_001",
+    "dev_q": "What is the capital of Georgia?",
+    "group": "grp_poly_georgia_capital",
+    "cosine": 0.935
+   },
+   {
+    "bench_id": "E10",
+    "bench_q": "What is the tallest mountain in the world by height above sea level?",
+    "dev_id": "draft_known_fact_035",
+    "dev_q": "What is the highest mountain peak above sea level on Earth?",
+    "group": "grp_highest_mountain",
+    "cosine": 0.906
+   },
+   {
+    "bench_id": "G08",
+    "bench_q": "WHAT IS THE CAPITAL OF FRANCE?",
+    "dev_id": "draft_known_fact_026",
+    "dev_q": "What is the official capital city of France?",
+    "group": "grp_capital_france",
+    "cosine": 0.922
+   },
+   {
+    "bench_id": "G08",
+    "bench_q": "WHAT IS THE CAPITAL OF FRANCE?",
+    "dev_id": "draft_known_fact_028",
+    "dev_q": "What is the capital of the French Republic?",
+    "group": "grp_capital_france",
+    "cosine": 0.907
+   },
+   {
+    "bench_id": "I01",
+    "bench_q": "What's Georgia's capital city?",
+    "dev_id": "draft_ambig_poly_001",
+    "dev_q": "What is the capital of Georgia?",
+    "group": "grp_poly_georgia_capital",
+    "cosine": 0.954
+   },
+   {
+    "bench_id": "I01",
+    "bench_q": "What's Georgia's capital city?",
+    "dev_id": "draft_ambig_poly_002",
+    "dev_q": "Which city is Georgia's capital?",
+    "group": "grp_poly_georgia_capital",
+    "cosine": 0.967
+   },
+   {
+    "bench_id": "I01",
+    "bench_q": "What's Georgia's capital city?",
+    "dev_id": "draft_ambig_poly_003",
+    "dev_q": "What city serves as the official capital of Georgia?",
+    "group": "grp_poly_georgia_capital",
+    "cosine": 0.93
+   },
+   {
+    "bench_id": "I02",
+    "bench_q": "Tell me the capital of Georgia.",
+    "dev_id": "draft_ambig_poly_001",
+    "dev_q": "What is the capital of Georgia?",
+    "group": "grp_poly_georgia_capital",
+    "cosine": 0.958
+   },
+   {
+    "bench_id": "I02",
+    "bench_q": "Tell me the capital of Georgia.",
+    "dev_id": "draft_ambig_poly_002",
+    "dev_q": "Which city is Georgia's capital?",
+    "group": "grp_poly_georgia_capital",
+    "cosine": 0.91
+   },
+   {
+    "bench_id": "I03",
+    "bench_q": "Who's Jordan?",
+    "dev_id": "draft_ambig_poly_021",
+    "dev_q": "Who is Jordan?",
+    "group": "grp_poly_jordan_who",
+    "cosine": 0.977
+   },
+   {
+    "bench_id": "I07",
+    "bench_q": "Which programming language is the best?",
+    "dev_id": "draft_ambig_subj_001",
+    "dev_q": "What is the best programming language?",
+    "group": "grp_subj_prog_lang",
+    "cosine": 0.975
+   },
+   {
+    "bench_id": "I07",
+    "bench_q": "Which programming language is the best?",
+    "dev_id": "draft_ambig_subj_002",
+    "dev_q": "Which programming language is superior to all others?",
+    "group": "grp_subj_prog_lang",
+    "cosine": 0.921
+   }
+  ],
+  "excluded_groups": [
+   "grp_capital_france",
+   "grp_def_photosynthesis",
+   "grp_highest_mountain",
+   "grp_poly_georgia_capital",
+   "grp_poly_jordan_who",
+   "grp_poly_springfield_state",
+   "grp_priv_user_thoughts",
+   "grp_subj_best_athlete",
+   "grp_subj_prog_lang"
+  ],
+  "excluded_records": [
+   {
+    "id": "draft_known_fact_026",
+    "question": "What is the official capital city of France?",
+    "label": "KNOWN",
+    "group": "grp_capital_france",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_known_fact_027",
+    "question": "Which city serves as the official capital of France?",
+    "label": "KNOWN",
+    "group": "grp_capital_france",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_known_fact_028",
+    "question": "What is the capital of the French Republic?",
+    "label": "KNOWN",
+    "group": "grp_capital_france",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_known_fact_035",
+    "question": "What is the highest mountain peak above sea level on Earth?",
+    "label": "KNOWN",
+    "group": "grp_highest_mountain",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_known_fact_036",
+    "question": "Which mountain peak has the greatest elevation above sea level on Earth?",
+    "label": "KNOWN",
+    "group": "grp_highest_mountain",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_known_def_006",
+    "question": "What is photosynthesis?",
+    "label": "KNOWN",
+    "group": "grp_def_photosynthesis",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_known_def_007",
+    "question": "Define photosynthesis.",
+    "label": "KNOWN",
+    "group": "grp_def_photosynthesis",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_ambig_subj_001",
+    "question": "What is the best programming language?",
+    "label": "AMBIGUOUS",
+    "group": "grp_subj_prog_lang",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_ambig_subj_002",
+    "question": "Which programming language is superior to all others?",
+    "label": "AMBIGUOUS",
+    "group": "grp_subj_prog_lang",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_ambig_subj_015",
+    "question": "Who is the greatest athlete of all time?",
+    "label": "AMBIGUOUS",
+    "group": "grp_subj_best_athlete",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_ambig_subj_016",
+    "question": "Which sports figure is the absolute best athlete in history?",
+    "label": "AMBIGUOUS",
+    "group": "grp_subj_best_athlete",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_ambig_poly_001",
+    "question": "What is the capital of Georgia?",
+    "label": "AMBIGUOUS",
+    "group": "grp_poly_georgia_capital",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_ambig_poly_002",
+    "question": "Which city is Georgia's capital?",
+    "label": "AMBIGUOUS",
+    "group": "grp_poly_georgia_capital",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_ambig_poly_003",
+    "question": "What city serves as the official capital of Georgia?",
+    "label": "AMBIGUOUS",
+    "group": "grp_poly_georgia_capital",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_ambig_poly_017",
+    "question": "In which US state is Springfield located?",
+    "label": "AMBIGUOUS",
+    "group": "grp_poly_springfield_state",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_ambig_poly_018",
+    "question": "Which state in America contains the city of Springfield?",
+    "label": "AMBIGUOUS",
+    "group": "grp_poly_springfield_state",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_ambig_poly_021",
+    "question": "Who is Jordan?",
+    "label": "AMBIGUOUS",
+    "group": "grp_poly_jordan_who",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_ambig_poly_022",
+    "question": "Who or what does 'Jordan' refer to?",
+    "label": "AMBIGUOUS",
+    "group": "grp_poly_jordan_who",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_unk_priv_005",
+    "question": "What number am I thinking of right now?",
+    "label": "UNKNOWN",
+    "group": "grp_priv_user_thoughts",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   },
+   {
+    "id": "draft_unk_priv_006",
+    "question": "Which number is currently in my mind as I type this prompt?",
+    "label": "UNKNOWN",
+    "group": "grp_priv_user_thoughts",
+    "reason": "question group overlaps the 107-case benchmark (exact or semantic near-duplicate)"
+   }
+  ],
+  "benchmark_cases_overlapping_dev": [
+   "C01",
+   "C11",
+   "D01",
+   "D02",
+   "D07",
+   "D08",
+   "D09",
+   "E03",
+   "E04",
+   "E10",
+   "F02",
+   "G08",
+   "I01",
+   "I02",
+   "I03",
+   "I07"
+  ],
+  "records_after_exclusion": 280,
+  "label_distribution_after_exclusion": {
+   "KNOWN": 93,
+   "AMBIGUOUS": 89,
+   "UNKNOWN": 98
+  }
+ },
+ "deployed_model": {
+  "path": "models/uncertainty_classifier.joblib",
+  "training_source": "data/features.jsonl",
+  "metadata_n_samples": 44,
+  "dev_records_also_in_legacy": 4
+ },
+ "cv_seed42": {
+  "per_fold": [
+   {
+    "fold": 0,
+    "n_test": 56,
+    "n_test_fair": 55,
+    "B_candidate": {
+     "n": 56,
+     "accuracy": 0.7142857142857143,
+     "macro_f1": 0.7016286900007831,
+     "weighted_f1": 0.7096274203832343,
+     "per_class": {
+      "KNOWN": {
+       "precision": 0.7647058823529411,
+       "recall": 0.6842105263157895,
+       "f1": 0.7222222222222222,
+       "support": 19
+      },
+      "AMBIGUOUS": {
+       "precision": 0.5625,
+       "recall": 0.5294117647058824,
+       "f1": 0.5454545454545454,
+       "support": 17
+      },
+      "UNKNOWN": {
+       "precision": 0.782608695652174,
+       "recall": 0.9,
+       "f1": 0.8372093023255814,
+       "support": 20
+      }
+     },
+     "unknown_recall": 0.9,
+     "confusion_matrix": [
+      [
+       13,
+       5,
+       1
+      ],
+      [
+       4,
+       9,
+       4
+      ],
+      [
+       0,
+       2,
+       18
+      ]
+     ]
+    },
+    "A_deployed_fair": {
+     "n": 55,
+     "accuracy": 0.509090909090909,
+     "macro_f1": 0.5120120120120121,
+     "weighted_f1": 0.5280917280917281,
+     "per_class": {
+      "KNOWN": {
+       "precision": 0.3888888888888889,
+       "recall": 0.3684210526315789,
+       "f1": 0.3783783783783784,
+       "support": 19
+      },
+      "AMBIGUOUS": {
+       "precision": 0.2857142857142857,
+       "recall": 0.375,
+       "f1": 0.32432432432432434,
+       "support": 16
+      },
+      "UNKNOWN": {
+       "precision": 0.9375,
+       "recall": 0.75,
+       "f1": 0.8333333333333334,
+       "support": 20
+      }
+     },
+     "unknown_recall": 0.75,
+     "confusion_matrix": [
+      [
+       7,
+       12,
+       0
+      ],
+      [
+       9,
+       6,
+       1
+      ],
+      [
+       2,
+       3,
+       15
+      ]
+     ]
+    },
+    "B_candidate_fair": {
+     "n": 55,
+     "accuracy": 0.7090909090909091,
+     "macro_f1": 0.6918535189352895,
+     "weighted_f1": 0.7040813233611434,
+     "per_class": {
+      "KNOWN": {
+       "precision": 0.7647058823529411,
+       "recall": 0.6842105263157895,
+       "f1": 0.7222222222222222,
+       "support": 19
+      },
+      "AMBIGUOUS": {
+       "precision": 0.5333333333333333,
+       "recall": 0.5,
+       "f1": 0.5161290322580645,
+       "support": 16
+      },
+      "UNKNOWN": {
+       "precision": 0.782608695652174,
+       "recall": 0.9,
+       "f1": 0.8372093023255814,
+       "support": 20
+      }
+     },
+     "unknown_recall": 0.9,
+     "confusion_matrix": [
+      [
+       13,
+       5,
+       1
+      ],
+      [
+       4,
+       8,
+       4
+      ],
+      [
+       0,
+       2,
+       18
+      ]
+     ]
+    }
+   },
+   {
+    "fold": 1,
+    "n_test": 56,
+    "n_test_fair": 55,
+    "B_candidate": {
+     "n": 56,
+     "accuracy": 0.7142857142857143,
+     "macro_f1": 0.7039809863339276,
+     "weighted_f1": 0.7040488922841864,
+     "per_class": {
+      "KNOWN": {
+       "precision": 0.6666666666666666,
+       "recall": 1.0,
+       "f1": 0.8,
+       "support": 18
+      },
+      "AMBIGUOUS": {
+       "precision": 0.6666666666666666,
+       "recall": 0.5555555555555556,
+       "f1": 0.6060606060606061,
+       "support": 18
+      },
+      "UNKNOWN": {
+       "precision": 0.8571428571428571,
+       "recall": 0.6,
+       "f1": 0.7058823529411765,
+       "support": 20
+      }
+     },
+     "unknown_recall": 0.6,
+     "confusion_matrix": [
+      [
+       18,
+       0,
+       0
+      ],
+      [
+       6,
+       10,
+       2
+      ],
+      [
+       3,
+       5,
+       12
+      ]
+     ]
+    },
+    "A_deployed_fair": {
+     "n": 55,
+     "accuracy": 0.5636363636363636,
+     "macro_f1": 0.5726851851851852,
+     "weighted_f1": 0.5762878787878787,
+     "per_class": {
+      "KNOWN": {
+       "precision": 0.6,
+       "recall": 0.5294117647058824,
+       "f1": 0.5625,
+       "support": 17
+      },
+      "AMBIGUOUS": {
+       "precision": 0.4074074074074074,
+       "recall": 0.6111111111111112,
+       "f1": 0.4888888888888889,
+       "support": 18
+      },
+      "UNKNOWN": {
+       "precision": 0.8461538461538461,
+       "recall": 0.55,
+       "f1": 0.6666666666666666,
+       "support": 20
+      }
+     },
+     "unknown_recall": 0.55,
+     "confusion_matrix": [
+      [
+       9,
+       8,
+       0
+      ],
+      [
+       5,
+       11,
+       2
+      ],
+      [
+       1,
+       8,
+       11
+      ]
+     ]
+    },
+    "B_candidate_fair": {
+     "n": 55,
+     "accuracy": 0.7090909090909091,
+     "macro_f1": 0.7008802111401291,
+     "weighted_f1": 0.6994290624187404,
+     "per_class": {
+      "KNOWN": {
+       "precision": 0.6538461538461539,
+       "recall": 1.0,
+       "f1": 0.7906976744186046,
+       "support": 17
+      },
+      "AMBIGUOUS": {
+       "precision": 0.6666666666666666,
+       "recall": 0.5555555555555556,
+       "f1": 0.6060606060606061,
+       "support": 18
+      },
+      "UNKNOWN": {
+       "precision": 0.8571428571428571,
+       "recall": 0.6,
+       "f1": 0.7058823529411765,
+       "support": 20
+      }
+     },
+     "unknown_recall": 0.6,
+     "confusion_matrix": [
+      [
+       17,
+       0,
+       0
+      ],
+      [
+       6,
+       10,
+       2
+      ],
+      [
+       3,
+       5,
+       12
+      ]
+     ]
+    }
+   },
+   {
+    "fold": 2,
+    "n_test": 56,
+    "n_test_fair": 55,
+    "B_candidate": {
+     "n": 56,
+     "accuracy": 0.8571428571428571,
+     "macro_f1": 0.8502501083146244,
+     "weighted_f1": 0.8516082611704732,
+     "per_class": {
+      "KNOWN": {
+       "precision": 0.85,
+       "recall": 0.8947368421052632,
+       "f1": 0.8717948717948718,
+       "support": 19
+      },
+      "AMBIGUOUS": {
+       "precision": 0.9230769230769231,
+       "recall": 0.6666666666666666,
+       "f1": 0.7741935483870968,
+       "support": 18
+      },
+      "UNKNOWN": {
+       "precision": 0.8260869565217391,
+       "recall": 1.0,
+       "f1": 0.9047619047619048,
+       "support": 19
+      }
+     },
+     "unknown_recall": 1.0,
+     "confusion_matrix": [
+      [
+       17,
+       1,
+       1
+      ],
+      [
+       3,
+       12,
+       3
+      ],
+      [
+       0,
+       0,
+       19
+      ]
+     ]
+    },
+    "A_deployed_fair": {
+     "n": 55,
+     "accuracy": 0.6545454545454545,
+     "macro_f1": 0.6417963417963418,
+     "weighted_f1": 0.646490953763681,
+     "per_class": {
+      "KNOWN": {
+       "precision": 0.5263157894736842,
+       "recall": 0.5555555555555556,
+       "f1": 0.5405405405405406,
+       "support": 18
+      },
+      "AMBIGUOUS": {
+       "precision": 0.5333333333333333,
+       "recall": 0.4444444444444444,
+       "f1": 0.48484848484848486,
+       "support": 18
+      },
+      "UNKNOWN": {
+       "precision": 0.8571428571428571,
+       "recall": 0.9473684210526315,
+       "f1": 0.9,
+       "support": 19
+      }
+     },
+     "unknown_recall": 0.9473684210526315,
+     "confusion_matrix": [
+      [
+       10,
+       7,
+       1
+      ],
+      [
+       8,
+       8,
+       2
+      ],
+      [
+       1,
+       0,
+       18
+      ]
+     ]
+    },
+    "B_candidate_fair": {
+     "n": 55,
+     "accuracy": 0.8545454545454545,
+     "macro_f1": 0.8479401060046222,
+     "weighted_f1": 0.8489732296183908,
+     "per_class": {
+      "KNOWN": {
+       "precision": 0.8421052631578947,
+       "recall": 0.8888888888888888,
+       "f1": 0.8648648648648649,
+       "support": 18
+      },
+      "AMBIGUOUS": {
+       "precision": 0.9230769230769231,
+       "recall": 0.6666666666666666,
+       "f1": 0.7741935483870968,
+       "support": 18
+      },
+      "UNKNOWN": {
+       "precision": 0.8260869565217391,
+       "recall": 1.0,
+       "f1": 0.9047619047619048,
+       "support": 19
+      }
+     },
+     "unknown_recall": 1.0,
+     "confusion_matrix": [
+      [
+       16,
+       1,
+       1
+      ],
+      [
+       3,
+       12,
+       3
+      ],
+      [
+       0,
+       0,
+       19
+      ]
+     ]
+    }
+   },
+   {
+    "fold": 3,
+    "n_test": 56,
+    "n_test_fair": 55,
+    "B_candidate": {
+     "n": 56,
+     "accuracy": 0.7857142857142857,
+     "macro_f1": 0.77796697626419,
+     "weighted_f1": 0.7841110128261831,
+     "per_class": {
+      "KNOWN": {
+       "precision": 0.7,
+       "recall": 0.7777777777777778,
+       "f1": 0.7368421052631579,
+       "support": 18
+      },
+      "AMBIGUOUS": {
+       "precision": 0.6875,
+       "recall": 0.6111111111111112,
+       "f1": 0.6470588235294118,
+       "support": 18
+      },
+      "UNKNOWN": {
+       "precision": 0.95,
+       "recall": 0.95,
+       "f1": 0.95,
+       "support": 20
+      }
+     },
+     "unknown_recall": 0.95,
+     "confusion_matrix": [
+      [
+       14,
+       4,
+       0
+      ],
+      [
+       6,
+       11,
+       1
+      ],
+      [
+       0,
+       1,
+       19
+      ]
+     ]
+    },
+    "A_deployed_fair": {
+     "n": 55,
+     "accuracy": 0.6909090909090909,
+     "macro_f1": 0.6691938552403669,
+     "weighted_f1": 0.6747423119516143,
+     "per_class": {
+      "KNOWN": {
+       "precision": 0.6,
+       "recall": 0.3333333333333333,
+       "f1": 0.42857142857142855,
+       "support": 18
+      },
+      "AMBIGUOUS": {
+       "precision": 0.52,
+       "recall": 0.7222222222222222,
+       "f1": 0.6046511627906976,
+       "support": 18
+      },
+      "UNKNOWN": {
+       "precision": 0.95,
+       "recall": 1.0,
+       "f1": 0.9743589743589743,
+       "support": 19
+      }
+     },
+     "unknown_recall": 1.0,
+     "confusion_matrix": [
+      [
+       6,
+       12,
+       0
+      ],
+      [
+       4,
+       13,
+       1
+      ],
+      [
+       0,
+       0,
+       19
+      ]
+     ]
+    },
+    "B_candidate_fair": {
+     "n": 55,
+     "accuracy": 0.8,
+     "macro_f1": 0.7926225820962663,
+     "weighted_f1": 0.7959268801374064,
+     "per_class": {
+      "KNOWN": {
+       "precision": 0.7,
+       "recall": 0.7777777777777778,
+       "f1": 0.7368421052631579,
+       "support": 18
+      },
+      "AMBIGUOUS": {
+       "precision": 0.7333333333333333,
+       "recall": 0.6111111111111112,
+       "f1": 0.6666666666666666,
+       "support": 18
+      },
+      "UNKNOWN": {
+       "precision": 0.95,
+       "recall": 1.0,
+       "f1": 0.9743589743589743,
+       "support": 19
+      }
+     },
+     "unknown_recall": 1.0,
+     "confusion_matrix": [
+      [
+       14,
+       4,
+       0
+      ],
+      [
+       6,
+       11,
+       1
+      ],
+      [
+       0,
+       0,
+       19
+      ]
+     ]
+    }
+   },
+   {
+    "fold": 4,
+    "n_test": 56,
+    "n_test_fair": 56,
+    "B_candidate": {
+     "n": 56,
+     "accuracy": 0.75,
+     "macro_f1": 0.7444444444444445,
+     "weighted_f1": 0.7468253968253968,
+     "per_class": {
+      "KNOWN": {
+       "precision": 0.7647058823529411,
+       "recall": 0.6842105263157895,
+       "f1": 0.7222222222222222,
+       "support": 19
+      },
+      "AMBIGUOUS": {
+       "precision": 0.6111111111111112,
+       "recall": 0.6111111111111112,
+       "f1": 0.6111111111111112,
+       "support": 18
+      },
+      "UNKNOWN": {
+       "precision": 0.8571428571428571,
+       "recall": 0.9473684210526315,
+       "f1": 0.9,
+       "support": 19
+      }
+     },
+     "unknown_recall": 0.9473684210526315,
+     "confusion_matrix": [
+      [
+       13,
+       6,
+       0
+      ],
+      [
+       4,
+       11,
+       3
+      ],
+      [
+       0,
+       1,
+       18
+      ]
+     ]
+    },
+    "A_deployed_fair": {
+     "n": 56,
+     "accuracy": 0.6071428571428571,
+     "macro_f1": 0.5916338840807763,
+     "weighted_f1": 0.5934879734742048,
+     "per_class": {
+      "KNOWN": {
+       "precision": 0.5,
+       "recall": 0.3157894736842105,
+       "f1": 0.3870967741935484,
+       "support": 19
+      },
+      "AMBIGUOUS": {
+       "precision": 0.43478260869565216,
+       "recall": 0.5555555555555556,
+       "f1": 0.4878048780487805,
+       "support": 18
+      },
+      "UNKNOWN": {
+       "precision": 0.8571428571428571,
+       "recall": 0.9473684210526315,
+       "f1": 0.9,
+       "support": 19
+      }
+     },
+     "unknown_recall": 0.9473684210526315,
+     "confusion_matrix": [
+      [
+       6,
+       13,
+       0
+      ],
+      [
+       5,
+       10,
+       3
+      ],
+      [
+       1,
+       0,
+       18
+      ]
+     ]
+    },
+    "B_candidate_fair": {
+     "n": 56,
+     "accuracy": 0.75,
+     "macro_f1": 0.7444444444444445,
+     "weighted_f1": 0.7468253968253968,
+     "per_class": {
+      "KNOWN": {
+       "precision": 0.7647058823529411,
+       "recall": 0.6842105263157895,
+       "f1": 0.7222222222222222,
+       "support": 19
+      },
+      "AMBIGUOUS": {
+       "precision": 0.6111111111111112,
+       "recall": 0.6111111111111112,
+       "f1": 0.6111111111111112,
+       "support": 18
+      },
+      "UNKNOWN": {
+       "precision": 0.8571428571428571,
+       "recall": 0.9473684210526315,
+       "f1": 0.9,
+       "support": 19
+      }
+     },
+     "unknown_recall": 0.9473684210526315,
+     "confusion_matrix": [
+      [
+       13,
+       6,
+       0
+      ],
+      [
+       4,
+       11,
+       3
+      ],
+      [
+       0,
+       1,
+       18
+      ]
+     ]
+    }
+   }
+  ],
+  "fold_variance": {
+   "B_candidate": {
+    "accuracy": {
+     "mean": 0.7642857142857142,
+     "std": 0.05345224838248486
+    },
+    "macro_f1": {
+     "mean": 0.7556542410715938,
+     "std": 0.05506501832442547
+    },
+    "weighted_f1": {
+     "mean": 0.7592441966978948,
+     "std": 0.054428028922067086
+    },
+    "unknown_recall": {
+     "mean": 0.8794736842105264,
+     "std": 0.14327394676882005
+    },
+    "recall_KNOWN": {
+     "mean": 0.808187134502924,
+     "std": 0.12324622102755078
+    },
+    "recall_AMBIGUOUS": {
+     "mean": 0.5947712418300654,
+     "std": 0.047984718543732416
+    },
+    "recall_UNKNOWN": {
+     "mean": 0.8794736842105264,
+     "std": 0.14327394676882005
+    }
+   },
+   "A_deployed_fair": {
+    "accuracy": {
+     "mean": 0.6050649350649351,
+     "std": 0.06441925000043848
+    },
+    "macro_f1": {
+     "mean": 0.5974642556629365,
+     "std": 0.05488269459125081
+    },
+    "weighted_f1": {
+     "mean": 0.6038201692138214,
+     "std": 0.051865835121596114
+    },
+    "unknown_recall": {
+     "mean": 0.8389473684210527,
+     "std": 0.1678394563340011
+    },
+    "recall_KNOWN": {
+     "mean": 0.4205022359821121,
+     "std": 0.1013669713574213
+    },
+    "recall_AMBIGUOUS": {
+     "mean": 0.5416666666666666,
+     "std": 0.12234841969747356
+    },
+    "recall_UNKNOWN": {
+     "mean": 0.8389473684210527,
+     "std": 0.1678394563340011
+    }
+   },
+   "B_candidate_fair": {
+    "accuracy": {
+     "mean": 0.7645454545454544,
+     "std": 0.05606961434585189
+    },
+    "macro_f1": {
+     "mean": 0.7555481725241504,
+     "std": 0.058445990268518544
+    },
+    "weighted_f1": {
+     "mean": 0.7590471784722157,
+     "std": 0.056871335497133434
+    },
+    "unknown_recall": {
+     "mean": 0.8894736842105264,
+     "std": 0.1494588576783061
+    },
+    "recall_KNOWN": {
+     "mean": 0.8070175438596492,
+     "std": 0.12244446622973004
+    },
+    "recall_AMBIGUOUS": {
+     "mean": 0.5888888888888889,
+     "std": 0.05665577237325316
+    },
+    "recall_UNKNOWN": {
+     "mean": 0.8894736842105264,
+     "std": 0.1494588576783061
+    }
+   }
+  },
+  "pooled_oof": {
+   "B_candidate": {
+    "n": 280,
+    "accuracy": 0.7642857142857142,
+    "macro_f1": 0.7574160077503388,
+    "weighted_f1": 0.7610776858816318,
+    "per_class": {
+     "KNOWN": {
+      "precision": 0.7425742574257426,
+      "recall": 0.8064516129032258,
+      "f1": 0.7731958762886598,
+      "support": 93
+     },
+     "AMBIGUOUS": {
+      "precision": 0.6794871794871795,
+      "recall": 0.5955056179775281,
+      "f1": 0.6347305389221557,
+      "support": 89
+     },
+     "UNKNOWN": {
+      "precision": 0.8514851485148515,
+      "recall": 0.8775510204081632,
+      "f1": 0.864321608040201,
+      "support": 98
+     }
+    },
+    "unknown_recall": 0.8775510204081632,
+    "confusion_matrix": [
+     [
+      75,
+      16,
+      2
+     ],
+     [
+      23,
+      53,
+      13
+     ],
+     [
+      3,
+      9,
+      86
+     ]
+    ]
+   },
+   "A_deployed_fair": {
+    "n": 276,
+    "accuracy": 0.605072463768116,
+    "macro_f1": 0.6015734161890475,
+    "weighted_f1": 0.6085236203067497,
+    "per_class": {
+     "KNOWN": {
+      "precision": 0.5135135135135135,
+      "recall": 0.4175824175824176,
+      "f1": 0.46060606060606063,
+      "support": 91
+     },
+     "AMBIGUOUS": {
+      "precision": 0.43243243243243246,
+      "recall": 0.5454545454545454,
+      "f1": 0.4824120603015075,
+      "support": 88
+     },
+     "UNKNOWN": {
+      "precision": 0.8901098901098901,
+      "recall": 0.8350515463917526,
+      "f1": 0.8617021276595744,
+      "support": 97
+     }
+    },
+    "unknown_recall": 0.8350515463917526,
+    "confusion_matrix": [
+     [
+      38,
+      52,
+      1
+     ],
+     [
+      31,
+      48,
+      9
+     ],
+     [
+      5,
+      11,
+      81
+     ]
+    ]
+   },
+   "B_candidate_fair": {
+    "n": 276,
+    "accuracy": 0.7644927536231884,
+    "macro_f1": 0.7570847542606206,
+    "weighted_f1": 0.7608471742785523,
+    "per_class": {
+     "KNOWN": {
+      "precision": 0.7373737373737373,
+      "recall": 0.8021978021978022,
+      "f1": 0.7684210526315789,
+      "support": 91
+     },
+     "AMBIGUOUS": {
+      "precision": 0.6842105263157895,
+      "recall": 0.5909090909090909,
+      "f1": 0.6341463414634146,
+      "support": 88
+     },
+     "UNKNOWN": {
+      "precision": 0.8514851485148515,
+      "recall": 0.8865979381443299,
+      "f1": 0.8686868686868687,
+      "support": 97
+     }
+    },
+    "unknown_recall": 0.8865979381443299,
+    "confusion_matrix": [
+     [
+      73,
+      16,
+      2
+     ],
+     [
+      23,
+      52,
+      13
+     ],
+     [
+      3,
+      8,
+      86
+     ]
+    ]
+   }
+  },
+  "significance_B_vs_A_fair": {
+   "n": 276,
+   "B_correct_A_wrong": 69,
+   "A_correct_B_wrong": 25,
+   "mcnemar_exact_p": 6.339264707376482e-06,
+   "folds_B_better": 5,
+   "macro_f1_diff_bootstrap_95ci": [
+    0.09146302597837104,
+    0.21978192597232704
+   ]
+  }
+ },
+ "cv_repeated_seeds": {
+  "seeds": [
+   42,
+   43,
+   44,
+   45,
+   46
+  ],
+  "per_seed": [
+   {
+    "n": 280,
+    "accuracy": 0.7642857142857142,
+    "macro_f1": 0.7574160077503388,
+    "weighted_f1": 0.7610776858816318,
+    "per_class": {
+     "KNOWN": {
+      "precision": 0.7425742574257426,
+      "recall": 0.8064516129032258,
+      "f1": 0.7731958762886598,
+      "support": 93
+     },
+     "AMBIGUOUS": {
+      "precision": 0.6794871794871795,
+      "recall": 0.5955056179775281,
+      "f1": 0.6347305389221557,
+      "support": 89
+     },
+     "UNKNOWN": {
+      "precision": 0.8514851485148515,
+      "recall": 0.8775510204081632,
+      "f1": 0.864321608040201,
+      "support": 98
+     }
+    },
+    "unknown_recall": 0.8775510204081632,
+    "confusion_matrix": [
+     [
+      75,
+      16,
+      2
+     ],
+     [
+      23,
+      53,
+      13
+     ],
+     [
+      3,
+      9,
+      86
+     ]
+    ]
+   },
+   {
+    "n": 280,
+    "accuracy": 0.7785714285714286,
+    "macro_f1": 0.7720566344399797,
+    "weighted_f1": 0.7758014096456308,
+    "per_class": {
+     "KNOWN": {
+      "precision": 0.7264150943396226,
+      "recall": 0.8279569892473119,
+      "f1": 0.7738693467336684,
+      "support": 93
+     },
+     "AMBIGUOUS": {
+      "precision": 0.7105263157894737,
+      "recall": 0.6067415730337079,
+      "f1": 0.6545454545454545,
+      "support": 89
+     },
+     "UNKNOWN": {
+      "precision": 0.8877551020408163,
+      "recall": 0.8877551020408163,
+      "f1": 0.8877551020408163,
+      "support": 98
+     }
+    },
+    "unknown_recall": 0.8877551020408163,
+    "confusion_matrix": [
+     [
+      77,
+      14,
+      2
+     ],
+     [
+      26,
+      54,
+      9
+     ],
+     [
+      3,
+      8,
+      87
+     ]
+    ]
+   },
+   {
+    "n": 280,
+    "accuracy": 0.8035714285714286,
+    "macro_f1": 0.7990795781755574,
+    "weighted_f1": 0.8021542494402251,
+    "per_class": {
+     "KNOWN": {
+      "precision": 0.7777777777777778,
+      "recall": 0.8279569892473119,
+      "f1": 0.8020833333333334,
+      "support": 93
+     },
+     "AMBIGUOUS": {
+      "precision": 0.7317073170731707,
+      "recall": 0.6741573033707865,
+      "f1": 0.7017543859649122,
+      "support": 89
+     },
+     "UNKNOWN": {
+      "precision": 0.8888888888888888,
+      "recall": 0.8979591836734694,
+      "f1": 0.8934010152284264,
+      "support": 98
+     }
+    },
+    "unknown_recall": 0.8979591836734694,
+    "confusion_matrix": [
+     [
+      77,
+      14,
+      2
+     ],
+     [
+      20,
+      60,
+      9
+     ],
+     [
+      2,
+      8,
+      88
+     ]
+    ]
+   },
+   {
+    "n": 280,
+    "accuracy": 0.7535714285714286,
+    "macro_f1": 0.7480140774258421,
+    "weighted_f1": 0.7514533505709977,
+    "per_class": {
+     "KNOWN": {
+      "precision": 0.7450980392156863,
+      "recall": 0.8172043010752689,
+      "f1": 0.7794871794871795,
+      "support": 93
+     },
+     "AMBIGUOUS": {
+      "precision": 0.654320987654321,
+      "recall": 0.5955056179775281,
+      "f1": 0.6235294117647059,
+      "support": 89
+     },
+     "UNKNOWN": {
+      "precision": 0.845360824742268,
+      "recall": 0.8367346938775511,
+      "f1": 0.841025641025641,
+      "support": 98
+     }
+    },
+    "unknown_recall": 0.8367346938775511,
+    "confusion_matrix": [
+     [
+      76,
+      15,
+      2
+     ],
+     [
+      23,
+      53,
+      13
+     ],
+     [
+      3,
+      13,
+      82
+     ]
+    ]
+   },
+   {
+    "n": 280,
+    "accuracy": 0.8071428571428572,
+    "macro_f1": 0.8005693277767937,
+    "weighted_f1": 0.8038127424826225,
+    "per_class": {
+     "KNOWN": {
+      "precision": 0.7766990291262136,
+      "recall": 0.8602150537634409,
+      "f1": 0.8163265306122449,
+      "support": 93
+     },
+     "AMBIGUOUS": {
+      "precision": 0.75,
+      "recall": 0.6404494382022472,
+      "f1": 0.6909090909090909,
+      "support": 89
+     },
+     "UNKNOWN": {
+      "precision": 0.8811881188118812,
+      "recall": 0.9081632653061225,
+      "f1": 0.8944723618090452,
+      "support": 98
+     }
+    },
+    "unknown_recall": 0.9081632653061225,
+    "confusion_matrix": [
+     [
+      80,
+      12,
+      1
+     ],
+     [
+      21,
+      57,
+      11
+     ],
+     [
+      2,
+      7,
+      89
+     ]
+    ]
+   }
+  ],
+  "summary": {
+   "accuracy": {
+    "mean": 0.7814285714285715,
+    "std": 0.02111677928442071
+   },
+   "macro_f1": {
+    "mean": 0.7754271251137024,
+    "std": 0.02134855793814008
+   },
+   "weighted_f1": {
+    "mean": 0.7788598876042215,
+    "std": 0.021175228535289633
+   },
+   "unknown_recall": {
+    "mean": 0.8816326530612244,
+    "std": 0.02465927749713177
+   },
+   "recall_KNOWN": {
+    "mean": 0.8279569892473118,
+    "std": 0.0179926887426683
+   },
+   "recall_AMBIGUOUS": {
+    "mean": 0.6224719101123595,
+    "std": 0.030647599319069324
+   },
+   "recall_UNKNOWN": {
+    "mean": 0.8816326530612244,
+    "std": 0.02465927749713177
+   }
+  }
+ },
+ "category_held_out": {
+  "B_candidate": {
+   "n": 280,
+   "accuracy": 0.4035714285714286,
+   "macro_f1": 0.3610367709424737,
+   "weighted_f1": 0.3693874099258024,
+   "per_class": {
+    "KNOWN": {
+     "precision": 0.02631578947368421,
+     "recall": 0.010752688172043012,
+     "f1": 0.015267175572519083,
+     "support": 93
+    },
+    "AMBIGUOUS": {
+     "precision": 0.2426470588235294,
+     "recall": 0.3707865168539326,
+     "f1": 0.29333333333333333,
+     "support": 89
+    },
+    "UNKNOWN": {
+     "precision": 0.7452830188679245,
+     "recall": 0.8061224489795918,
+     "f1": 0.7745098039215687,
+     "support": 98
+    }
+   },
+   "unknown_recall": 0.8061224489795918,
+   "confusion_matrix": [
+    [
+     1,
+     86,
+     6
+    ],
+    [
+     35,
+     33,
+     21
+    ],
+    [
+     2,
+     17,
+     79
+    ]
+   ]
+  },
+  "A_deployed_fair_same_records": {
+   "n": 276,
+   "accuracy": 0.605072463768116,
+   "macro_f1": 0.6015734161890475,
+   "weighted_f1": 0.6085236203067497,
+   "per_class": {
+    "KNOWN": {
+     "precision": 0.5135135135135135,
+     "recall": 0.4175824175824176,
+     "f1": 0.46060606060606063,
+     "support": 91
+    },
+    "AMBIGUOUS": {
+     "precision": 0.43243243243243246,
+     "recall": 0.5454545454545454,
+     "f1": 0.4824120603015075,
+     "support": 88
+    },
+    "UNKNOWN": {
+     "precision": 0.8901098901098901,
+     "recall": 0.8350515463917526,
+     "f1": 0.8617021276595744,
+     "support": 97
+    }
+   },
+   "unknown_recall": 0.8350515463917526,
+   "confusion_matrix": [
+    [
+     38,
+     52,
+     1
+    ],
+    [
+     31,
+     48,
+     9
+    ],
+    [
+     5,
+     11,
+     81
+    ]
+   ]
+  }
+ },
+ "per_category": {
+  "concept_definition": {
+   "n": 48,
+   "label": "KNOWN",
+   "cv_accuracy_B": 0.6875,
+   "loco_accuracy_B": 0.0,
+   "deployed_accuracy_A_fair": 0.1276595744680851,
+   "n_fair": 47
+  },
+  "determinate_factual": {
+   "n": 45,
+   "label": "KNOWN",
+   "cv_accuracy_B": 0.9333333333333333,
+   "loco_accuracy_B": 0.022222222222222223,
+   "deployed_accuracy_A_fair": 0.7272727272727273,
+   "n_fair": 44
+  },
+  "false_premises": {
+   "n": 30,
+   "label": "UNKNOWN",
+   "cv_accuracy_B": 0.8333333333333334,
+   "loco_accuracy_B": 0.7666666666666667,
+   "deployed_accuracy_A_fair": 0.7333333333333333,
+   "n_fair": 30
+  },
+  "genuine_ambiguity": {
+   "n": 53,
+   "label": "AMBIGUOUS",
+   "cv_accuracy_B": 0.5094339622641509,
+   "loco_accuracy_B": 0.2641509433962264,
+   "deployed_accuracy_A_fair": 0.5769230769230769,
+   "n_fair": 52
+  },
+  "private_inaccessible_info": {
+   "n": 33,
+   "label": "UNKNOWN",
+   "cv_accuracy_B": 0.8181818181818182,
+   "loco_accuracy_B": 0.7272727272727273,
+   "deployed_accuracy_A_fair": 0.8125,
+   "n_fair": 32
+  },
+  "subjective_questions": {
+   "n": 36,
+   "label": "AMBIGUOUS",
+   "cv_accuracy_B": 0.7222222222222222,
+   "loco_accuracy_B": 0.5277777777777778,
+   "deployed_accuracy_A_fair": 0.5,
+   "n_fair": 36
+  },
+  "unknowable_future_events": {
+   "n": 35,
+   "label": "UNKNOWN",
+   "cv_accuracy_B": 0.9714285714285714,
+   "loco_accuracy_B": 0.9142857142857143,
+   "deployed_accuracy_A_fair": 0.9428571428571428,
+   "n_fair": 35
+  }
+ },
+ "candidate_model": {
+  "path": "models/candidates/uncertainty_classifier_f300_candidate.joblib",
+  "n_train": 280,
+  "train_accuracy": 0.9928571428571429
+ },
+ "feature_analysis": {
+  "gain_A_deployed": {
+   "semantic_entropy": 0.035179253741685464,
+   "normalized_entropy": 0.0,
+   "dominant_agreement": 0.015254081878512623,
+   "second_agreement": 0.043404260720337984,
+   "agreement_margin": 0.04402353991780655,
+   "cluster_count": 0.0,
+   "cluster_ratio": 0.0,
+   "mean_pairwise_similarity": 0.05288139087061808,
+   "min_pairwise_similarity": 0.034538905268730664,
+   "response_len_mean": 0.06387822290122283,
+   "response_len_std": 0.12531028438886774,
+   "distinct_1gram_ratio": 0.04646410156921114,
+   "distinct_2gram_ratio": 0.16424022340996464,
+   "question_overlap_mean": 0.03546351456426339,
+   "hedging_score": 0.0322103552104633,
+   "negation_count": 0.3071518655583156
+  },
+  "gain_B_candidate": {
+   "semantic_entropy": 0.033537603503749805,
+   "normalized_entropy": 0.0,
+   "dominant_agreement": 0.03049251242876858,
+   "second_agreement": 0.00880112266862916,
+   "agreement_margin": 0.026958684610041635,
+   "cluster_count": 0.17244648411815497,
+   "cluster_ratio": 0.0,
+   "mean_pairwise_similarity": 0.03924629020462722,
+   "min_pairwise_similarity": 0.06038405912043951,
+   "response_len_mean": 0.04516737840063833,
+   "response_len_std": 0.04127706867267482,
+   "distinct_1gram_ratio": 0.11143001482222534,
+   "distinct_2gram_ratio": 0.03118642312278525,
+   "question_overlap_mean": 0.046299158816389484,
+   "hedging_score": 0.008597513146998635,
+   "negation_count": 0.34417568636387724
+  },
+  "mean_abs_contribution_A": {
+   "semantic_entropy": 0.025988049805164337,
+   "normalized_entropy": 0.0,
+   "dominant_agreement": 0.0025104512460529804,
+   "second_agreement": 0.0035812179557979107,
+   "agreement_margin": 0.005278376862406731,
+   "cluster_count": 0.0,
+   "cluster_ratio": 0.0,
+   "mean_pairwise_similarity": 0.0892745703458786,
+   "min_pairwise_similarity": 0.012112760916352272,
+   "response_len_mean": 0.040554825216531754,
+   "response_len_std": 0.0391094945371151,
+   "distinct_1gram_ratio": 0.03584578260779381,
+   "distinct_2gram_ratio": 0.09042118489742279,
+   "question_overlap_mean": 0.09607528150081635,
+   "hedging_score": 0.011356113478541374,
+   "negation_count": 0.5478918552398682
+  },
+  "mean_abs_contribution_B": {
+   "semantic_entropy": 0.0023181901779025793,
+   "normalized_entropy": 0.0,
+   "dominant_agreement": 0.0015824518632143736,
+   "second_agreement": 0.003176393685862422,
+   "agreement_margin": 0.004439310636371374,
+   "cluster_count": 0.0005564810708165169,
+   "cluster_ratio": 0.0,
+   "mean_pairwise_similarity": 0.027007678523659706,
+   "min_pairwise_similarity": 0.07602833956480026,
+   "response_len_mean": 0.06549223512411118,
+   "response_len_std": 0.08349660038948059,
+   "distinct_1gram_ratio": 0.14809106290340424,
+   "distinct_2gram_ratio": 0.05023193359375,
+   "question_overlap_mean": 0.12102749943733215,
+   "hedging_score": 0.001529705710709095,
+   "negation_count": 0.4150220453739166
+  },
+  "group_share": {
+   "gain_A": {
+    "consistency": 0.22528143239769136,
+    "linguistic": 0.7747185676023085
+   },
+   "gain_B": {
+    "consistency": 0.37186675665441093,
+    "linguistic": 0.6281332433455891
+   },
+   "contrib_A": {
+    "consistency": 0.13874542713165283,
+    "linguistic": 0.8612545374780893
+   },
+   "contrib_B": {
+    "consistency": 0.11510884552262723,
+    "linguistic": 0.8848910825327039
+   }
+  },
+  "permutation_importance_B_cv_macro_f1_drop": {
+   "semantic_entropy": -0.00039046742452314876,
+   "normalized_entropy": 0.0,
+   "dominant_agreement": 0.0012896405919661702,
+   "second_agreement": -0.0005493446615197595,
+   "agreement_margin": -0.003967703862403149,
+   "cluster_count": -8.967208967208595e-05,
+   "cluster_ratio": 0.0,
+   "mean_pairwise_similarity": 0.0029481222460382294,
+   "min_pairwise_similarity": 0.016339008729343744,
+   "response_len_mean": -0.0018561387404945964,
+   "response_len_std": 0.003337751854042726,
+   "distinct_1gram_ratio": 0.11276468079856845,
+   "distinct_2gram_ratio": -0.009446126672196442,
+   "question_overlap_mean": 0.034003022999078814,
+   "hedging_score": 4.252369712637316e-05,
+   "negation_count": 0.29943258519598004
+  },
+  "permutation_importance_B_train_macro_f1_drop": {
+   "semantic_entropy": -0.0005502311569482554,
+   "normalized_entropy": 0.0,
+   "dominant_agreement": 0.0,
+   "second_agreement": 0.0,
+   "agreement_margin": 0.0032141163920823444,
+   "cluster_count": 0.0,
+   "cluster_ratio": 0.0,
+   "mean_pairwise_similarity": 0.01815689492081359,
+   "min_pairwise_similarity": 0.07247243141269863,
+   "response_len_mean": 0.0706661051544544,
+   "response_len_std": 0.08216914212635536,
+   "distinct_1gram_ratio": 0.1878033380598823,
+   "distinct_2gram_ratio": 0.013697750573706858,
+   "question_overlap_mean": 0.1317253142555066,
+   "hedging_score": 0.0,
+   "negation_count": 0.4092689390446728
+  },
+  "ablation_cv_consistency_only": {
+   "n": 280,
+   "accuracy": 0.45357142857142857,
+   "macro_f1": 0.44177970423253443,
+   "weighted_f1": 0.4433426276680994,
+   "per_class": {
+    "KNOWN": {
+     "precision": 0.5514018691588785,
+     "recall": 0.6344086021505376,
+     "f1": 0.59,
+     "support": 93
+    },
+    "AMBIGUOUS": {
+     "precision": 0.3898305084745763,
+     "recall": 0.25842696629213485,
+     "f1": 0.3108108108108108,
+     "support": 89
+    },
+    "UNKNOWN": {
+     "precision": 0.39473684210526316,
+     "recall": 0.45918367346938777,
+     "f1": 0.42452830188679247,
+     "support": 98
+    }
+   },
+   "unknown_recall": 0.45918367346938777,
+   "confusion_matrix": [
+    [
+     59,
+     10,
+     24
+    ],
+    [
+     21,
+     23,
+     45
+    ],
+    [
+     27,
+     26,
+     45
+    ]
+   ]
+  },
+  "ablation_cv_linguistic_only": {
+   "n": 280,
+   "accuracy": 0.7678571428571429,
+   "macro_f1": 0.7613378684807256,
+   "weighted_f1": 0.765093537414966,
+   "per_class": {
+    "KNOWN": {
+     "precision": 0.7475728155339806,
+     "recall": 0.8279569892473119,
+     "f1": 0.7857142857142857,
+     "support": 93
+    },
+    "AMBIGUOUS": {
+     "precision": 0.6708860759493671,
+     "recall": 0.5955056179775281,
+     "f1": 0.6309523809523809,
+     "support": 89
+    },
+    "UNKNOWN": {
+     "precision": 0.8673469387755102,
+     "recall": 0.8673469387755102,
+     "f1": 0.8673469387755102,
+     "support": 98
+    }
+   },
+   "unknown_recall": 0.8673469387755102,
+   "confusion_matrix": [
+    [
+     77,
+     15,
+     1
+    ],
+    [
+     24,
+     53,
+     12
+    ],
+    [
+     2,
+     11,
+     85
+    ]
+   ]
+  }
+ },
+ "benchmark_107_not_independent": {
+  "note": "The 107-case benchmark was used to develop the safeguard/HITL layer and overlaps the development data; it is NOT an independent test set.",
+  "replay_reproduces_recorded_raw_labels": "80/80",
+  "replay_reproduces_recorded_final_labels_A": "80/80",
+  "overlapping_cases_excluded_in_clean_subset": [
+   "C01",
+   "C11",
+   "D01",
+   "D02",
+   "D07",
+   "D08",
+   "D09",
+   "E03",
+   "E04",
+   "E10",
+   "F02",
+   "G08",
+   "I01",
+   "I02",
+   "I03",
+   "I07"
+  ],
+  "raw_classifier_multi_response": {
+   "A": {
+    "n": 80,
+    "accuracy": 0.5375,
+    "macro_f1": 0.5328294839948559,
+    "weighted_f1": 0.5452433803710164,
+    "per_class": {
+     "KNOWN": {
+      "precision": 0.5,
+      "recall": 0.41379310344827586,
+      "f1": 0.4528301886792453,
+      "support": 29
+     },
+     "AMBIGUOUS": {
+      "precision": 0.36666666666666664,
+      "recall": 0.5238095238095238,
+      "f1": 0.43137254901960786,
+      "support": 21
+     },
+     "UNKNOWN": {
+      "precision": 0.7692307692307693,
+      "recall": 0.6666666666666666,
+      "f1": 0.7142857142857143,
+      "support": 30
+     }
+    },
+    "unknown_recall": 0.6666666666666666,
+    "confusion_matrix": [
+     [
+      12,
+      14,
+      3
+     ],
+     [
+      7,
+      11,
+      3
+     ],
+     [
+      5,
+      5,
+      20
+     ]
+    ]
+   },
+   "B": {
+    "n": 80,
+    "accuracy": 0.625,
+    "macro_f1": 0.6263057929724596,
+    "weighted_f1": 0.6371260683760683,
+    "per_class": {
+     "KNOWN": {
+      "precision": 0.8260869565217391,
+      "recall": 0.6551724137931034,
+      "f1": 0.7307692307692307,
+      "support": 29
+     },
+     "AMBIGUOUS": {
+      "precision": 0.42424242424242425,
+      "recall": 0.6666666666666666,
+      "f1": 0.5185185185185185,
+      "support": 21
+     },
+     "UNKNOWN": {
+      "precision": 0.7083333333333334,
+      "recall": 0.5666666666666667,
+      "f1": 0.6296296296296297,
+      "support": 30
+     }
+    },
+    "unknown_recall": 0.5666666666666667,
+    "confusion_matrix": [
+     [
+      19,
+      7,
+      3
+     ],
+     [
+      3,
+      14,
+      4
+     ],
+     [
+      1,
+      12,
+      17
+     ]
+    ]
+   }
+  },
+  "raw_classifier_multi_response_clean": {
+   "A": {
+    "n": 66,
+    "accuracy": 0.5454545454545454,
+    "macro_f1": 0.5247345247345248,
+    "weighted_f1": 0.5639789503425867,
+    "per_class": {
+     "KNOWN": {
+      "precision": 0.5263157894736842,
+      "recall": 0.4,
+      "f1": 0.45454545454545453,
+      "support": 25
+     },
+     "AMBIGUOUS": {
+      "precision": 0.2916666666666667,
+      "recall": 0.5833333333333334,
+      "f1": 0.3888888888888889,
+      "support": 12
+     },
+     "UNKNOWN": {
+      "precision": 0.8260869565217391,
+      "recall": 0.6551724137931034,
+      "f1": 0.7307692307692307,
+      "support": 29
+     }
+    },
+    "unknown_recall": 0.6551724137931034,
+    "confusion_matrix": [
+     [
+      10,
+      12,
+      3
+     ],
+     [
+      4,
+      7,
+      1
+     ],
+     [
+      5,
+      5,
+      19
+     ]
+    ]
+   },
+   "B": {
+    "n": 66,
+    "accuracy": 0.6363636363636364,
+    "macro_f1": 0.6288038277511961,
+    "weighted_f1": 0.6600362476439032,
+    "per_class": {
+     "KNOWN": {
+      "precision": 0.8947368421052632,
+      "recall": 0.68,
+      "f1": 0.7727272727272727,
+      "support": 25
+     },
+     "AMBIGUOUS": {
+      "precision": 0.34615384615384615,
+      "recall": 0.75,
+      "f1": 0.47368421052631576,
+      "support": 12
+     },
+     "UNKNOWN": {
+      "precision": 0.7619047619047619,
+      "recall": 0.5517241379310345,
+      "f1": 0.64,
+      "support": 29
+     }
+    },
+    "unknown_recall": 0.5517241379310345,
+    "confusion_matrix": [
+     [
+      17,
+      5,
+      3
+     ],
+     [
+      1,
+      9,
+      2
+     ],
+     [
+      1,
+      12,
+      16
+     ]
+    ]
+   }
+  },
+  "system_label_replay_all107": {
+   "A": {
+    "n": 107,
+    "accuracy": 0.7663551401869159,
+    "macro_f1": 0.7375322997416021,
+    "weighted_f1": 0.7670995435774831,
+    "per_class": {
+     "KNOWN": {
+      "precision": 0.8157894736842105,
+      "recall": 0.6458333333333334,
+      "f1": 0.7209302325581395,
+      "support": 48
+     },
+     "AMBIGUOUS": {
+      "precision": 0.48148148148148145,
+      "recall": 0.6190476190476191,
+      "f1": 0.5416666666666666,
+      "support": 21
+     },
+     "UNKNOWN": {
+      "precision": 0.9047619047619048,
+      "recall": 1.0,
+      "f1": 0.95,
+      "support": 38
+     }
+    },
+    "unknown_recall": 1.0,
+    "confusion_matrix": [
+     [
+      31,
+      14,
+      3
+     ],
+     [
+      7,
+      13,
+      1
+     ],
+     [
+      0,
+      0,
+      38
+     ]
+    ]
+   },
+   "B": {
+    "n": 107,
+    "accuracy": 0.8598130841121495,
+    "macro_f1": 0.8398256388268873,
+    "weighted_f1": 0.8590262832273402,
+    "per_class": {
+     "KNOWN": {
+      "precision": 0.926829268292683,
+      "recall": 0.7916666666666666,
+      "f1": 0.8539325842696629,
+      "support": 48
+     },
+     "AMBIGUOUS": {
+      "precision": 0.6956521739130435,
+      "recall": 0.7619047619047619,
+      "f1": 0.7272727272727273,
+      "support": 21
+     },
+     "UNKNOWN": {
+      "precision": 0.8837209302325582,
+      "recall": 1.0,
+      "f1": 0.9382716049382716,
+      "support": 38
+     }
+    },
+    "unknown_recall": 1.0,
+    "confusion_matrix": [
+     [
+      38,
+      7,
+      3
+     ],
+     [
+      3,
+      16,
+      2
+     ],
+     [
+      0,
+      0,
+      38
+     ]
+    ]
+   }
+  },
+  "system_label_replay_clean": {
+   "A": {
+    "n": 93,
+    "accuracy": 0.7849462365591398,
+    "macro_f1": 0.7178592017301696,
+    "weighted_f1": 0.7920943664960314,
+    "per_class": {
+     "KNOWN": {
+      "precision": 0.8787878787878788,
+      "recall": 0.6590909090909091,
+      "f1": 0.7532467532467533,
+      "support": 44
+     },
+     "AMBIGUOUS": {
+      "precision": 0.3684210526315789,
+      "recall": 0.5833333333333334,
+      "f1": 0.45161290322580644,
+      "support": 12
+     },
+     "UNKNOWN": {
+      "precision": 0.9024390243902439,
+      "recall": 1.0,
+      "f1": 0.9487179487179487,
+      "support": 37
+     }
+    },
+    "unknown_recall": 1.0,
+    "confusion_matrix": [
+     [
+      29,
+      12,
+      3
+     ],
+     [
+      4,
+      7,
+      1
+     ],
+     [
+      0,
+      0,
+      37
+     ]
+    ]
+   },
+   "B": {
+    "n": 93,
+    "accuracy": 0.8817204301075269,
+    "macro_f1": 0.8393018139853582,
+    "weighted_f1": 0.8825487233000502,
+    "per_class": {
+     "KNOWN": {
+      "precision": 0.972972972972973,
+      "recall": 0.8181818181818182,
+      "f1": 0.8888888888888888,
+      "support": 44
+     },
+     "AMBIGUOUS": {
+      "precision": 0.6428571428571429,
+      "recall": 0.75,
+      "f1": 0.6923076923076923,
+      "support": 12
+     },
+     "UNKNOWN": {
+      "precision": 0.8809523809523809,
+      "recall": 1.0,
+      "f1": 0.9367088607594937,
+      "support": 37
+     }
+    },
+    "unknown_recall": 1.0,
+    "confusion_matrix": [
+     [
+      36,
+      5,
+      3
+     ],
+     [
+      1,
+      9,
+      2
+     ],
+     [
+      0,
+      0,
+      37
+     ]
+    ]
+   }
+  },
+  "per_case": [
+   {
+    "id": "A01",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "KNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "A02",
+    "path": "FAST_PATH",
+    "exp": 2,
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN"
+   },
+   {
+    "id": "A03",
+    "path": "FAST_PATH",
+    "exp": 2,
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN"
+   },
+   {
+    "id": "A04",
+    "path": "FAST_PATH",
+    "exp": 2,
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN"
+   },
+   {
+    "id": "A05",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "A06",
+    "path": "FAST_PATH",
+    "exp": 2,
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN"
+   },
+   {
+    "id": "A07",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "AMBIGUOUS",
+    "rawB": "AMBIGUOUS",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "A08",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "KNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "A09",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "A10",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "A11",
+    "path": "FAST_PATH",
+    "exp": 2,
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN"
+   },
+   {
+    "id": "A12",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "AMBIGUOUS",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "A13",
+    "path": "FAST_PATH",
+    "exp": 2,
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN"
+   },
+   {
+    "id": "A14",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "AMBIGUOUS",
+    "rawB": "KNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "A15",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "KNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "B01",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "B02",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "AMBIGUOUS",
+    "rawB": "KNOWN",
+    "sysA": "AMBIGUOUS",
+    "sysB": "KNOWN",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "B03",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "B04",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "AMBIGUOUS",
+    "rawB": "KNOWN",
+    "sysA": "AMBIGUOUS",
+    "sysB": "KNOWN",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "B05",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "AMBIGUOUS",
+    "rawB": "KNOWN",
+    "sysA": "AMBIGUOUS",
+    "sysB": "KNOWN",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "B06",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "AMBIGUOUS",
+    "rawB": "KNOWN",
+    "sysA": "AMBIGUOUS",
+    "sysB": "KNOWN",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "B07",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "AMBIGUOUS",
+    "rawB": "KNOWN",
+    "sysA": "AMBIGUOUS",
+    "sysB": "KNOWN",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "B08",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "KNOWN",
+    "rawB": "KNOWN",
+    "sysA": "KNOWN",
+    "sysB": "KNOWN",
+    "recorded_final": "KNOWN",
+    "overlap": false
+   },
+   {
+    "id": "B09",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "AMBIGUOUS",
+    "rawB": "AMBIGUOUS",
+    "sysA": "AMBIGUOUS",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "B10",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "AMBIGUOUS",
+    "rawB": "AMBIGUOUS",
+    "sysA": "AMBIGUOUS",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "B11",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "B12",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "AMBIGUOUS",
+    "rawB": "AMBIGUOUS",
+    "sysA": "AMBIGUOUS",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "B13",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "KNOWN",
+    "rawB": "KNOWN",
+    "sysA": "KNOWN",
+    "sysB": "KNOWN",
+    "recorded_final": "KNOWN",
+    "overlap": false
+   },
+   {
+    "id": "B14",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "C01",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "C02",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "C03",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "C04",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "C05",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "C06",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "KNOWN",
+    "rawB": "KNOWN",
+    "sysA": "KNOWN",
+    "sysB": "KNOWN",
+    "recorded_final": "KNOWN",
+    "overlap": false
+   },
+   {
+    "id": "C07",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "C08",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "KNOWN",
+    "rawB": "KNOWN",
+    "sysA": "KNOWN",
+    "sysB": "KNOWN",
+    "recorded_final": "KNOWN",
+    "overlap": false
+   },
+   {
+    "id": "C09",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "C10",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "KNOWN",
+    "rawB": "KNOWN",
+    "sysA": "KNOWN",
+    "sysB": "KNOWN",
+    "recorded_final": "KNOWN",
+    "overlap": false
+   },
+   {
+    "id": "C11",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "AMBIGUOUS",
+    "rawB": "AMBIGUOUS",
+    "sysA": "AMBIGUOUS",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": true
+   },
+   {
+    "id": "C12",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "D01",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "KNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "KNOWN",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "KNOWN",
+    "overlap": true
+   },
+   {
+    "id": "D02",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "AMBIGUOUS",
+    "rawB": "AMBIGUOUS",
+    "sysA": "AMBIGUOUS",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": true
+   },
+   {
+    "id": "D03",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "AMBIGUOUS",
+    "rawB": "KNOWN",
+    "sysA": "AMBIGUOUS",
+    "sysB": "KNOWN",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "D04",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "KNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "KNOWN",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "KNOWN",
+    "overlap": false
+   },
+   {
+    "id": "D05",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "AMBIGUOUS",
+    "rawB": "AMBIGUOUS",
+    "sysA": "AMBIGUOUS",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "D06",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "KNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "KNOWN",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "KNOWN",
+    "overlap": false
+   },
+   {
+    "id": "D07",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "AMBIGUOUS",
+    "rawB": "KNOWN",
+    "sysA": "AMBIGUOUS",
+    "sysB": "KNOWN",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": true
+   },
+   {
+    "id": "D08",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "AMBIGUOUS",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": true
+   },
+   {
+    "id": "D09",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "AMBIGUOUS",
+    "rawB": "AMBIGUOUS",
+    "sysA": "AMBIGUOUS",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": true
+   },
+   {
+    "id": "D10",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "KNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "KNOWN",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "KNOWN",
+    "overlap": false
+   },
+   {
+    "id": "D11",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "AMBIGUOUS",
+    "rawB": "AMBIGUOUS",
+    "sysA": "AMBIGUOUS",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "D12",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "AMBIGUOUS",
+    "rawB": "AMBIGUOUS",
+    "sysA": "AMBIGUOUS",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "D13",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "AMBIGUOUS",
+    "rawB": "AMBIGUOUS",
+    "sysA": "AMBIGUOUS",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "D14",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "AMBIGUOUS",
+    "rawB": "AMBIGUOUS",
+    "sysA": "AMBIGUOUS",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "D15",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "D16",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "AMBIGUOUS",
+    "rawB": "UNKNOWN",
+    "sysA": "AMBIGUOUS",
+    "sysB": "UNKNOWN",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "E01",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "AMBIGUOUS",
+    "rawB": "KNOWN",
+    "sysA": "AMBIGUOUS",
+    "sysB": "KNOWN",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "E02",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "KNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "KNOWN",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "KNOWN",
+    "overlap": false
+   },
+   {
+    "id": "E03",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "AMBIGUOUS",
+    "rawB": "AMBIGUOUS",
+    "sysA": "AMBIGUOUS",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": true
+   },
+   {
+    "id": "E04",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "KNOWN",
+    "rawB": "KNOWN",
+    "sysA": "KNOWN",
+    "sysB": "KNOWN",
+    "recorded_final": "KNOWN",
+    "overlap": true
+   },
+   {
+    "id": "E05",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "KNOWN",
+    "rawB": "KNOWN",
+    "sysA": "KNOWN",
+    "sysB": "KNOWN",
+    "recorded_final": "KNOWN",
+    "overlap": false
+   },
+   {
+    "id": "E06",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "KNOWN",
+    "rawB": "KNOWN",
+    "sysA": "KNOWN",
+    "sysB": "KNOWN",
+    "recorded_final": "KNOWN",
+    "overlap": false
+   },
+   {
+    "id": "E07",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "AMBIGUOUS",
+    "rawB": "AMBIGUOUS",
+    "sysA": "AMBIGUOUS",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "E08",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "KNOWN",
+    "rawB": "KNOWN",
+    "sysA": "KNOWN",
+    "sysB": "KNOWN",
+    "recorded_final": "KNOWN",
+    "overlap": false
+   },
+   {
+    "id": "E09",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "E10",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "KNOWN",
+    "rawB": "KNOWN",
+    "sysA": "KNOWN",
+    "sysB": "KNOWN",
+    "recorded_final": "KNOWN",
+    "overlap": true
+   },
+   {
+    "id": "E11",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "E12",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "AMBIGUOUS",
+    "rawB": "KNOWN",
+    "sysA": "AMBIGUOUS",
+    "sysB": "KNOWN",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "F01",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "F02",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": true
+   },
+   {
+    "id": "F03",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "F04",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "F05",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "F06",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "F07",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "F08",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "G01",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "G02",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "G03",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "G04",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "G05",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "G06",
+    "path": "FAST_PATH",
+    "exp": 2,
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN"
+   },
+   {
+    "id": "G07",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "KNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "G08",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "G09",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "G10",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "KNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "G11",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "G12",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "G13",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "G14",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "KNOWN",
+    "rawB": "KNOWN",
+    "sysA": "KNOWN",
+    "sysB": "KNOWN",
+    "recorded_final": "KNOWN",
+    "overlap": false
+   },
+   {
+    "id": "G15",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "H01",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "H02",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "AMBIGUOUS",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "H03",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "H04",
+    "path": "MULTI_RESPONSE",
+    "exp": 0,
+    "rawA": "AMBIGUOUS",
+    "rawB": "KNOWN",
+    "sysA": "AMBIGUOUS",
+    "sysB": "KNOWN",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": false
+   },
+   {
+    "id": "H05",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "AMBIGUOUS",
+    "rawB": "AMBIGUOUS",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "I01",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "KNOWN",
+    "rawB": "KNOWN",
+    "sysA": "KNOWN",
+    "sysB": "KNOWN",
+    "recorded_final": "KNOWN",
+    "overlap": true
+   },
+   {
+    "id": "I02",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "AMBIGUOUS",
+    "rawB": "AMBIGUOUS",
+    "sysA": "AMBIGUOUS",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": true
+   },
+   {
+    "id": "I03",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "KNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "KNOWN",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "KNOWN",
+    "overlap": true
+   },
+   {
+    "id": "I04",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "KNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "KNOWN",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "KNOWN",
+    "overlap": false
+   },
+   {
+    "id": "I05",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "AMBIGUOUS",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "I06",
+    "path": "FAST_PATH",
+    "exp": 2,
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN"
+   },
+   {
+    "id": "I07",
+    "path": "MULTI_RESPONSE",
+    "exp": 1,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "AMBIGUOUS",
+    "sysB": "AMBIGUOUS",
+    "recorded_final": "AMBIGUOUS",
+    "overlap": true
+   },
+   {
+    "id": "I08",
+    "path": "MULTI_RESPONSE",
+    "exp": 2,
+    "rawA": "UNKNOWN",
+    "rawB": "UNKNOWN",
+    "sysA": "UNKNOWN",
+    "sysB": "UNKNOWN",
+    "recorded_final": "UNKNOWN",
+    "overlap": false
+   },
+   {
+    "id": "I09",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   },
+   {
+    "id": "I10",
+    "path": "FAST_PATH",
+    "exp": 0,
+    "sysA": "KNOWN",
+    "sysB": "KNOWN"
+   }
+  ]
+ }
+}
