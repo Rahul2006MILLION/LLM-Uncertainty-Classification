@@ -1,0 +1,60 @@
+{
+  "model_type": "xgboost",
+  "feature_names": [
+    "semantic_entropy",
+    "normalized_entropy",
+    "dominant_agreement",
+    "second_agreement",
+    "agreement_margin",
+    "cluster_count",
+    "cluster_ratio",
+    "mean_pairwise_similarity",
+    "min_pairwise_similarity",
+    "response_len_mean",
+    "response_len_std",
+    "distinct_1gram_ratio",
+    "distinct_2gram_ratio",
+    "question_overlap_mean",
+    "hedging_score",
+    "negation_count"
+  ],
+  "is_trained": true,
+  "metadata": {
+    "model_type": "xgboost",
+    "feature_names": [
+      "semantic_entropy",
+      "normalized_entropy",
+      "dominant_agreement",
+      "second_agreement",
+      "agreement_margin",
+      "cluster_count",
+      "cluster_ratio",
+      "mean_pairwise_similarity",
+      "min_pairwise_similarity",
+      "response_len_mean",
+      "response_len_std",
+      "distinct_1gram_ratio",
+      "distinct_2gram_ratio",
+      "question_overlap_mean",
+      "hedging_score",
+      "negation_count"
+    ],
+    "n_samples": 280,
+    "n_features": 16,
+    "experiment": "production_retraining",
+    "training_data": "data/features/features_300_v1.1.jsonl",
+    "excluded_groups": [
+      "grp_capital_france",
+      "grp_def_photosynthesis",
+      "grp_highest_mountain",
+      "grp_poly_georgia_capital",
+      "grp_poly_jordan_who",
+      "grp_poly_springfield_state",
+      "grp_priv_user_thoughts",
+      "grp_subj_best_athlete",
+      "grp_subj_prog_lang"
+    ],
+    "promoted": false,
+    "note": "Candidate only. NOT the production model."
+  }
+}

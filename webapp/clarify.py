@@ -117,7 +117,7 @@ def suggest_interpretations(
     for a in (sample_answers or [])[:2]:
         hints.append(f'One sampled answer was: "{a[:220]}"')
     prompt = _SUGGEST_PROMPT.format(
-        question=question,
+        question=sanitize_user_input(question),  # treat the question as data, not instructions
         ambiguity=(ambiguity_type or "multiple interpretations").replace("_", " ").lower(),
         hints="\n".join(hints),
         n=MAX_SUGGESTIONS - 1,
@@ -156,7 +156,7 @@ def merge_clarification(question: str, clarification: str, cfg: Dict[str, Any]) 
     try:
         client, model = _client(cfg)
         raw = client.generate(
-            _MERGE_PROMPT.format(question=question, clarification=clarification),
+            _MERGE_PROMPT.format(question=sanitize_user_input(question), clarification=sanitize_user_input(clarification)),
             model=model, system=_MERGE_SYSTEM, temperature=0.0, seed=7, options={"num_predict": 80},
         )["response"]
     except Exception:

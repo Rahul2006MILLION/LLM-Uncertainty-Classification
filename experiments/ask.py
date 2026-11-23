@@ -23,6 +23,7 @@ from src.features.feature_extractor import FeatureExtractor
 from src.classification.router import AdaptiveRouter
 from src.classification.classifier import UncertaintyClassifier
 from src.classification.ambiguity_assessor import CriterionAmbiguityAssessor
+from src.classification.ambiguity_corroboration import assess_ambiguity_corroboration
 from src.classification.inaccessibility_assessor import InaccessibilityAssessor
 from src.classification.fast_path_assessor import FastPathAnswerabilityAssessor
 from src.classification.clarity_assessor import QuestionClarityAssessor
@@ -387,6 +388,17 @@ def run_pipeline(
             f"  • Claim 2 ({p2:.0%} consensus): {sec_text}"
         )
 
+    # Routing check for an unclarified AMBIGUOUS label: is a clarification request
+    # supported by any independent signal? (The label itself is never changed.)
+    corroboration = None
+    if pred_label == "AMBIGUOUS" and not conversation_state.is_clarified:
+        corroboration = assess_ambiguity_corroboration(
+            question=question,
+            responses=response_texts,
+            features=features,
+            explanation_threshold=expl_threshold,
+        )
+
     # Determine epistemic decision, interaction status, and ambiguity provenance
     if conversation_state.round_count >= conversation_state.max_rounds:
         rec_interaction_status = "MAX_ROUNDS_REACHED"
@@ -458,11 +470,33 @@ def run_pipeline(
         rec_decision = "UNRESOLVED"
         rec_ambig_type = post_dec.ambiguity_type.value if post_dec.ambiguity_type != AmbiguityType.NONE else None
         rec_reason = post_dec.reason
+    elif corroboration is not None and not corroboration.corroborated:
+        # Routing only: the label stays AMBIGUOUS, but nothing independent supports
+        # interrupting the user with a clarification question.
+        rec_interaction_status = "NOT_REQUIRED"
+        rec_decision = "ANSWERABLE"
+        rec_ambig_type = None
+        rec_reason = corroboration.reason
     elif pred_label == "AMBIGUOUS" and not conversation_state.is_clarified:
-        rec_interaction_status = "PENDING" if conversation_state.can_clarify() else "NOT_REQUIRED"
-        rec_decision = "CLARIFICATION_REQUIRED" if conversation_state.can_clarify() else "UNRESOLVED"
+        # A clarification can only be pending when there is an interactive channel to ask
+        # through; otherwise the ambiguity is reported as unresolved, as when rounds run out.
+        can_ask = interactive_hitl and conversation_state.can_clarify()
+        rec_interaction_status = "PENDING" if can_ask else "NOT_REQUIRED"
+        rec_decision = "CLARIFICATION_REQUIRED" if can_ask else "UNRESOLVED"
         rec_ambig_type = clarity_assessment.ambiguity_type or (post_dec.ambiguity_type.value if (post_dec and post_dec.ambiguity_type != AmbiguityType.NONE) else "UNDERSPECIFIED_CONTEXT")
-        rec_reason = clarity_assessment.reason or (post_dec.reason if post_dec else "Ambiguity requires context resolution.")
+        # Only cite the clarity assessment when it actually found ambiguity; otherwise its
+        # reason ("Question specifies unambiguous referents…") contradicts the decision.
+        rec_reason = (
+            clarity_assessment.reason if clarity_assessment.status == "AMBIGUOUS"
+            else "Response-consistency analysis indicates competing interpretations; clarification can isolate the intended one."
+        )
+    elif pred_label == "UNKNOWN":
+        # Keep the HITL decision consistent with the label: an UNKNOWN answer is an
+        # abstention, never "answerable".
+        rec_interaction_status = "NOT_REQUIRED"
+        rec_decision = "ABSTAIN"
+        rec_ambig_type = post_dec.ambiguity_type.value if (post_dec and post_dec.ambiguity_type != AmbiguityType.NONE) else None
+        rec_reason = "Classifier assessed the question as unanswerable from the model's knowledge (response dispersion or refusal profile)."
     else:
         rec_interaction_status = "NOT_REQUIRED"
         rec_decision = "ANSWERABLE"

@@ -4,6 +4,12 @@ import re
 from typing import Dict, Any, List, Optional, Union
 from dataclasses import dataclass, field
 
+from src.classification.sensitive_request import (
+    SensitiveRequestDetector,
+    is_conceptual_question,
+    normalize_text,
+)
+
 
 @dataclass
 class InaccessibilityAssessment:
@@ -53,6 +59,26 @@ class InaccessibilityAssessor:
         r"\b(what\s+(is|was)\s+(in\s+)?my\s+(mind|head|thoughts?|dreams?))\b",
         r"\b(what\s+(number|word|letter|color|symbol|name)\s+am\s+i\s+(thinking|contemplating))\b",
         r"\b(read\s+my\s+mind|guess\s+what\s+i('m|\s+am)\s+thinking)\b",
+        # "Guess the number I have in my head", "what colour is in my mind right now"
+        r"\b(in|on)\s+my\s+(mind|head)\b",
+        r"\bguess\s+(the|which|what)\s+[a-z]+\s+i\s+(have|am|'m|picked|chose|chosen)\b",
+    ]
+
+    # Subset of the mental-state / future-action patterns that unambiguously ask for a
+    # value only the asker holds (no general-psychology reading is possible).
+    STRONG_PRIVATE_STATE_PATTERNS = [
+        r"\bwhat\s+(number|word|letter|colou?r|symbol|name|card|animal|shape)\s+(am\s+i|i'm|i\s+am|was\s+i)\s+(thinking|contemplating|imagining|picturing)\b",
+        r"\b(read\s+my\s+mind|guess\s+what\s+i('m|\s+am)\s+thinking)\b",
+        r"\bguess\s+(the|which|what)\s+[a-z]+\s+i\s+(have|am|'m|picked|chose|chosen)\b",
+        r"\b(in|on)\s+my\s+(mind|head)\s+(right\s+)?now\b",
+        r"\bwhat\s+(am\s+i|will\s+i|i'm)\s+(going\s+to\s+|gonna\s+)?(have|eat|cook|order|wear|buy)\b.*\b(tomorrow|tonight|later|next)\b",
+    ]
+
+    # Category 2b: The asker's own future private choices ("What am I going to eat tomorrow?")
+    PRIVATE_FUTURE_ACTION_PATTERNS = [
+        r"\bwhat\s+(am\s+i|will\s+i|i'm|i\s+am|are\s+we|will\s+we)\s+(going\s+to\s+|gonna\s+)?"
+        r"(have|eat|cook|order|wear|buy|do|say|choose|pick|watch|name)\b"
+        r".*\b(tomorrow|tonight|later|next|today|this\s+(evening|weekend|week))\b",
     ]
 
     # Category 3: Private physical secrets, unindexed notes, notebooks, and future private actions
@@ -108,8 +134,33 @@ class InaccessibilityAssessor:
            or access barriers (avoiding false overrides on subjective or polysemous queries).
         """
         q_clean = question.strip()
-        q_lower = q_clean.lower()
+        # Normalised text: undoes light obfuscation and collapses line breaks so that
+        # multi-line or spaced-out input cannot slip between pattern keywords.
+        q_lower = normalize_text(q_clean)
         evidence: List[str] = []
+
+        # 0. Strongest evidence: a request for a specific person's private data
+        #    ("what is MY bank account number"). The model has no access to such data,
+        #    so the question is UNKNOWN whatever the responses say; no refusal
+        #    confirmation is required.
+        private = SensitiveRequestDetector.assess(q_clean)
+        if private.is_private_request:
+            return InaccessibilityAssessment(
+                is_inaccessible=True,
+                predicted_label="UNKNOWN",
+                confidence=0.95,
+                confidence_type="rule_based_heuristic",
+                status="ASSESSED_INACCESSIBLE_RULE_HEURISTIC (private_personal_data)",
+                reason=(
+                    f"{private.reason} Personal records and secrets are not available to the model, "
+                    "so any generated value would be fabricated."
+                ),
+                evidence=private.evidence,
+            )
+
+        # Conceptual / procedural questions about sensitive topics ("what is an API key",
+        # "how do I reset a router password") are answerable public knowledge.
+        conceptual = is_conceptual_question(q_clean)
 
         # Disqualify if question matches known ambiguity counter-signals without private keywords
         for counter_pat in cls.AMBIGUITY_COUNTER_SIGNALS:
@@ -128,17 +179,28 @@ class InaccessibilityAssessor:
         # 1. Question-level evidence checking across supported inaccessibility classes
         inacc_category = None
 
-        for pat in cls.PRIVATE_CREDENTIAL_PATTERNS:
-            if re.search(pat, q_lower):
-                inacc_category = "private_credential"
-                evidence.append(f"question_private_credential:{pat}")
-                break
+        # Credential keywords without an owner (e.g. "the password for the router at X") are
+        # weaker evidence: they still require refusal confirmation from the responses, and
+        # never apply to conceptual or procedural questions.
+        if not conceptual:
+            for pat in cls.PRIVATE_CREDENTIAL_PATTERNS:
+                if re.search(pat, q_lower):
+                    inacc_category = "private_credential"
+                    evidence.append(f"question_private_credential:{pat}")
+                    break
 
         if not inacc_category:
             for pat in cls.PRIVATE_MENTAL_STATE_PATTERNS:
                 if re.search(pat, q_lower):
                     inacc_category = "private_mental_state"
                     evidence.append(f"question_private_mental_state:{pat}")
+                    break
+
+        if not inacc_category:
+            for pat in cls.PRIVATE_FUTURE_ACTION_PATTERNS:
+                if re.search(pat, q_lower):
+                    inacc_category = "private_future_action"
+                    evidence.append(f"question_private_future_action:{pat}")
                     break
 
         if not inacc_category:
@@ -183,7 +245,16 @@ class InaccessibilityAssessor:
 
             # If responses are available, verify that at least one response (or >= 20%) displays refusal
             # This protects against cases where a question might have a factual answer available
-            if refusal_count == 0 and len(response_list) >= 3:
+            # Keyword-only credential evidence (no owner) is weak: require at least one
+            # refusal even for a single fast-path response.
+            weak_evidence = inacc_category == "private_credential"
+            # Explicit requests to identify a value only the asker holds ("what number am I
+            # thinking of", "read my mind") cannot be answered by anyone else: a confident
+            # response is fabricated, so no refusal confirmation is required.
+            strong_evidence = inacc_category in ("private_mental_state", "private_future_action") and any(
+                re.search(p, q_lower) for p in cls.STRONG_PRIVATE_STATE_PATTERNS
+            )
+            if refusal_count == 0 and not strong_evidence and (len(response_list) >= 3 or weak_evidence):
                 return InaccessibilityAssessment(
                     is_inaccessible=False,
                     predicted_label=None,

@@ -5,6 +5,7 @@ from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
 
 from src.classification.clarity_assessor import QuestionClarityAssessor
+from src.classification.inaccessibility_assessor import InaccessibilityAssessor
 
 
 @dataclass
@@ -48,6 +49,10 @@ class FastPathAnswerabilityAssessor:
         r"\bunanswerable\b",
         r"\bas an ai,?\s*i cannot\b",
         r"\bnot possible to (know|determine)\b",
+        # Access / disclosure refusals ("I don't have access to your passwords")
+        r"\bi (do not|don't|cannot|can't|am unable to|am not able to) (have )?(access|provide|share|retrieve|see|disclose|reveal)\b",
+        r"\b(do not|don't) have (access to|the ability to|any way to|information about) (your|personal|private|that)\b",
+        r"\b(i'm|i am) (sorry|afraid),? (but )?(i|as an ai)\b",
     ]
 
     # Explicit ambiguity and polysemy triggers
@@ -70,7 +75,8 @@ class FastPathAnswerabilityAssessor:
 
     # Patterns for established concept definitions
     DEFINITION_QUERY_PATTERNS = [
-        r"^\s*what\s+is\s+(?!(the\s+))(a\s+|an\s+)?[a-z\s]+\??\s*$",
+        # "what is my/your/their X" is a request for a specific value, not a concept definition
+        r"^\s*what\s+is\s+(?!(the|my|your|our|his|her|their|its)\s+)(a\s+|an\s+)?[a-z\s]+\??\s*$",
         r"^\s*define\s+[a-z\s]+\??\s*$",
         r"^\s*what\s+does\s+[a-z\s]+\s+mean\??\s*$",
     ]
@@ -99,6 +105,24 @@ class FastPathAnswerabilityAssessor:
         resp_clean = response.strip()
         q_lower = q_clean.lower()
         resp_lower = resp_clean.lower()
+
+        # -1. Safeguards take precedence over any fast-path certification. A request for
+        #     private or otherwise inaccessible information is UNKNOWN even when the single
+        #     greedy response sounds confident.
+        inacc = InaccessibilityAssessor.assess(question=q_clean, responses=[resp_clean] if resp_clean else None)
+        if inacc.is_inaccessible:
+            refusal = next((p for p in cls.REFUSAL_TRIGGERS if re.search(p, resp_lower)), None)
+            return FastPathAssessment(
+                is_assessed=True,
+                predicted_label="UNKNOWN",
+                confidence=inacc.confidence,
+                confidence_type="rule_based_heuristic",
+                # Keep the established REFUSAL status when the response itself refuses;
+                # INACCESSIBLE marks the case where the safeguard caught a confident answer.
+                status="ASSESSED_FAST_PATH_REFUSAL" if refusal else "ASSESSED_FAST_PATH_INACCESSIBLE",
+                reason=inacc.reason,
+                evidence=inacc.evidence + ([f"refusal:{refusal}"] if refusal else []),
+            )
 
         # 0. Check Question Clarity (missing referent, missing context, polysemy)
         clarity = QuestionClarityAssessor.assess(q_clean)

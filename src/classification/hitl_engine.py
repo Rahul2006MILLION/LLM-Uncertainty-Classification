@@ -17,6 +17,8 @@ from dataclasses import dataclass, field
 from src.classification.inaccessibility_assessor import InaccessibilityAssessor
 from src.classification.ambiguity_assessor import CriterionAmbiguityAssessor
 from src.classification.clarity_assessor import QuestionClarityAssessor
+from src.classification.entity_ambiguity import EntityAmbiguityAssessor
+from src.classification.sensitive_request import is_conceptual_question
 from src.classification.hitl_prompts import (
     sanitize_user_input,
     is_user_declining,
@@ -47,6 +49,19 @@ class AmbiguityType(str, Enum):
     FALSE_PREMISE = "FALSE_PREMISE"
     MODEL_DISAGREEMENT = "MODEL_DISAGREEMENT"
     NONE = "NONE"
+
+
+def _clarity_ambiguity_type(clarity) -> "AmbiguityType":
+    """Map a clarity assessment to the HITL ambiguity taxonomy.
+
+    Polysemous named entities keep the established ENTITY_POLYSEMY type whichever
+    component (clarity assessor or polysemy check) detected them first.
+    """
+    if any(str(e).startswith("polysemic_term:") for e in (clarity.evidence or [])):
+        return AmbiguityType.ENTITY_POLYSEMY
+    if clarity.ambiguity_type in AmbiguityType._member_map_:
+        return AmbiguityType[clarity.ambiguity_type]
+    return AmbiguityType.UNDERSPECIFIED_CONTEXT
 
 
 @dataclass
@@ -166,6 +181,14 @@ class HITLEngine:
         r"\b(columbia|victoria|alexandria|springfield)\b",
     ]
 
+    CONTEXT_DEPENDENCE_MARKERS = (
+        r"\b(it depends on|depends on (the|which|what|whether|your|how)|depending on (the|which|what|whether|your)|"
+        r"(can|could|may|might) refer to|refers? to (several|multiple|different|both|either)|"
+        r"(several|multiple|different) (meanings|interpretations|senses|referents|possible answers)|"
+        r"varies (by|depending on|between) (country|state|jurisdiction|region|context)|"
+        r"(if you mean|if you are referring to|are you referring to|do you mean))\b"
+    )
+
     def __init__(self, max_rounds: int = 2):
         self.max_rounds = max_rounds
 
@@ -262,11 +285,7 @@ class HITLEngine:
         # 3.5. QUESTION CLARITY ASSESSMENT: Missing referents, missing comparison, or missing context
         clarity = QuestionClarityAssessor.assess(q_clean)
         if clarity.status == "AMBIGUOUS" and clarity.clarification_required:
-            ambig_enum = (
-                AmbiguityType[clarity.ambiguity_type]
-                if clarity.ambiguity_type in AmbiguityType._member_map_
-                else AmbiguityType.UNDERSPECIFIED_CONTEXT
-            )
+            ambig_enum = _clarity_ambiguity_type(clarity)
             if conversation_state:
                 conversation_state.detected_ambiguity_type = ambig_enum.value
                 conversation_state.interaction_status = "PENDING"
@@ -282,23 +301,26 @@ class HITLEngine:
                 confidence=clarity.confidence,
             )
 
-        # 4. RESOLVABLE AMBIGUITY: Lexical Polysemy & Name Collisions
-        for pat in self.KNOWN_POLYSEMIC_TERMS:
-            if re.search(pat, q_lower):
-                if conversation_state:
-                    conversation_state.detected_ambiguity_type = AmbiguityType.ENTITY_POLYSEMY.value
-                    conversation_state.interaction_status = "PENDING"
-                q_prompt, why, options = generate_fallback_clarification(q_clean, ambiguity_reason=f"Polysemic entity matched: {pat}")
-                return ClarificationDecision(
-                    decision=ClarificationState.CLARIFICATION_REQUIRED,
-                    ambiguity_type=AmbiguityType.ENTITY_POLYSEMY,
-                    reason=f"Question contains polysemic entity or name collision '{pat}'. User can specify intended referent.",
-                    clarification_prompt=q_prompt,
-                    options=options,
-                    why_it_matters=why,
-                    can_user_resolve=True,
-                    confidence=0.90,
-                )
+        # 4. RESOLVABLE AMBIGUITY: Lexical Polysemy & Name Collisions.
+        #    Context-aware: "Michael Jordan", "the planet Mercury" or "capital of Jordan"
+        #    already select a sense and must not trigger clarification.
+        entity = EntityAmbiguityAssessor.assess(q_clean)
+        if entity.is_ambiguous:
+            pat = entity.term
+            if conversation_state:
+                conversation_state.detected_ambiguity_type = AmbiguityType.ENTITY_POLYSEMY.value
+                conversation_state.interaction_status = "PENDING"
+            q_prompt, why, options = generate_fallback_clarification(q_clean, ambiguity_reason=f"Polysemic entity matched: {pat}")
+            return ClarificationDecision(
+                decision=ClarificationState.CLARIFICATION_REQUIRED,
+                ambiguity_type=AmbiguityType.ENTITY_POLYSEMY,
+                reason=f"Question contains polysemic entity or name collision '{pat}'. User can specify intended referent.",
+                clarification_prompt=q_prompt,
+                options=options,
+                why_it_matters=why,
+                can_user_resolve=True,
+                confidence=0.90,
+            )
 
         # 5. RESOLVABLE AMBIGUITY: Subjective Superlatives without Objective Criteria
         has_superlative = any(re.search(pat, q_lower) for pat in CriterionAmbiguityAssessor.CRITERION_SUPERLATIVES)
@@ -401,7 +423,18 @@ class HITLEngine:
             if any(re.search(pat, r_low) for pat in InaccessibilityAssessor.REFUSAL_INACCESSIBILITY_MARKERS):
                 refusal_count += 1
 
-        if refusal_count >= max(2, int(0.4 * len(responses))):
+        # Refusals that only reflect missing user context ("I don't know your location" for
+        # "What is the speed limit?") are resolvable by clarification, not unknowable.
+        clarity_pre = QuestionClarityAssessor.assess(q_clean)
+        user_resolvable = (
+            clarity_pre.status == "AMBIGUOUS"
+            and clarity_pre.clarification_required
+            and not (conversation_state and conversation_state.is_clarified)
+        )
+        # Explanations and procedures ("why should you never share your password") often
+        # contain words such as "personal" or "confidential" without refusing anything.
+        conceptual = is_conceptual_question(q_clean)
+        if refusal_count >= max(2, int(0.4 * len(responses))) and not user_resolvable and not conceptual:
             return ClarificationDecision(
                 decision=ClarificationState.ABSTAIN,
                 ambiguity_type=AmbiguityType.INHERENTLY_UNKNOWABLE,
@@ -451,15 +484,26 @@ class HITLEngine:
                 if any(re.search(pat, context_text) for pat in disambiguating_markers):
                     is_polysemy_resolved = True
 
-            has_polysemy = (not is_polysemy_resolved) and any(re.search(pat, q_lower) for pat in self.KNOWN_POLYSEMIC_TERMS)
+            has_polysemy = (not is_polysemy_resolved) and EntityAmbiguityAssessor.assess(q_clean).is_ambiguous
+            # Explicit statements that the answer depends on the reading of the question.
+            # Bare common words ("or", "area", "definition") appear in ordinary factual
+            # answers and are not evidence of user-resolvable ambiguity.
             has_context_dependence = (not is_already_clarified) and any(
-                re.search(r"\b(depends on|refer to|refers to|either|or|definition|meaning|context|jurisdiction|population|area)\b", r.lower())
-                for r in responses
+                re.search(self.CONTEXT_DEPENDENCE_MARKERS, r.lower()) for r in responses
             )
             has_superlative = (not is_already_clarified) and any(re.search(pat, q_lower) for pat in CriterionAmbiguityAssessor.CRITERION_SUPERLATIVES)
 
-            if has_polysemy or has_context_dependence or has_superlative:
-                ambig_type = AmbiguityType.ENTITY_POLYSEMY if has_polysemy else AmbiguityType.UNDERSPECIFIED_CONTEXT
+            # A question the clarity assessor already found user-resolvably ambiguous
+            # (missing context / referent / comparison) explains the divergence: the
+            # samples disagree because the question is underspecified, not because the
+            # model contradicts itself on a factual question.
+            if has_polysemy or has_context_dependence or has_superlative or user_resolvable:
+                if has_polysemy:
+                    ambig_type = AmbiguityType.ENTITY_POLYSEMY
+                elif user_resolvable and not (has_context_dependence or has_superlative):
+                    ambig_type = _clarity_ambiguity_type(clarity_pre)
+                else:
+                    ambig_type = AmbiguityType.UNDERSPECIFIED_CONTEXT
                 if conversation_state:
                     conversation_state.detected_ambiguity_type = ambig_type.value
                     conversation_state.interaction_status = "PENDING"
@@ -491,11 +535,7 @@ class HITLEngine:
         # Priority 5: Inherent question ambiguity from clarity assessment
         clarity = QuestionClarityAssessor.assess(q_clean)
         if clarity.status == "AMBIGUOUS" and clarity.clarification_required and not (conversation_state and conversation_state.is_clarified):
-            ambig_enum = (
-                AmbiguityType[clarity.ambiguity_type]
-                if clarity.ambiguity_type in AmbiguityType._member_map_
-                else AmbiguityType.UNDERSPECIFIED_CONTEXT
-            )
+            ambig_enum = _clarity_ambiguity_type(clarity)
             if conversation_state:
                 conversation_state.detected_ambiguity_type = ambig_enum.value
                 conversation_state.interaction_status = "PENDING"
